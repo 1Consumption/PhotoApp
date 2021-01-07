@@ -6,20 +6,78 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Photo List View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="PhotoApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PhotoListViewController" customModule="PhotoApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="EdK-gR-4DE">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SF6-2W-Nm8">
+                                    <size key="itemSize" width="413" height="498"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoListCollectionViewCell" id="6GR-6Y-Xtw" customClass="PhotoListCollectionViewCell" customModule="PhotoApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.5" y="0.0" width="413" height="498"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="vj6-qZ-ld0">
+                                            <rect key="frame" x="0.0" y="0.0" width="413" height="498"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bty-gn-kSq">
+                                                    <rect key="frame" x="0.0" y="0.0" width="413" height="498"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kPT-qd-XWR">
+                                                    <rect key="frame" x="20" y="457.5" width="44.5" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="kPT-qd-XWR" firstAttribute="leading" secondItem="Bty-gn-kSq" secondAttribute="leading" constant="20" id="J5L-WS-0cf"/>
+                                                <constraint firstAttribute="trailing" secondItem="Bty-gn-kSq" secondAttribute="trailing" id="M1r-gH-AM6"/>
+                                                <constraint firstItem="Bty-gn-kSq" firstAttribute="top" secondItem="vj6-qZ-ld0" secondAttribute="top" id="MNR-cV-xTn"/>
+                                                <constraint firstItem="Bty-gn-kSq" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kPT-qd-XWR" secondAttribute="trailing" constant="20" id="V2Z-ug-meC"/>
+                                                <constraint firstAttribute="bottom" secondItem="Bty-gn-kSq" secondAttribute="bottom" id="V4m-kO-PtL"/>
+                                                <constraint firstItem="Bty-gn-kSq" firstAttribute="bottom" secondItem="kPT-qd-XWR" secondAttribute="bottom" constant="20" id="hF5-hb-VKI"/>
+                                                <constraint firstItem="Bty-gn-kSq" firstAttribute="leading" secondItem="vj6-qZ-ld0" secondAttribute="leading" id="n4S-X9-iAe"/>
+                                                <constraint firstItem="kPT-qd-XWR" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Bty-gn-kSq" secondAttribute="top" constant="20" id="p9i-JN-k0n"/>
+                                            </constraints>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="413" height="498"/>
+                                        <connections>
+                                            <outlet property="authorNameLabel" destination="kPT-qd-XWR" id="98I-iL-HCq"/>
+                                            <outlet property="photoImageView" destination="Bty-gn-kSq" id="HwQ-zr-wB3"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="EdK-gR-4DE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Ex1-zf-YhY"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EdK-gR-4DE" secondAttribute="trailing" id="T1S-di-sGo"/>
+                            <constraint firstItem="EdK-gR-4DE" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="T9E-0L-c9R"/>
+                            <constraint firstAttribute="bottom" secondItem="EdK-gR-4DE" secondAttribute="bottom" id="ULg-qE-D2r"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rIZ-Fp-vUP"/>
+                    <connections>
+                        <outlet property="photoListCollectionView" destination="EdK-gR-4DE" id="ZPA-7f-JGr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
