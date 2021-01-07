@@ -11,38 +11,56 @@ final class NetworkManager: NetworkManageable {
     private(set) var requestBag: Set<URL> = Set<URL>()
     private(set) var requester: Requestable
     
-    init(requester: Requestable) {
+    init(requester: Requestable = DefaultRequester()) {
         self.requester = requester
     }
     
+    @discardableResult
     func requestData(from url: String, method: HTTPMethod, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
         guard let url = URL(string: url) else {
             completionHandler(.failure(.invalidURL))
             return nil
         }
         
+        guard !requestBag.contains(url) else {
+            completionHandler(.failure(.duplicatedRequest))
+            return nil
+        }
+        
+        requestBag.insert(url)
+        
         let dataTask = requester.dataTask(with: url) { data , response, error in
             guard error == nil else {
-                completionHandler(.failure(.requestError(description: error!.localizedDescription)))
+                self.requestCompleted(with: url,
+                                      result: .failure(.requestError(description: error!.localizedDescription)),
+                                      handler: completionHandler)
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                completionHandler(.failure(.invalidHTTPResponse))
+                self.requestCompleted(with: url,
+                                      result: .failure(.invalidHTTPResponse),
+                                      handler: completionHandler)
                 return
             }
             
             guard (200...299) ~= httpResponse.statusCode else {
-                completionHandler(.failure(.invalidStatusCode(with: httpResponse.statusCode)))
+                self.requestCompleted(with: url,
+                                      result: .failure(.invalidStatusCode(with: httpResponse.statusCode)),
+                                      handler: completionHandler)
                 return
             }
             
             guard let data = data else {
-                completionHandler(.failure(.invalidData))
+                self.requestCompleted(with: url,
+                                      result: .failure(.invalidData),
+                                      handler: completionHandler)
                 return
             }
             
-            completionHandler(.success(data))
+            self.requestCompleted(with: url,
+                                  result: .success(data),
+                                  handler: completionHandler)
         }
         
         dataTask.resume()
@@ -50,7 +68,18 @@ final class NetworkManager: NetworkManageable {
         return dataTask
     }
     
-    func requestCompleted() {
-        
+    func requestCompleted(with url: URL, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler) {
+        requestBag.remove(url)
+        handler(result)
+    }
+    
+    deinit {
+        requestBag = Set<URL>()
+    }
+}
+
+final class DefaultRequester: Requestable {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        return URLSession.shared.dataTask(with: url, completionHandler: completionHandler)
     }
 }

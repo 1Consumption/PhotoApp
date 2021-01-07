@@ -13,6 +13,7 @@ enum NetworkError: Error {
     case invalidHTTPResponse
     case invalidStatusCode(with: Int)
     case invalidData
+    case duplicatedRequest
     
     var description: String {
         switch self {
@@ -26,6 +27,8 @@ enum NetworkError: Error {
             return "invalid statusCode: \(code)"
         case .invalidData:
             return "invalid data"
+        case .duplicatedRequest:
+            return "duplicated request"
         }
     }
 }

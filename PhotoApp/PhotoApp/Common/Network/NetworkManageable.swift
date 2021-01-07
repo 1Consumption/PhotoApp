@@ -16,5 +16,5 @@ protocol NetworkManageable: class {
     @discardableResult
     func requestData(from url: String, method: HTTPMethod, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask?
     
-    func requestCompleted()
+    func requestCompleted(with url: URL, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler)
 }

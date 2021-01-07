@@ -63,7 +63,44 @@ final class NetworkManagerTests: XCTestCase {
                     networkError: .invalidData)
     }
     
-    private func failureCase(description: String, requester: Requestable, url: String = "failure", networkError: NetworkError) {
+    func testFailureWithDuplicatedRequest() {
+        let invalidExpectation = XCTestExpectation(description: "invalid")
+        let duplicateExpectation = XCTestExpectation(description: "duplicate")
+        
+        let duplicate = DuplicateRequest()
+        duplicate.delayTime = 3
+        let manager = NetworkManager(requester: duplicate)
+        
+        manager.requestData(from: "duplicate",
+                                   method: .get,
+                                   completionHandler: { result in
+                                    switch result {
+                                    case .success(_):
+                                        XCTFail()
+                                    case .failure(let error):
+                                        XCTAssertEqual(error, .invalidData)
+                                        invalidExpectation.fulfill()
+                                    }
+                                   })
+        
+        duplicate.delayTime = 0
+        
+        manager.requestData(from: "duplicate",
+                                   method: .get,
+                                   completionHandler: { result in
+                                    switch result {
+                                    case .success(_):
+                                        XCTFail()
+                                    case .failure(let error):
+                                        XCTAssertEqual(error, .duplicatedRequest)
+                                        duplicateExpectation.fulfill()
+                                    }
+                                   })
+        
+        wait(for: [invalidExpectation, duplicateExpectation], timeout: 5.0)
+    }
+    
+    private func failureCase(description: String, requester: Requestable, url: String = "failure", networkError: NetworkError, time: TimeInterval = 0) {
         let expectation = XCTestExpectation(description: description)
         
         networkManager = NetworkManager(requester: requester)
@@ -114,6 +151,18 @@ final class InvalidStatusCode: Requestable {
 final class InvalidData: Requestable {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(nil, HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
+        return URLSession.shared.dataTask(with: url)
+    }
+}
+
+final class DuplicateRequest: Requestable {
+    private let queue = DispatchQueue(label: "duplicated")
+    var delayTime = 0
+    
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        queue.asyncAfter(deadline: .now() + .seconds(delayTime), execute: {
+            completionHandler(nil, HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
+        })
         return URLSession.shared.dataTask(with: url)
     }
 }
