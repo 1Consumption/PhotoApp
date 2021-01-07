@@ -9,10 +9,22 @@ import Foundation
 
 enum NetworkError: Error {
     case requestError(description: String)
+    case invalidURL
+    
     var localizedDescription: String {
         switch self {
         case .requestError(let description):
             return description
+        case .invalidURL:
+            return "invalid URL!"
         }
     }
 }
+
+//default :
+//    return ""
+
+//case invalidHTTPResponse(error: Error)
+//case invalidStatusCode(error: Error)
+
+

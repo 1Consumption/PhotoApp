@@ -50,6 +50,25 @@ final class NetworkManagerTests: XCTestCase {
 
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    func testRequestDataFailureWithInvalidURL() {
+        let expectation = XCTestExpectation(description: "requestFailureWithInvalidURL")
+        
+        networkManager = NetworkManager(requester: SuccessRequester())
+        networkManager.requestData(from: "",
+                                   method: .get,
+                                   completionHandler: { result in
+                                    switch result {
+                                    case .success(_):
+                                        XCTFail()
+                                    case .failure(let error):
+                                        XCTAssertEqual(error, NetworkError.invalidURL)
+                                        expectation.fulfill()
+                                    }
+                                   })
+
+        wait(for: [expectation], timeout: 5.0)
+    }
 }
 
 final class SuccessRequester: Requestable {

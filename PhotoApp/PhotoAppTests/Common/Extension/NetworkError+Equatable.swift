@@ -13,6 +13,10 @@ extension NetworkError: Equatable {
         switch (lhs, rhs) {
         case (.requestError(_), .requestError(_)):
             return true
+        case (.invalidURL, .invalidURL):
+            return true
+        default:
+            return false
         }
     }
 }
