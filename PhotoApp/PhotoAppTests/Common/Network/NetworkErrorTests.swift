@@ -16,5 +16,8 @@ final class NetworkErrorTests: XCTestCase {
         
         description = NetworkError.invalidURL.localizedDescription
         XCTAssertEqual(description, "invalid URL!")
+        
+        description = NetworkError.invalidHTTPResponse.localizedDescription
+        XCTAssertEqual(description, "invalid HTTPResponse!")
     }
 }

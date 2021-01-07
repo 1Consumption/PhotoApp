@@ -11,7 +11,7 @@ import XCTest
 final class NetworkManagerTests: XCTestCase {
     private var networkManager: NetworkManageable!
     
-    func testRequestDataSuccess() {
+    func testSuccess() {
         let expectation = XCTestExpectation(description: "requestSuccess")
         var resultData: Data?
         
@@ -32,8 +32,8 @@ final class NetworkManagerTests: XCTestCase {
         XCTAssertNotNil(resultData)
     }
     
-    func testRequestDataFailureWithError() {
-        let expectation = XCTestExpectation(description: "requestFailureWithError")
+    func testFailureWithError() {
+        let expectation = XCTestExpectation(description: "rrror")
         
         networkManager = NetworkManager(requester: ReqeustErrorRequester())
         networkManager.requestData(from: "requestError",
@@ -51,8 +51,8 @@ final class NetworkManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
     
-    func testRequestDataFailureWithInvalidURL() {
-        let expectation = XCTestExpectation(description: "requestFailureWithInvalidURL")
+    func testFailureWithInvalidURL() {
+        let expectation = XCTestExpectation(description: "invalidURL")
         
         networkManager = NetworkManager(requester: SuccessRequester())
         networkManager.requestData(from: "",
@@ -69,11 +69,30 @@ final class NetworkManagerTests: XCTestCase {
 
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    func testFailiureWithInvalidHTTPResponse() {
+        let expectation = XCTestExpectation(description: "invalidHTTPResponse")
+        
+        networkManager = NetworkManager(requester: InvalidHTTPResponseRequester())
+        networkManager.requestData(from: "invalidHTTPResponse",
+                                   method: .get,
+                                   completionHandler: { result in
+                                    switch result {
+                                    case .success(_):
+                                        XCTFail()
+                                    case .failure(let error):
+                                        XCTAssertEqual(error, NetworkError.invalidHTTPResponse)
+                                        expectation.fulfill()
+                                    }
+                                   })
+
+        wait(for: [expectation], timeout: 5.0)
+    }
 }
 
 final class SuccessRequester: Requestable {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(Data(), nil, nil)
+        completionHandler(Data(), HTTPURLResponse(), nil)
         return URLSession.shared.dataTask(with: url)
     }
 }
@@ -81,6 +100,13 @@ final class SuccessRequester: Requestable {
 final class ReqeustErrorRequester: Requestable {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(nil, nil, NetworkError.requestError(description: "error"))
+        return URLSession.shared.dataTask(with: url)
+    }
+}
+
+final class InvalidHTTPResponseRequester: Requestable {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        completionHandler(nil, URLResponse(), nil)
         return URLSession.shared.dataTask(with: url)
     }
 }

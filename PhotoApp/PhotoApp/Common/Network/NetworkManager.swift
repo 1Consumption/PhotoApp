@@ -21,11 +21,17 @@ final class NetworkManager: NetworkManageable {
             return nil
         }
         
-        let dataTask = requester.dataTask(with: url) { data ,response, error in
+        let dataTask = requester.dataTask(with: url) { data , response, error in
             guard error == nil else {
                 completionHandler(.failure(.requestError(description: error!.localizedDescription)))
                 return
             }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completionHandler(.failure(.invalidHTTPResponse))
+                return
+            }
+            
             guard let data = data else { return }
             completionHandler(.success(data))
         }

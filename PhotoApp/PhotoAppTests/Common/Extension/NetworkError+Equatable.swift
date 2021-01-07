@@ -15,6 +15,8 @@ extension NetworkError: Equatable {
             return true
         case (.invalidURL, .invalidURL):
             return true
+        case (.invalidHTTPResponse, .invalidHTTPResponse):
+            return true
         default:
             return false
         }

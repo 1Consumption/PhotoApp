@@ -10,6 +10,7 @@ import Foundation
 enum NetworkError: Error {
     case requestError(description: String)
     case invalidURL
+    case invalidHTTPResponse
     
     var localizedDescription: String {
         switch self {
@@ -17,6 +18,8 @@ enum NetworkError: Error {
             return description
         case .invalidURL:
             return "invalid URL!"
+        case .invalidHTTPResponse:
+            return "invalid HTTPResponse!"
         }
     }
 }
@@ -24,7 +27,7 @@ enum NetworkError: Error {
 //default :
 //    return ""
 
-//case invalidHTTPResponse(error: Error)
+
 //case invalidStatusCode(error: Error)
 
 
