@@ -11,16 +11,19 @@ import XCTest
 final class NetworkErrorTests: XCTestCase {
     
     func testLocalizedDescription() {
-        var description = NetworkError.requestError(description: "reqeustError").localizedDescription
+        var description = NetworkError.requestError(description: "reqeustError").description
         XCTAssertEqual(description, "reqeustError")
         
-        description = NetworkError.invalidURL.localizedDescription
+        description = NetworkError.invalidURL.description
         XCTAssertEqual(description, "invalid URL!")
         
-        description = NetworkError.invalidHTTPResponse.localizedDescription
+        description = NetworkError.invalidHTTPResponse.description
         XCTAssertEqual(description, "invalid HTTPResponse!")
         
-        description = NetworkError.invalidStatusCode(with: 300).localizedDescription
+        description = NetworkError.invalidStatusCode(with: 300).description
         XCTAssertEqual(description, "invalid statusCode: 300")
+        
+        description = NetworkError.invalidData.description
+        XCTAssertEqual(description, "invalid data")
     }
 }

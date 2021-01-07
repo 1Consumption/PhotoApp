@@ -51,10 +51,16 @@ final class NetworkManagerTests: XCTestCase {
                     networkError: .invalidHTTPResponse)
     }
     
-    func testFialureWithInvalidStatusCode() {
+    func testFailureWithInvalidStatusCode() {
         failureCase(description: "invalidStatusCode",
                     requester: InvalidStatusCode(),
                     networkError: .invalidStatusCode(with: 300))
+    }
+    
+    func testFailureWithInvalidData() {
+        failureCase(description: "invalidData",
+                    requester: InvalidData(),
+                    networkError: .invalidData)
     }
     
     private func failureCase(description: String, requester: Requestable, url: String = "failure", networkError: NetworkError) {
@@ -101,6 +107,13 @@ final class InvalidHTTPResponseRequester: Requestable {
 final class InvalidStatusCode: Requestable {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(nil, HTTPURLResponse(url: url, statusCode: 300, httpVersion: nil, headerFields: nil), nil)
+        return URLSession.shared.dataTask(with: url)
+    }
+}
+
+final class InvalidData: Requestable {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        completionHandler(nil, HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
         return URLSession.shared.dataTask(with: url)
     }
 }

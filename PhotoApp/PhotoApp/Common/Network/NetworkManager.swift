@@ -37,7 +37,11 @@ final class NetworkManager: NetworkManageable {
                 return
             }
             
-            guard let data = data else { return }
+            guard let data = data else {
+                completionHandler(.failure(.invalidData))
+                return
+            }
+            
             completionHandler(.success(data))
         }
         
