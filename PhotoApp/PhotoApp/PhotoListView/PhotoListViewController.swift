@@ -46,4 +46,12 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         guard let size = UIImage(named: model[indexPath.item].name)?.size else { return .zero }
         return CGSize(width: view.frame.width, height: size.height * view.frame.width / size.width)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let lastIndexPathItem = collectionView.numberOfItems(inSection: 0)
+        
+        guard lastIndexPathItem == indexPath.item + 1 else { return }
+        
+        // Todo: 다음 페이지에 해당하는 모델 받아오기
+    }
 }
