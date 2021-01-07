@@ -32,6 +32,11 @@ final class NetworkManager: NetworkManageable {
                 return
             }
             
+            guard (200...299) ~= httpResponse.statusCode else {
+                completionHandler(.failure(.invalidStatusCode(with: httpResponse.statusCode)))
+                return
+            }
+            
             guard let data = data else { return }
             completionHandler(.success(data))
         }

@@ -33,55 +33,42 @@ final class NetworkManagerTests: XCTestCase {
     }
     
     func testFailureWithError() {
-        let expectation = XCTestExpectation(description: "rrror")
-        
-        networkManager = NetworkManager(requester: ReqeustErrorRequester())
-        networkManager.requestData(from: "requestError",
-                                   method: .get,
-                                   completionHandler: { result in
-                                    switch result {
-                                    case .success(_):
-                                        XCTFail()
-                                    case .failure(let error):
-                                        XCTAssertEqual(error, NetworkError.requestError(description: "error"))
-                                        expectation.fulfill()
-                                    }
-                                   })
-
-        wait(for: [expectation], timeout: 5.0)
+        failureCase(description: "error",
+                    requester: ReqeustErrorRequester(),
+                    networkError: .requestError(description: "error"))
     }
     
     func testFailureWithInvalidURL() {
-        let expectation = XCTestExpectation(description: "invalidURL")
-        
-        networkManager = NetworkManager(requester: SuccessRequester())
-        networkManager.requestData(from: "",
-                                   method: .get,
-                                   completionHandler: { result in
-                                    switch result {
-                                    case .success(_):
-                                        XCTFail()
-                                    case .failure(let error):
-                                        XCTAssertEqual(error, NetworkError.invalidURL)
-                                        expectation.fulfill()
-                                    }
-                                   })
-
-        wait(for: [expectation], timeout: 5.0)
+        failureCase(description: "invalidURL",
+                    requester: SuccessRequester(),
+                    url: "",
+                    networkError: .invalidURL)
     }
     
     func testFailiureWithInvalidHTTPResponse() {
-        let expectation = XCTestExpectation(description: "invalidHTTPResponse")
+        failureCase(description: "invalidHTTPResponse",
+                    requester: InvalidHTTPResponseRequester(),
+                    networkError: .invalidHTTPResponse)
+    }
+    
+    func testFialureWithInvalidStatusCode() {
+        failureCase(description: "invalidStatusCode",
+                    requester: InvalidStatusCode(),
+                    networkError: .invalidStatusCode(with: 300))
+    }
+    
+    private func failureCase(description: String, requester: Requestable, url: String = "failure", networkError: NetworkError) {
+        let expectation = XCTestExpectation(description: description)
         
-        networkManager = NetworkManager(requester: InvalidHTTPResponseRequester())
-        networkManager.requestData(from: "invalidHTTPResponse",
+        networkManager = NetworkManager(requester: requester)
+        networkManager.requestData(from: url,
                                    method: .get,
                                    completionHandler: { result in
                                     switch result {
                                     case .success(_):
                                         XCTFail()
                                     case .failure(let error):
-                                        XCTAssertEqual(error, NetworkError.invalidHTTPResponse)
+                                        XCTAssertEqual(error, networkError)
                                         expectation.fulfill()
                                     }
                                    })
@@ -92,7 +79,7 @@ final class NetworkManagerTests: XCTestCase {
 
 final class SuccessRequester: Requestable {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(Data(), HTTPURLResponse(), nil)
+        completionHandler(Data(), HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
         return URLSession.shared.dataTask(with: url)
     }
 }
@@ -107,6 +94,13 @@ final class ReqeustErrorRequester: Requestable {
 final class InvalidHTTPResponseRequester: Requestable {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(nil, URLResponse(), nil)
+        return URLSession.shared.dataTask(with: url)
+    }
+}
+
+final class InvalidStatusCode: Requestable {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        completionHandler(nil, HTTPURLResponse(url: url, statusCode: 300, httpVersion: nil, headerFields: nil), nil)
         return URLSession.shared.dataTask(with: url)
     }
 }

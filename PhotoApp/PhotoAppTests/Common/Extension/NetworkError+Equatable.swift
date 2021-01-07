@@ -17,6 +17,8 @@ extension NetworkError: Equatable {
             return true
         case (.invalidHTTPResponse, .invalidHTTPResponse):
             return true
+        case (.invalidStatusCode(let left), .invalidStatusCode(let right)):
+            return left == right
         default:
             return false
         }

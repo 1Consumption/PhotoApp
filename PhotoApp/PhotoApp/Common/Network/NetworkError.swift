@@ -11,6 +11,7 @@ enum NetworkError: Error {
     case requestError(description: String)
     case invalidURL
     case invalidHTTPResponse
+    case invalidStatusCode(with: Int)
     
     var localizedDescription: String {
         switch self {
@@ -20,14 +21,8 @@ enum NetworkError: Error {
             return "invalid URL!"
         case .invalidHTTPResponse:
             return "invalid HTTPResponse!"
+        case .invalidStatusCode(let code):
+            return "invalid statusCode: \(code)"
         }
     }
 }
-
-//default :
-//    return ""
-
-
-//case invalidStatusCode(error: Error)
-
-
