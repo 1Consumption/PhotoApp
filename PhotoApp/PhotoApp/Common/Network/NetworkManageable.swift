@@ -11,8 +11,10 @@ typealias DataResultHandler = (Result<Data, NetworkError>) -> Void
 
 protocol NetworkManageable: class {
     var requestBag: Set<URL> { get }
+    var requester: Requestable { get }
     
     @discardableResult
     func requestData(from url: String, method: HTTPMethod, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask?
+    
     func requestCompleted()
 }
