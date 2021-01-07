@@ -16,8 +16,8 @@ final class NetworkManagerTests: XCTestCase {
         var resultData: Data?
         
         networkManager = NetworkManager(requester: SuccessRequester())
-        networkManager.requestData(from: "success",
-                                   method: .get,
+        networkManager.requestData(from: URL(string: "success"),
+                                   method: .get, header: nil,
                                    completionHandler: { result in
                                     switch result {
                                     case .success(let data):
@@ -41,7 +41,7 @@ final class NetworkManagerTests: XCTestCase {
     func testFailureWithInvalidURL() {
         failureCase(description: "invalidURL",
                     requester: SuccessRequester(),
-                    url: "",
+                    path: "",
                     networkError: .invalidURL)
     }
     
@@ -71,7 +71,7 @@ final class NetworkManagerTests: XCTestCase {
         duplicate.delayTime = 3
         let manager = NetworkManager(requester: duplicate)
         
-        manager.requestData(from: "duplicate",
+        manager.requestData(from: URL(string: "duplicate"),
                                    method: .get,
                                    completionHandler: { result in
                                     switch result {
@@ -85,7 +85,7 @@ final class NetworkManagerTests: XCTestCase {
         
         duplicate.delayTime = 0
         
-        manager.requestData(from: "duplicate",
+        manager.requestData(from: URL(string: "duplicate"),
                                    method: .get,
                                    completionHandler: { result in
                                     switch result {
@@ -100,12 +100,12 @@ final class NetworkManagerTests: XCTestCase {
         wait(for: [invalidExpectation, duplicateExpectation], timeout: 5.0)
     }
     
-    private func failureCase(description: String, requester: Requestable, url: String = "failure", networkError: NetworkError, time: TimeInterval = 0) {
+    private func failureCase(description: String, requester: Requestable, path: String = "failure", networkError: NetworkError, time: TimeInterval = 0) {
         let expectation = XCTestExpectation(description: description)
         
         networkManager = NetworkManager(requester: requester)
-        networkManager.requestData(from: url,
-                                   method: .get,
+        networkManager.requestData(from: URL(string: path),
+                                   method: .get,header: nil,
                                    completionHandler: { result in
                                     switch result {
                                     case .success(_):
@@ -121,37 +121,37 @@ final class NetworkManagerTests: XCTestCase {
 }
 
 final class SuccessRequester: Requestable {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(Data(), HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
-        return URLSession.shared.dataTask(with: url)
+    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        completionHandler(Data(), HTTPURLResponse(url: urlRequest.url!, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
+        return URLSession.shared.dataTask(with: urlRequest)
     }
 }
 
 final class ReqeustErrorRequester: Requestable {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(nil, nil, NetworkError.requestError(description: "error"))
-        return URLSession.shared.dataTask(with: url)
+        return URLSession.shared.dataTask(with: urlRequest)
     }
 }
 
 final class InvalidHTTPResponseRequester: Requestable {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(nil, URLResponse(), nil)
-        return URLSession.shared.dataTask(with: url)
+        return URLSession.shared.dataTask(with: urlRequest)
     }
 }
 
 final class InvalidStatusCode: Requestable {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(nil, HTTPURLResponse(url: url, statusCode: 300, httpVersion: nil, headerFields: nil), nil)
-        return URLSession.shared.dataTask(with: url)
+    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        completionHandler(nil, HTTPURLResponse(url: urlRequest.url!, statusCode: 300, httpVersion: nil, headerFields: nil), nil)
+        return URLSession.shared.dataTask(with: urlRequest)
     }
 }
 
 final class InvalidData: Requestable {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(nil, HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
-        return URLSession.shared.dataTask(with: url)
+    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        completionHandler(nil, HTTPURLResponse(url: urlRequest.url!, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
+        return URLSession.shared.dataTask(with: urlRequest)
     }
 }
 
@@ -159,10 +159,10 @@ final class DuplicateRequest: Requestable {
     private let queue = DispatchQueue(label: "duplicated")
     var delayTime = 0
     
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         queue.asyncAfter(deadline: .now() + .seconds(delayTime), execute: {
-            completionHandler(nil, HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
+            completionHandler(nil, HTTPURLResponse(url: urlRequest.url!, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
         })
-        return URLSession.shared.dataTask(with: url)
+        return URLSession.shared.dataTask(with: urlRequest)
     }
 }

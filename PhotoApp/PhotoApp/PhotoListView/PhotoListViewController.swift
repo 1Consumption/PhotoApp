@@ -13,7 +13,6 @@ struct Photo {
 }
 
 final class PhotoListViewController: UIViewController {
-    
     private var model: [Photo] = [Photo]()
     @IBOutlet weak var photoListCollectionView: UICollectionView!
     

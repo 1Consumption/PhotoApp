@@ -8,7 +8,7 @@
 import Foundation
 
 final class NetworkManager: NetworkManageable {
-    private(set) var requestBag: Set<URL> = Set<URL>()
+    private(set) var requestBag: Set<URLRequest> = Set<URLRequest>()
     private(set) var requester: Requestable
     
     init(requester: Requestable = DefaultRequester()) {
@@ -16,8 +16,8 @@ final class NetworkManager: NetworkManageable {
     }
     
     @discardableResult
-    func requestData(from url: String, method: HTTPMethod, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
-        guard let url = URL(string: url) else {
+    func requestData(from url: URL?, method: HTTPMethod, header: [String: String]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
+        guard let url = makeURLRequest(url: url, method: method, headers: header) else {
             completionHandler(.failure(.invalidURL))
             return nil
         }
@@ -68,18 +68,30 @@ final class NetworkManager: NetworkManageable {
         return dataTask
     }
     
-    func requestCompleted(with url: URL, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler) {
+    func requestCompleted(with url: URLRequest, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler) {
         requestBag.remove(url)
         handler(result)
     }
     
+    private func makeURLRequest(url: URL?, method: HTTPMethod, headers: [String: String]?) -> URLRequest? {
+        guard let url = url else { return nil }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = method.rawValue
+        headers?.forEach { field, value in
+            urlRequest.addValue(value, forHTTPHeaderField: field)
+        }
+        
+        return urlRequest
+    }
+    
     deinit {
-        requestBag = Set<URL>()
+        requestBag = Set<URLRequest>()
     }
 }
 
 final class DefaultRequester: Requestable {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+    func dataTask(with url: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return URLSession.shared.dataTask(with: url, completionHandler: completionHandler)
     }
 }

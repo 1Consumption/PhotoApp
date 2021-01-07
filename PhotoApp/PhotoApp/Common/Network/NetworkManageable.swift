@@ -10,11 +10,11 @@ import Foundation
 typealias DataResultHandler = (Result<Data, NetworkError>) -> Void
 
 protocol NetworkManageable: class {
-    var requestBag: Set<URL> { get }
+    var requestBag: Set<URLRequest> { get }
     var requester: Requestable { get }
     
     @discardableResult
-    func requestData(from url: String, method: HTTPMethod, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask?
+    func requestData(from url: URL?, method: HTTPMethod, header: [String: String]?, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask?
     
-    func requestCompleted(with url: URL, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler)
+    func requestCompleted(with url: URLRequest, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler)
 }
