@@ -17,48 +17,48 @@ final class NetworkManager: NetworkManageable {
     
     @discardableResult
     func requestData(from url: URL?, method: HTTPMethod, header: [String: String]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
-        guard let url = makeURLRequest(url: url, method: method, headers: header) else {
+        guard let urlRequest = makeURLRequest(url: url, method: method, headers: header) else {
             completionHandler(.failure(.invalidURL))
             return nil
         }
         
-        guard !requestBag.contains(url) else {
+        guard !requestBag.contains(urlRequest) else {
             completionHandler(.failure(.duplicatedRequest))
             return nil
         }
         
-        requestBag.insert(url)
+        requestBag.insert(urlRequest)
         
-        let dataTask = requester.dataTask(with: url) { data , response, error in
+        let dataTask = requester.dataTask(with: urlRequest) { data , response, error in
             guard error == nil else {
-                self.requestCompleted(with: url,
+                self.requestCompleted(with: urlRequest,
                                       result: .failure(.requestError(description: error!.localizedDescription)),
                                       handler: completionHandler)
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                self.requestCompleted(with: url,
+                self.requestCompleted(with: urlRequest,
                                       result: .failure(.invalidHTTPResponse),
                                       handler: completionHandler)
                 return
             }
             
             guard (200...299) ~= httpResponse.statusCode else {
-                self.requestCompleted(with: url,
+                self.requestCompleted(with: urlRequest,
                                       result: .failure(.invalidStatusCode(with: httpResponse.statusCode)),
                                       handler: completionHandler)
                 return
             }
             
             guard let data = data else {
-                self.requestCompleted(with: url,
+                self.requestCompleted(with: urlRequest,
                                       result: .failure(.invalidData),
                                       handler: completionHandler)
                 return
             }
             
-            self.requestCompleted(with: url,
+            self.requestCompleted(with: urlRequest,
                                   result: .success(data),
                                   handler: completionHandler)
         }

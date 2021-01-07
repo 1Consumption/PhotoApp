@@ -11,8 +11,8 @@ import XCTest
 final class NetworkErrorTests: XCTestCase {
     
     func testLocalizedDescription() {
-        var description = NetworkError.requestError(description: "reqeustError").description
-        XCTAssertEqual(description, "reqeustError")
+        var description = NetworkError.requestError(description: "requestError").description
+        XCTAssertEqual(description, "requestError")
         
         description = NetworkError.invalidURL.description
         XCTAssertEqual(description, "invalid URL!")

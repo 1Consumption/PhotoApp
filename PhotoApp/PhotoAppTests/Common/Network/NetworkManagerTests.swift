@@ -34,7 +34,7 @@ final class NetworkManagerTests: XCTestCase {
     
     func testFailureWithError() {
         failureCase(description: "error",
-                    requester: ReqeustErrorRequester(),
+                    requester: RequestErrorRequester(),
                     networkError: .requestError(description: "error"))
     }
     
@@ -127,7 +127,7 @@ final class SuccessRequester: Requestable {
     }
 }
 
-final class ReqeustErrorRequester: Requestable {
+final class RequestErrorRequester: Requestable {
     func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(nil, nil, NetworkError.requestError(description: "error"))
         return URLSession.shared.dataTask(with: urlRequest)
