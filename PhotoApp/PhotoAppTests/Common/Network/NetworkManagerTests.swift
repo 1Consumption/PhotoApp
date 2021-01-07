@@ -14,6 +14,7 @@ final class NetworkManagerTests: XCTestCase {
     func testRequestDataSuccess() {
         let expectation = XCTestExpectation(description: "requestSuccess")
         var resultData: Data?
+        
         networkManager = NetworkManager(requester: SuccessRequester())
         networkManager.requestData(from: "success",
                                    method: .get,
@@ -30,11 +31,37 @@ final class NetworkManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
         XCTAssertNotNil(resultData)
     }
+    
+    func testRequestDataFailureWithError() {
+        let expectation = XCTestExpectation(description: "requestFailureWithError")
+        
+        networkManager = NetworkManager(requester: ReqeustErrorRequester())
+        networkManager.requestData(from: "requestError",
+                                   method: .get,
+                                   completionHandler: { result in
+                                    switch result {
+                                    case .success(_):
+                                        XCTFail()
+                                    case .failure(let error):
+                                        XCTAssertEqual(error, NetworkError.requestError(description: "error"))
+                                        expectation.fulfill()
+                                    }
+                                   })
+
+        wait(for: [expectation], timeout: 5.0)
+    }
 }
 
 final class SuccessRequester: Requestable {
     func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         completionHandler(Data(), nil, nil)
-        return URLSession.shared.dataTask(with: URL(string: "success")!)
+        return URLSession.shared.dataTask(with: url)
+    }
+}
+
+final class ReqeustErrorRequester: Requestable {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        completionHandler(nil, nil, NetworkError.requestError(description: "error"))
+        return URLSession.shared.dataTask(with: url)
     }
 }

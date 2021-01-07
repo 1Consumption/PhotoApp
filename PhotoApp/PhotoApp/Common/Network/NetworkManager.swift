@@ -18,6 +18,10 @@ final class NetworkManager: NetworkManageable {
     func requestData(from url: String, method: HTTPMethod, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
         guard let url = URL(string: url) else { return nil }
         let dataTask = requester.dataTask(with: url) { data ,response, error in
+            guard error == nil else {
+                completionHandler(.failure(.requestError(description: error!.localizedDescription)))
+                return
+            }
             guard let data = data else { return }
             completionHandler(.success(data))
         }
@@ -31,5 +35,3 @@ final class NetworkManager: NetworkManageable {
         
     }
 }
-
-

@@ -8,4 +8,11 @@
 import Foundation
 
 enum NetworkError: Error {
+    case requestError(description: String)
+    var localizedDescription: String {
+        switch self {
+        case .requestError(let description):
+            return description
+        }
+    }
 }
