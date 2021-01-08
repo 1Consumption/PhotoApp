@@ -11,7 +11,7 @@ final class PhotoListUseCase {
     private(set) var page: Int = 1
     private let networkManager: NetworkManageable
     
-    init(networkManageable: NetworkManager) {
+    init(networkManageable: NetworkManager = NetworkManager()) {
         self.networkManager = networkManageable
     }
     
@@ -20,7 +20,7 @@ final class PhotoListUseCase {
         
         networkManager.requestData(from: url,
                                    method: .get,
-                                   header: ["Authorization": Secret.APIKey],
+                                   header: [.authorization(key: Secret.APIKey)],
                                    completionHandler: {
                                     switch $0 {
                                     case .success(let data):
