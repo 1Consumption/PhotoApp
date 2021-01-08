@@ -17,7 +17,11 @@
 		A5D46FFC25A768FD000BF4EE /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FFB25A768FD000BF4EE /* EndPoint.swift */; };
 		A5D4700025A76968000BF4EE /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FFF25A76968000BF4EE /* Secret.swift */; };
 		A5E07C5B25A81E54004C6C24 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C5A25A81E54004C6C24 /* Photo.swift */; };
+		A5E07C6225A8214C004C6C24 /* PhotoListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */; };
+		A5E07C6825A8219C004C6C24 /* PhotoListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */; };
 		A5E07C6D25A82314004C6C24 /* Reqeusters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6C25A82314004C6C24 /* Reqeusters.swift */; };
+		A5E07C7C25A82934004C6C24 /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C7B25A82934004C6C24 /* Encoder.swift */; };
+		A5E07C8225A82CEE004C6C24 /* UseCaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */; };
 		A5E78E3C25A6B283000B9C76 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E78E3B25A6B283000B9C76 /* AppDelegate.swift */; };
 		A5E78E4025A6B283000B9C76 /* PhotoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */; };
 		A5E78E4325A6B283000B9C76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E78E4125A6B283000B9C76 /* Main.storyboard */; };
@@ -49,7 +53,11 @@
 		A5D46FFB25A768FD000BF4EE /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		A5D46FFF25A76968000BF4EE /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		A5E07C5A25A81E54004C6C24 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListUseCase.swift; sourceTree = "<group>"; };
+		A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListUseCaseTests.swift; sourceTree = "<group>"; };
 		A5E07C6C25A82314004C6C24 /* Reqeusters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reqeusters.swift; sourceTree = "<group>"; };
+		A5E07C7B25A82934004C6C24 /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
+		A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseError.swift; sourceTree = "<group>"; };
 		A5E78E3825A6B283000B9C76 /* PhotoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E78E3B25A6B283000B9C76 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +93,7 @@
 		A588F19425A6E38400487FB0 /* PhotoListView */ = {
 			isa = PBXGroup;
 			children = (
+				A5E07C6025A82133004C6C24 /* UseCase */,
 				A5E07C5925A81E4D004C6C24 /* Model */,
 				A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */,
 				A591B53925A6E45900B53FA6 /* PhotoListCollectionViewCell.swift */,
@@ -106,6 +115,14 @@
 				A5E07C5A25A81E54004C6C24 /* Photo.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		A5E07C6025A82133004C6C24 /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+				A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */,
+			);
+			path = UseCase;
 			sourceTree = "<group>";
 		};
 		A5E78E2F25A6B283000B9C76 = {
@@ -145,6 +162,7 @@
 			children = (
 				A5FDA16C25A70DB300264597 /* Network */,
 				A5D46FFF25A76968000BF4EE /* Secret.swift */,
+				A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -167,6 +185,7 @@
 			children = (
 				A5FDA18525A7105E00264597 /* Common */,
 				A5FDA17B25A7103400264597 /* Info.plist */,
+				A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */,
 			);
 			path = PhotoAppTests;
 			sourceTree = "<group>";
@@ -177,6 +196,7 @@
 				A5D46FEA25A721D8000BF4EE /* Extension */,
 				A5FDA18625A7106200264597 /* Network */,
 				A5E07C6C25A82314004C6C24 /* Reqeusters.swift */,
+				A5E07C7B25A82934004C6C24 /* Encoder.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -291,10 +311,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5E07C6225A8214C004C6C24 /* PhotoListUseCase.swift in Sources */,
 				A5C0F17F25A7134200F80C08 /* NetworkManager.swift in Sources */,
 				A5D4700025A76968000BF4EE /* Secret.swift in Sources */,
 				A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */,
 				A5C0F18325A713E200F80C08 /* NetworkError.swift in Sources */,
+				A5E07C8225A82CEE004C6C24 /* UseCaseError.swift in Sources */,
 				A5D46FFC25A768FD000BF4EE /* EndPoint.swift in Sources */,
 				A5E78E4025A6B283000B9C76 /* PhotoListViewController.swift in Sources */,
 				A5FDA16E25A70DC300264597 /* NetworkManageable.swift in Sources */,
@@ -312,6 +334,8 @@
 				A5D46FEC25A721E7000BF4EE /* NetworkError+Equatable.swift in Sources */,
 				A5FDA17A25A7103400264597 /* NetworkManagerTests.swift in Sources */,
 				A5E07C6D25A82314004C6C24 /* Reqeusters.swift in Sources */,
+				A5E07C6825A8219C004C6C24 /* PhotoListUseCaseTests.swift in Sources */,
+				A5E07C7C25A82934004C6C24 /* Encoder.swift in Sources */,
 				A5D46FF825A76592000BF4EE /* EndPointTests.swift in Sources */,
 				A5D46FF225A72535000BF4EE /* NetworkErrorTests.swift in Sources */,
 			);
