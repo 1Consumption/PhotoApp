@@ -16,7 +16,7 @@ final class NetworkManager: NetworkManageable {
     }
     
     @discardableResult
-    func requestData(from url: URL?, method: HTTPMethod, header: [String: String]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
+    func requestData(from url: URL?, method: HTTPMethod, header: [HTTPHeader]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
         guard let urlRequest = makeURLRequest(url: url, method: method, headers: header) else {
             completionHandler(.failure(.invalidURL))
             return nil
@@ -73,13 +73,15 @@ final class NetworkManager: NetworkManageable {
         handler(result)
     }
     
-    private func makeURLRequest(url: URL?, method: HTTPMethod, headers: [String: String]?) -> URLRequest? {
+    private func makeURLRequest(url: URL?, method: HTTPMethod, headers: [HTTPHeader]?) -> URLRequest? {
         guard let url = url else { return nil }
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
-        headers?.forEach { field, value in
-            urlRequest.addValue(value, forHTTPHeaderField: field)
+        headers?.forEach {
+            $0.header.forEach { field, value in
+                urlRequest.addValue(value, forHTTPHeaderField: field)
+            }
         }
         
         return urlRequest

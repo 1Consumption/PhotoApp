@@ -7,20 +7,11 @@
 
 import UIKit
 
-struct Photo {
-    let name: String
-    let author: String
-}
-
 final class PhotoListViewController: UIViewController {
-    private var model: [Photo] = [Photo]()
+    private var model: [Photo] = dummyPhotos
     @IBOutlet weak var photoListCollectionView: UICollectionView!
     
     override func viewDidLoad() {
-        (1..<20).forEach { _ in
-            let number = Int.random(in: 1...8)
-            model.append(Photo(name: "sample\(number)", author: "Author \(number)"))
-        }
         super.viewDidLoad()
         photoListCollectionView.dataSource = self
         photoListCollectionView.delegate = self
@@ -34,16 +25,19 @@ extension PhotoListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoListCollectionViewCell.identifier, for: indexPath) as? PhotoListCollectionViewCell else { return UICollectionViewCell() }
-        cell.photoImageView.image = UIImage(named: model[indexPath.item].name)
-        cell.authorNameLabel.text = "\(model[indexPath.item].author)"
+        let url = URL(string: model[indexPath.item].urls.regular)!
+        let data = try! Data(contentsOf: url)
+        cell.photoImageView.image = UIImage(data: data)
+        cell.authorNameLabel.text = "\(model[indexPath.item].user.name)"
         return cell
     }
 }
 
 extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let size = UIImage(named: model[indexPath.item].name)?.size else { return .zero }
-        return CGSize(width: view.frame.width, height: size.height * view.frame.width / size.width)
+        let width = CGFloat(model[indexPath.item].width)
+        let height = CGFloat(model[indexPath.item].height)
+        return CGSize(width: view.frame.width, height: height * view.frame.width / width)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
