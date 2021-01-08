@@ -18,6 +18,17 @@ final class PhotoListViewController: UIViewController {
         dataSource.photoListViewModel = photoListViewModel
         photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
+        
+        photoListViewModel.bind({ range in
+            DispatchQueue.main.async { [weak self] in
+                self?.photoListCollectionView.performBatchUpdates({
+                    self?.photoListCollectionView.insertItems(at: range.map { IndexPath(item: $0, section: 0)})
+                })
+            }
+        })
+        
+        photoListViewModel.retrievePhotoList(failureHandler: { _ in })
+    }
     }
 }
 
@@ -34,6 +45,6 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         
         guard lastIndexPathItem == indexPath.item + 1 else { return }
         
-        // Todo: 다음 페이지에 해당하는 모델 받아오기
+        photoListViewModel.retrievePhotoList(failureHandler: { _ in })
     }
 }
