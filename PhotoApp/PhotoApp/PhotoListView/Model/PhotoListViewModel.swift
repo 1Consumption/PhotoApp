@@ -17,6 +17,9 @@ final class PhotoListViewModel {
             handler?(stardIndex..<endIndex)
         }
     }
+    var count: Int {
+        return photoList.count
+    }
     
     init(networkManageable: NetworkManageable = NetworkManager()) {
         photoList = [Photo]()
@@ -32,5 +35,10 @@ final class PhotoListViewModel {
     
     func bind(_ handler: @escaping ((Range<Int>) -> Void)) {
         self.handler = handler
+    }
+    
+    func photo(of index: Int) -> Photo? {
+        guard index < photoList.count else { return nil }
+        return photoList[index]
     }
 }

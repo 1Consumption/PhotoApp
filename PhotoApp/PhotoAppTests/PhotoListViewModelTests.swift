@@ -81,7 +81,7 @@ final class PhotoListViewModelTests: XCTestCase {
         
         let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
         let photoListViewModel = PhotoListViewModel(networkManageable: networkManager)
-    
+        
         photoListViewModel.bind { _ in
             XCTFail()
         }
@@ -92,6 +92,39 @@ final class PhotoListViewModelTests: XCTestCase {
         })
         
         wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func testPhoto() {
+        let photo = [
+            Photo(id: "0", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "")),
+            Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "")),
+            Photo(id: "2", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))
+        ]
+        guard let encoded = ModelEncoder().encode(with: photo) else {
+            XCTFail()
+            return
+        }
+        
+        let requester = SuccessRequester(data: encoded)
+        let networkManager = NetworkManager(requester: requester)
+        let photoListViewModel = PhotoListViewModel(networkManageable: networkManager)
+        
+        let expectation = XCTestExpectation(description: "bindingSuccess")
+        
+        photoListViewModel.bind {
+            XCTAssertEqual((0..<3), $0)
+            expectation.fulfill()
+        }
+        
+        photoListViewModel.retrievePhotoList(failureHandler: { _ in
+            XCTFail()
+        })
+        
+        
+        wait(for: [expectation], timeout: 5.0)
+        
+        XCTAssertEqual(Photo(id: "2", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "")), photoListViewModel.photo(of: 2))
+        XCTAssertNil(photoListViewModel.photo(of: 3))
     }
     
     private func getDecodeError() -> Error? {
