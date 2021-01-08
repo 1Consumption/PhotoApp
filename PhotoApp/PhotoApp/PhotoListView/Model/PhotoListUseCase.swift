@@ -11,7 +11,7 @@ final class PhotoListUseCase: RemoteDataDecodableType {
     private(set) var page: Int = 1
     let networkManager: NetworkManageable
     
-    init(networkManageable: NetworkManager = NetworkManager()) {
+    init(networkManageable: NetworkManageable) {
         self.networkManager = networkManageable
     }
     
