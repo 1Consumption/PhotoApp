@@ -22,6 +22,9 @@
 		A5E07C6D25A82314004C6C24 /* Reqeusters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6C25A82314004C6C24 /* Reqeusters.swift */; };
 		A5E07C7C25A82934004C6C24 /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C7B25A82934004C6C24 /* Encoder.swift */; };
 		A5E07C8225A82CEE004C6C24 /* UseCaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */; };
+		A5E07C8625A83017004C6C24 /* UseCaseError+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8525A83017004C6C24 /* UseCaseError+Equatable.swift */; };
+		A5E07C8A25A83051004C6C24 /* Photos+Equatable+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8925A83051004C6C24 /* Photos+Equatable+Encodable.swift */; };
+		A5E07C8E25A83189004C6C24 /* Error+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8D25A83189004C6C24 /* Error+Equatable.swift */; };
 		A5E78E3C25A6B283000B9C76 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E78E3B25A6B283000B9C76 /* AppDelegate.swift */; };
 		A5E78E4025A6B283000B9C76 /* PhotoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */; };
 		A5E78E4325A6B283000B9C76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E78E4125A6B283000B9C76 /* Main.storyboard */; };
@@ -58,6 +61,9 @@
 		A5E07C6C25A82314004C6C24 /* Reqeusters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reqeusters.swift; sourceTree = "<group>"; };
 		A5E07C7B25A82934004C6C24 /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
 		A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseError.swift; sourceTree = "<group>"; };
+		A5E07C8525A83017004C6C24 /* UseCaseError+Equatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UseCaseError+Equatable.swift"; sourceTree = "<group>"; };
+		A5E07C8925A83051004C6C24 /* Photos+Equatable+Encodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photos+Equatable+Encodable.swift"; sourceTree = "<group>"; };
+		A5E07C8D25A83189004C6C24 /* Error+Equatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Equatable.swift"; sourceTree = "<group>"; };
 		A5E78E3825A6B283000B9C76 /* PhotoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E78E3B25A6B283000B9C76 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +111,9 @@
 			isa = PBXGroup;
 			children = (
 				A5D46FEB25A721E7000BF4EE /* NetworkError+Equatable.swift */,
+				A5E07C8525A83017004C6C24 /* UseCaseError+Equatable.swift */,
+				A5E07C8925A83051004C6C24 /* Photos+Equatable+Encodable.swift */,
+				A5E07C8D25A83189004C6C24 /* Error+Equatable.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -332,6 +341,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5D46FEC25A721E7000BF4EE /* NetworkError+Equatable.swift in Sources */,
+				A5E07C8625A83017004C6C24 /* UseCaseError+Equatable.swift in Sources */,
+				A5E07C8A25A83051004C6C24 /* Photos+Equatable+Encodable.swift in Sources */,
+				A5E07C8E25A83189004C6C24 /* Error+Equatable.swift in Sources */,
 				A5FDA17A25A7103400264597 /* NetworkManagerTests.swift in Sources */,
 				A5E07C6D25A82314004C6C24 /* Reqeusters.swift in Sources */,
 				A5E07C6825A8219C004C6C24 /* PhotoListUseCaseTests.swift in Sources */,

@@ -36,8 +36,14 @@ final class InvalidHTTPResponseRequester: Requestable {
 }
 
 final class InvalidStatusCode: Requestable {
+    private let code: Int
+    
+    init(with code: Int = 300) {
+        self.code = code
+    }
+    
     func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(nil, HTTPURLResponse(url: urlRequest.url!, statusCode: 300, httpVersion: nil, headerFields: nil), nil)
+        completionHandler(nil, HTTPURLResponse(url: urlRequest.url!, statusCode: code, httpVersion: nil, headerFields: nil), nil)
         return URLSession.shared.dataTask(with: urlRequest)
     }
 }

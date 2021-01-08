@@ -8,6 +8,6 @@
 import Foundation
 
 enum UseCaseError: Error {
-    case networkError(description: String)
-    case decodeError(description: String)
+    case networkError(networkError: NetworkError)
+    case decodeError(error: Error)
 }

@@ -29,10 +29,10 @@ final class PhotoListUseCase {
                                             self.page += 1
                                             successHandler(photoList)
                                         } catch {
-                                            failureHandler(.decodeError(description: error.localizedDescription))
+                                            failureHandler(.decodeError(error: error))
                                         }
-                                    case .failure(let networError):
-                                        failureHandler(.networkError(description: networError.description))
+                                    case .failure(let networkError):
+                                        failureHandler(.networkError(networkError: networkError))
                                     }
                                    })
     }
