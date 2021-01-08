@@ -10,7 +10,7 @@ import Foundation
 final class PhotoListViewModel {
     private let photoListUseCase: PhotoListUseCase
     private var handler: ((Range<Int>) -> Void)?
-    private var photoList: [Photo] {
+    private var photoList: PhotoList {
         didSet {
             let stardIndex = oldValue.count
             let endIndex = photoList.count
@@ -22,7 +22,7 @@ final class PhotoListViewModel {
     }
     
     init(networkManageable: NetworkManageable = NetworkManager()) {
-        photoList = [Photo]()
+        photoList = PhotoList()
         photoListUseCase = PhotoListUseCase(networkManageable: networkManageable)
     }
     
@@ -38,7 +38,6 @@ final class PhotoListViewModel {
     }
     
     func photo(of index: Int) -> Photo? {
-        guard index < photoList.count else { return nil }
-        return photoList[index]
+        photoList.photo(of: index)
     }
 }

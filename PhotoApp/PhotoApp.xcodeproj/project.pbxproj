@@ -17,6 +17,8 @@
 		A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0F18725A71A7600F80C08 /* Requestable.swift */; };
 		A5D26C7625A8D2DE0008CA87 /* UIAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7525A8D2DE0008CA87 /* UIAlertViewController.swift */; };
 		A5D26C7A25A8D3CD0008CA87 /* UseCaseErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */; };
+		A5D26C8425A8E9100008CA87 /* PhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C8325A8E9100008CA87 /* PhotoList.swift */; };
+		A5D26C8825A8EA2D0008CA87 /* PhotoListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C8725A8EA2D0008CA87 /* PhotoListTests.swift */; };
 		A5D46FEC25A721E7000BF4EE /* NetworkError+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FEB25A721E7000BF4EE /* NetworkError+Equatable.swift */; };
 		A5D46FF225A72535000BF4EE /* NetworkErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FF125A72535000BF4EE /* NetworkErrorTests.swift */; };
 		A5D46FF825A76592000BF4EE /* EndPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FF725A76592000BF4EE /* EndPointTests.swift */; };
@@ -64,6 +66,8 @@
 		A5C0F18725A71A7600F80C08 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		A5D26C7525A8D2DE0008CA87 /* UIAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertViewController.swift; sourceTree = "<group>"; };
 		A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseErrorTests.swift; sourceTree = "<group>"; };
+		A5D26C8325A8E9100008CA87 /* PhotoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoList.swift; sourceTree = "<group>"; };
+		A5D26C8725A8EA2D0008CA87 /* PhotoListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListTests.swift; sourceTree = "<group>"; };
 		A5D46FEB25A721E7000BF4EE /* NetworkError+Equatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkError+Equatable.swift"; sourceTree = "<group>"; };
 		A5D46FF125A72535000BF4EE /* NetworkErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorTests.swift; sourceTree = "<group>"; };
 		A5D46FF725A76592000BF4EE /* EndPointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPointTests.swift; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 				A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */,
 				A5E07C5A25A81E54004C6C24 /* Photo.swift */,
 				A593129A25A87E7800B286E6 /* PhotoListViewModel.swift */,
+				A5D26C8325A8E9100008CA87 /* PhotoList.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -217,6 +222,7 @@
 				A5FDA17B25A7103400264597 /* Info.plist */,
 				A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */,
 				A593129425A87CC100B286E6 /* PhotoListViewModelTests.swift */,
+				A5D26C8725A8EA2D0008CA87 /* PhotoListTests.swift */,
 			);
 			path = PhotoAppTests;
 			sourceTree = "<group>";
@@ -353,6 +359,7 @@
 				A593129B25A87E7800B286E6 /* PhotoListViewModel.swift in Sources */,
 				A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */,
 				A5C0F18325A713E200F80C08 /* NetworkError.swift in Sources */,
+				A5D26C8425A8E9100008CA87 /* PhotoList.swift in Sources */,
 				A5E07C8225A82CEE004C6C24 /* UseCaseError.swift in Sources */,
 				A5D46FFC25A768FD000BF4EE /* EndPoint.swift in Sources */,
 				A5E78E4025A6B283000B9C76 /* PhotoListViewController.swift in Sources */,
@@ -371,6 +378,7 @@
 			files = (
 				A5D46FEC25A721E7000BF4EE /* NetworkError+Equatable.swift in Sources */,
 				A593129525A87CC100B286E6 /* PhotoListViewModelTests.swift in Sources */,
+				A5D26C8825A8EA2D0008CA87 /* PhotoListTests.swift in Sources */,
 				A5E07C8625A83017004C6C24 /* UseCaseError+Equatable.swift in Sources */,
 				A5D26C7A25A8D3CD0008CA87 /* UseCaseErrorTests.swift in Sources */,
 				A5E07C8A25A83051004C6C24 /* Photos+Equatable+Encodable.swift in Sources */,
