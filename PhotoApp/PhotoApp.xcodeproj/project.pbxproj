@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A54969F625A8BA7800248856 /* PhotoListCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54969F525A8BA7800248856 /* PhotoListCollectionViewDataSource.swift */; };
 		A591B53A25A6E45900B53FA6 /* PhotoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A591B53925A6E45900B53FA6 /* PhotoListCollectionViewCell.swift */; };
 		A593129125A87A9700B286E6 /* RemoteDataDecodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A593129025A87A9700B286E6 /* RemoteDataDecodableType.swift */; };
 		A593129525A87CC100B286E6 /* PhotoListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A593129425A87CC100B286E6 /* PhotoListViewModelTests.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A54969F525A8BA7800248856 /* PhotoListCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A591B53925A6E45900B53FA6 /* PhotoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCollectionViewCell.swift; sourceTree = "<group>"; };
 		A593129025A87A9700B286E6 /* RemoteDataDecodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataDecodableType.swift; sourceTree = "<group>"; };
 		A593129425A87CC100B286E6 /* PhotoListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListViewModelTests.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				A5E07C5925A81E4D004C6C24 /* Model */,
 				A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */,
 				A591B53925A6E45900B53FA6 /* PhotoListCollectionViewCell.swift */,
+				A54969F525A8BA7800248856 /* PhotoListCollectionViewDataSource.swift */,
 			);
 			path = PhotoListView;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5E07C6225A8214C004C6C24 /* PhotoListUseCase.swift in Sources */,
+				A54969F625A8BA7800248856 /* PhotoListCollectionViewDataSource.swift in Sources */,
 				A5C0F17F25A7134200F80C08 /* NetworkManager.swift in Sources */,
 				A5E07C9225A834A7004C6C24 /* HTTPHeader.swift in Sources */,
 				A593129125A87A9700B286E6 /* RemoteDataDecodableType.swift in Sources */,

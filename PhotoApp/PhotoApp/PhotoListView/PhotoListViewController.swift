@@ -8,35 +8,22 @@
 import UIKit
 
 final class PhotoListViewController: UIViewController {
-    private var model: [Photo] = dummyPhotos
     @IBOutlet weak var photoListCollectionView: UICollectionView!
+
+    private let dataSource: PhotoListCollectionViewDataSource = PhotoListCollectionViewDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        photoListCollectionView.dataSource = self
+        photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
-    }
-}
-
-extension PhotoListViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return model.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoListCollectionViewCell.identifier, for: indexPath) as? PhotoListCollectionViewCell else { return UICollectionViewCell() }
-        let url = URL(string: model[indexPath.item].urls.regular)!
-        let data = try! Data(contentsOf: url)
-        cell.photoImageView.image = UIImage(data: data)
-        cell.authorNameLabel.text = "\(model[indexPath.item].user.name)"
-        return cell
     }
 }
 
 extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = CGFloat(model[indexPath.item].width)
-        let height = CGFloat(model[indexPath.item].height)
+        guard let size = dataSource.photo(of: indexPath.item) else { return .zero }
+        let width = CGFloat(size.width)
+        let height = CGFloat(size.height)
         return CGSize(width: view.frame.width, height: height * view.frame.width / width)
     }
     
