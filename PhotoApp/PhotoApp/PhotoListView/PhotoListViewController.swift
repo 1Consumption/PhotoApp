@@ -11,9 +11,11 @@ final class PhotoListViewController: UIViewController {
     @IBOutlet weak var photoListCollectionView: UICollectionView!
 
     private let dataSource: PhotoListCollectionViewDataSource = PhotoListCollectionViewDataSource()
+    private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dataSource.photoListViewModel = photoListViewModel
         photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
     }

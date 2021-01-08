@@ -8,23 +8,30 @@
 import UIKit
 
 final class PhotoListCollectionViewDataSource: NSObject, UICollectionViewDataSource {
-    private var model: [Photo] = dummyPhotos
+    var photoListViewModel: PhotoListViewModel?
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return model.count
+        return photoListViewModel?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoListCollectionViewCell.identifier, for: indexPath) as? PhotoListCollectionViewCell else { return UICollectionViewCell() }
-        let url = URL(string: model[indexPath.item].urls.regular)!
-        let data = try! Data(contentsOf: url)
-        cell.photoImageView.image = UIImage(data: data)
-        cell.authorNameLabel.text = "\(model[indexPath.item].user.name)"
+        
+        guard let photo = photoListViewModel?.photo(of: indexPath.item) else { return cell }
+        
+        DispatchQueue.global().async {
+            let url = URL(string: photo.urls.regular)!
+            let data = try! Data(contentsOf: url)
+            DispatchQueue.main.async {
+                cell.authorNameLabel.text = "\(photo.user.name)"
+                cell.photoImageView.image = UIImage(data: data)
+            }
+        }
+        
         return cell
     }
     
     func photo(of index: Int) -> Photo? {
-        guard index < model.count else { return nil }
-        return model[index]
+        photoListViewModel?.photo(of: index)
     }
 }
