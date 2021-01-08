@@ -81,13 +81,13 @@ final class PhotoListViewModelTests: XCTestCase {
         
         let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
         let photoListViewModel = PhotoListViewModel(networkManageable: networkManager)
-    
+        
         photoListViewModel.bind { _ in
             XCTFail()
         }
         
         photoListViewModel.retrievePhotoList(failureHandler: { error in
-            XCTAssertEqual(error, .decodeError(error: decodeError))
+            XCTAssertEqual(error, .decodeError(description: decodeError.localizedDescription))
             expectation.fulfill()
         })
         

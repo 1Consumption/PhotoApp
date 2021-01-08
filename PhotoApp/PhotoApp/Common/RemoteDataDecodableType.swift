@@ -33,7 +33,7 @@ extension RemoteDataDecodableType {
                                             modelWillDeliverHandler?()
                                             successHandler(model)
                                         } catch {
-                                            failureHandler(.decodeError(error: error))
+                                            failureHandler(.decodeError(description: error.localizedDescription))
                                         }
                                     case .failure(let networkError):
                                         failureHandler(.networkError(networkError: networkError))

@@ -8,43 +8,47 @@
 import UIKit
 
 final class PhotoListViewController: UIViewController {
-    private var model: [Photo] = dummyPhotos
     @IBOutlet weak var photoListCollectionView: UICollectionView!
+    
+    private let dataSource: PhotoListCollectionViewDataSource = PhotoListCollectionViewDataSource()
+    private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        photoListCollectionView.dataSource = self
+        dataSource.photoListViewModel = photoListViewModel
+        photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
-    }
-}
-
-extension PhotoListViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return model.count
+        
+        photoListViewModel.bind({ range in
+            DispatchQueue.main.async { [weak self] in
+                self?.photoListCollectionView.insertItems(at: range.map { IndexPath(item: $0, section: 0)})
+            }
+        })
+        
+        photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
+                                                self?.showErrorAlert(with: $0.message)})
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoListCollectionViewCell.identifier, for: indexPath) as? PhotoListCollectionViewCell else { return UICollectionViewCell() }
-        let url = URL(string: model[indexPath.item].urls.regular)!
-        let data = try! Data(contentsOf: url)
-        cell.photoImageView.image = UIImage(data: data)
-        cell.authorNameLabel.text = "\(model[indexPath.item].user.name)"
-        return cell
+    private func showErrorAlert(with message: String) {
+        let alert = UIAlertController().confirmAlert(title: "에러 발생", message: message)
+        present(alert, animated: true, completion: nil)
     }
 }
 
 extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = CGFloat(model[indexPath.item].width)
-        let height = CGFloat(model[indexPath.item].height)
+        guard let size = dataSource.photo(of: indexPath.item) else { return .zero }
+        let width = CGFloat(size.width)
+        let height = CGFloat(size.height)
         return CGSize(width: view.frame.width, height: height * view.frame.width / width)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let lastIndexPathItem = collectionView.numberOfItems(inSection: 0)
         
-        guard lastIndexPathItem == indexPath.item + 1 else { return }
+        guard lastIndexPathItem == indexPath.item + 4 else { return }
         
-        // Todo: 다음 페이지에 해당하는 모델 받아오기
+        photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
+                                                self?.showErrorAlert(with: $0.message)})
     }
 }

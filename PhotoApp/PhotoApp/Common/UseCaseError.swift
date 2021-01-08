@@ -9,5 +9,14 @@ import Foundation
 
 enum UseCaseError: Error {
     case networkError(networkError: NetworkError)
-    case decodeError(error: Error)
+    case decodeError(description: String)
+    
+    var message: String {
+        switch self {
+        case .networkError(let networkError):
+            return networkError.description
+        case .decodeError(let description):
+            return description
+        }
+    }
 }
