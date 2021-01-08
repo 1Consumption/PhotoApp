@@ -53,6 +53,51 @@ final class PhotoListUseCaseTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    func testFailureWithDecodeError() {
+        struct Fake: Encodable {
+            let name: String
+        }
+        
+        let expectation = XCTestExpectation(description: "failureWithDecodeError")
+        let fake = Fake(name: "fake")
+        
+        guard let encoded = ModelEncoder().encode(with: fake) else {
+            XCTFail()
+            return
+        }
+        
+        guard let decodeError = getDecodeError() else {
+            XCTFail()
+            return
+        }
+        
+        let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
+        let useCase = PhotoListUseCase(networkManageable: networkManager)
+        
+        useCase.retrievePhotoList(
+            failureHandler: { error in
+                XCTAssertEqual(error, .decodeError(error: decodeError))
+                XCTAssertEqual(useCase.page, 1)
+                expectation.fulfill()
+                
+            },
+            successHandler: { _ in
+                XCTFail()
+            })
+        
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    private func getDecodeError() -> Error? {
+        let data = Data()
+        do {
+            _ = try JSONDecoder().decode(Photo.self, from: data)
+            return nil
+        } catch {
+            return error
+        }
+    }
 }
 
 
