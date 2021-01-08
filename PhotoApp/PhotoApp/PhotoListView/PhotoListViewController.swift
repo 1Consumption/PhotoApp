@@ -9,7 +9,7 @@ import UIKit
 
 final class PhotoListViewController: UIViewController {
     @IBOutlet weak var photoListCollectionView: UICollectionView!
-
+    
     private let dataSource: PhotoListCollectionViewDataSource = PhotoListCollectionViewDataSource()
     private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
     
@@ -21,9 +21,7 @@ final class PhotoListViewController: UIViewController {
         
         photoListViewModel.bind({ range in
             DispatchQueue.main.async { [weak self] in
-                self?.photoListCollectionView.performBatchUpdates({
-                    self?.photoListCollectionView.insertItems(at: range.map { IndexPath(item: $0, section: 0)})
-                })
+                self?.photoListCollectionView.insertItems(at: range.map { IndexPath(item: $0, section: 0)})
             }
         })
         
