@@ -52,7 +52,7 @@ final class PhotoListUseCaseTests: XCTestCase {
     func testFailureWithNetworkError() {
         let expectation = XCTestExpectation(description: "failureWithNetworkError")
         
-        let networkManager = NetworkManager(requester: InvalidStatusCode(with: 300))
+        let networkManager = NetworkManager(requester: InvalidStatusCodeReqeuster(with: 300))
         let useCase = PhotoListUseCase(networkManageable: networkManager)
         
         useCase.retrievePhotoList(

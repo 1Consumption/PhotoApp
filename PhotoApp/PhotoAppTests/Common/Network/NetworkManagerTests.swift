@@ -53,13 +53,13 @@ final class NetworkManagerTests: XCTestCase {
     
     func testFailureWithInvalidStatusCode() {
         failureCase(description: "invalidStatusCode",
-                    requester: InvalidStatusCode(),
+                    requester: InvalidStatusCodeReqeuster(),
                     networkError: .invalidStatusCode(with: 300))
     }
     
     func testFailureWithInvalidData() {
         failureCase(description: "invalidData",
-                    requester: InvalidData(),
+                    requester: InvalidDataRequester(),
                     networkError: .invalidData)
     }
     
