@@ -135,6 +135,16 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		A5D26C8B25A8EB870008CA87 /* PhotoList */ = {
+			isa = PBXGroup;
+			children = (
+				A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */,
+				A593129425A87CC100B286E6 /* PhotoListViewModelTests.swift */,
+				A5D26C8725A8EA2D0008CA87 /* PhotoListTests.swift */,
+			);
+			path = PhotoList;
+			sourceTree = "<group>";
+		};
 		A5D46FEA25A721D8000BF4EE /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -218,11 +228,9 @@
 		A5FDA17825A7103400264597 /* PhotoAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				A5D26C8B25A8EB870008CA87 /* PhotoList */,
 				A5FDA18525A7105E00264597 /* Common */,
 				A5FDA17B25A7103400264597 /* Info.plist */,
-				A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */,
-				A593129425A87CC100B286E6 /* PhotoListViewModelTests.swift */,
-				A5D26C8725A8EA2D0008CA87 /* PhotoListTests.swift */,
 			);
 			path = PhotoAppTests;
 			sourceTree = "<group>";
