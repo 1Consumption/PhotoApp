@@ -87,7 +87,7 @@ final class PhotoListViewModelTests: XCTestCase {
         }
         
         photoListViewModel.retrievePhotoList(failureHandler: { error in
-            XCTAssertEqual(error, .decodeError(error: decodeError))
+            XCTAssertEqual(error, .decodeError(description: decodeError.localizedDescription))
             expectation.fulfill()
         })
         

@@ -91,7 +91,7 @@ final class PhotoListUseCaseTests: XCTestCase {
         
         useCase.retrievePhotoList(
             failureHandler: { error in
-                XCTAssertEqual(error, .decodeError(error: decodeError))
+                XCTAssertEqual(error, .decodeError(description: decodeError.localizedDescription))
                 XCTAssertEqual(useCase.page, 1)
                 expectation.fulfill()
                 

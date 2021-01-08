@@ -27,8 +27,13 @@ final class PhotoListViewController: UIViewController {
             }
         })
         
-        photoListViewModel.retrievePhotoList(failureHandler: { _ in })
+        photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
+                                                self?.showErrorAlert(with: $0.message)})
     }
+    
+    private func showErrorAlert(with message: String) {
+        let alert = UIAlertController().confirmAlert(title: "에러 발생", message: message)
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -45,6 +50,7 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         
         guard lastIndexPathItem == indexPath.item + 1 else { return }
         
-        photoListViewModel.retrievePhotoList(failureHandler: { _ in })
+        photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
+                                                self?.showErrorAlert(with: $0.message)})
     }
 }
