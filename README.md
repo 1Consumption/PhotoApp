@@ -1,115 +1,95 @@
 # PhotoApp
 
-## NetworkManager
+## PhotoListNetworking
 
-네트워킹 기능을 구현한 브랜치이며, 핵심은 프로토콜을 통해 테스트가 가능하고 유연한 네트워킹 객체를 만들었다는 것에 있다.
+### summary
 
-두 가지 프로토콜을 정의했는데, `Requestable`과 `NetworkManageable` 프로토콜이다. 그리고, 이 프로토콜을 조합해 만든 `NetworkManager` 클래스를 통해 네트워킹을 할 수 있다.
+모델을 서버에서 받아오고 디코드해서 handler로 넘겨주고, page 정보를 알고 있어서 모든 정보를 받아오지 않고 나눠서 받아올 수 있는 `PhotoListUseCase`
 
-###  `Requestable`
+모델과 `PhotoListUseCase`을 소유하면서 모델의 변화를 바인딩할 수 있는 `PhotoListViewModel`
 
-``` swift
-protocol Requestable {
-    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
-}
-```
 
-URLRequest와 네트워킹을 끝내면 실행할 completionHandler를 매개변수로 받고, URLSessionDataTask를 반환해 원한다면 취소할 수 있다. 이 프로토콜을 채택한 객체는 `dataTask(with:completionHandler:) -> URLSessionDataTask` 메소드만 구현하면 된다. 즉 내부가 어떻게 구현이 되어있건 매개변수와 반환값을 지키면 해당 프로토콜을 채택하는 데는 문제가 없다. 
 
-따라서 아래와 같이 원하는 케이스를 생성해 테스트를 할 수 있음. 특히 네트워크 테스트의 경우는 실패하는 케이스가 여러 개이고, 상황을 만들기 어렵기 때문에 더욱 효과적이다.
+### `RemoteDataDecodableType`
+
+ `retrieveModel<T: Decodable>(from:failureHandler:modelWillDeliverHandler:successHandler:)` 메소드는 서버에서 데이터를 받아오고 디코드 해주는 기본구현이 되어있다.([**RemoteDataDecodableType.swift**](https://github.com/1Consumption/PhotoApp/blob/feature/photoListNetworking/PhotoApp/PhotoApp/Common/RemoteDataDecodableType.swift)에서 확인 가능). 여기서  `modelWillDeliverHandler` 에 작업을 넘겨주면 모델이 전달되기 전에 원하는 작업을 수행할 수 있다.
 
 ``` swift
-// 항상 성공하는 네트워크 요청
-final class SuccessRequester: Requestable {
-    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(Data(), HTTPURLResponse(url: urlRequest.url!, statusCode: 200, httpVersion: nil, headerFields: nil), nil)
-        return URLSession.shared.dataTask(with: urlRequest)
-    }
-}
-
-// 항상 실패하는 네트워크 요청, NetworkError를 바꿔서 보낼 수 있다.
-final class RequestErrorRequester: Requestable {
-    func dataTask(with urlRequest: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        completionHandler(nil, nil, NetworkError.requestError(description: "error"))
-        return URLSession.shared.dataTask(with: urlRequest)
-    }
+protocol RemoteDataDecodableType {
+    var networkManager: NetworkManageable { get }
+    
+    func retrieveModel<T: Decodable>(from url: URL?,
+                                     failureHandler: @escaping (UseCaseError) -> Void,
+                                     modelWillDeliverHandler: (() -> Void)?,
+                                     successHandler: @escaping (T) -> Void)
 }
 ```
 
 <br>
 
-###  `NetworkManageable`
+### `PhotoListUseCase`
+
+먼저 `PhotoListUseCase`는 `RemoteDataDecodableType` 프로토콜을 채택한다. 아래는 `PhotoListUseCase`의 구현부 중 일부인데, 현재 페이지 정보를 저장하고 있다. 문제는 이 페이지 정보를 어떻게 변경할 것이냐인데, 모델이 전달되기 전(서버에서 온 데이터를 원하는 모델로 성공적으로 디코드 한 경우) page를 1 더해줘서 다음 요청은 다음 페이지에 대한 요청을 기대할 수 있다. 
 
 ``` swift
-typealias DataResultHandler = (Result<Data, NetworkError>) -> Void
+private(set) var page: Int = 1
 
-protocol NetworkManageable: class {
-    var requestBag: Set<URLRequest> { get }
-    var requester: Requestable { get }
-    
-    @discardableResult
-    func requestData(from url: URL?, method: HTTPMethod, header: [String: String]?, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask?
-    
-    func requestCompleted(with url: URLRequest, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler)
+func retrievePhotoList(failureHandler: @escaping (UseCaseError) -> Void, successHandler: @escaping ([Photo]) -> Void) {
+    let url = EndPoint(queryItems: .photoList(page: page)).url
+    retrieveModel(from: url,
+                  failureHandler: failureHandler,
+                  modelWillDeliverHandler: { [weak self] in self?.page += 1 },
+                  successHandler: successHandler)
 }
 ```
 
-`requestBag`: 현재 요청한 request 정보를 담음. 중복되는 요청을 거르는 목적의 프로퍼티이기 때문에 중복을 허용하지 않는 Set을 선택
+아래와 같이 요청을 성공적으로 보내고 난 후 page의 값이 증가한 것을 볼 수 있다.
 
-`requester`: 실질적으로 네트워킹을 담당하는 프로퍼티. `Requestable` 프로토콜을 채택하였음.
+![image](https://user-images.githubusercontent.com/37682858/104032817-0d3e2e80-5212-11eb-8863-eb942af01214.png)
 
-`requestData(from:method:header:completionHandler:) -> URLSessionDataTask?`: 외부에서 주입받은 `Requestable`을 채택한 `requester` 프로퍼티를 활용해 네트워킹을 하도록 의도된 메소드. 이 메소드에서 url의 유효성, 네트워크 오류 등을 체크하고 completionHandler에 값을 넘겨줌. 
+<br>
 
-> class만 채택 가능하게 만들어 놓은 이유
->
-> -> 중복 요청을 방지하기 위한 requestBag은 리퀘스트를 요청하기 전에 채워지고 리스폰스를 받은 후, 즉 completionHandler가 실행될 때 requestBag에서 요청을 지움.
->
-> 또한 completionHandler는 현재 메소드가 반환이 되고 나서도 살아있는 escaping 클로저이기 때문에 클로저 캡쳐가 필요함. 그런데, struct를 캡쳐하면 값을 복사해오기 때문에 requestBag을 비워도 동기화가 되지 않음. 따라서 주소를 복사하는 class만 채택 가능하도록 구현함.
+### `PhotoListViewModel`
 
-
-
-### `NetworkManager.Swift` 
-
-네트워킹을 하는 구현체. 생성자에서 `Requestable`을 채택한 타입을 받기 때문에 유연한 확장이 가능하다.(해당 프로토콜만 만족하면 어떤 객체든 올 수 있기 때문). 아무 값을 지정해주지 않으면 `URLSession.shared`를 통해 네트워킹을하게 된다.
+`[Photo]` 타입의 `photoList` 프로퍼티를 가지고 있으며, 해당 프로퍼티가 변경되면 바인딩 되어있는 handler를 실행시켜 view가 알아차릴 수 있다. 현재는 모델이 append만 되기 때문에 별 다른 처리를 해주지 않았으나, 만약 insert, delete 작업이 추가 된다면 enum을 하나 만들어서 작업을 분리 후 handler에 전달해 줄 수 있다.
 
 ``` swift
-init(requester: Requestable = DefaultRequester()) {
-    self.requester = requester
-}
-
-final class DefaultRequester: Requestable {
-    func dataTask(with url: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        return URLSession.shared.dataTask(with: url, completionHandler: completionHandler)
+private var photoList: [Photo] {
+    didSet {
+        let stardIndex = oldValue.count
+        let endIndex = photoList.count
+        handler?(stardIndex..<endIndex)
     }
 }
 ```
 
+그리고 `PhotoListUseCase` 타입의 `photoListUseCase`를 가지고 있다. 이 프로퍼티를 통해 서버에서 데이터를 받고, 디코드한 결과를 내려받고 `photoList`에 추가해준다.
 
-
-`requestData(from:method:header:completionHandler:) -> URLSessionDataTask?` 내부에서 중복된 리퀘스트를 검사하는데, 코드는 다음과 같다. `requestBag`에 리퀘스트가 있다면(아직 해당 요청에 대한 답이 오지 않았다면) 에러를 포함한 completionHandler를 실행하고 early exit 한다. 반대로 `requestBag`에 리퀘스트가 없다면 해당 요청은 중복되지 않은 요청이라고 간주하여 서버에 요청을 보내게 된다.
-
-``` swift
-guard !requestBag.contains(urlRequest) else {
-    completionHandler(.failure(.duplicatedRequest))
-    return nil
-}
-
-requestBag.insert(urlRequest)
-```
-
-<br>
-
-그렇다면 `requestBag`의 리퀘스트는 언제 없어질까? 바로 completionHandler가 실행되기 전이다. completionHandler가 실행되었다는 것은 실패했던, 성공했던 서버로부터 응답이 왔다는 얘기이기 때문이다.(url오류나 중복 요청 오류 제외)
-
-``` swift
-func requestCompleted(with url: URLRequest, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler) {
-    requestBag.remove(url)
-    handler(result)
+```swift
+func retrievePhotoList(failureHandler: @escaping (UseCaseError) -> Void) {
+    photoListUseCase.retrievePhotoList(failureHandler: failureHandler,
+                                       successHandler: { [weak self] in
+                                        self?.photoList.append(contentsOf: $0)
+                                       })
 }
 ```
 
+결과적으로 아래의 흐름으로 핸들러가 실행된다.
+
+1. 외부에서 `retrievePhotoList(failureHandler:) 메소드 호출`(이벤트 전달)
+2. `photoListUseCase` 를 통해 디코딩된 모델을 `photoList`에 추가함
+3.  `photoList`가 변경되면 변경된 index 범위를 handler를 통해 전달함
+
+<img src = "https://user-images.githubusercontent.com/37682858/104035157-25fc1380-5215-11eb-89d9-3fab102d470f.png" width = "300">
 
 
-이 기능들을 사용해 아래와 같이 중복 테스트를 통과할 수 있었다.
 
-![image](https://user-images.githubusercontent.com/37682858/103935026-4ff7fc00-5169-11eb-9a9d-9505da545d41.png)
+### appendix
+
+> @testable import의 이유?
+>
+> 접근제어자를 명시해주지 않으면 Internal이 되는데, Internal은 외부 모듈에서 접근이 불가능하다. 
+>
+> ![image](https://user-images.githubusercontent.com/37682858/104029025-c994f600-520c-11eb-808c-c2c1f2e7d12a.png)
+>
+> 따라서 프로덕트 모듈과 테스트 모듈은 별개이므로 테스트 모듈에서 프로덕트 모듈에 접근이 불가능하다는 말이다. 하지만, @testable 어노테이션을 명시해주면서 Internal로 지정된 객체에 접근이 가능하기 때문에 테스트를 할 수 있다.
