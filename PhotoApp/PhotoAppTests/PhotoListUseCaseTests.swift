@@ -33,6 +33,20 @@ final class PhotoListUseCaseTests: XCTestCase {
             })
         
         wait(for: [expectation], timeout: 5.0)
+        
+        let expecation2 = XCTestExpectation(description: "success2")
+        useCase.retrievePhotoList(
+            failureHandler: { _ in
+                XCTFail()
+            },
+            successHandler: {
+                let retrievedPhoto = $0
+                XCTAssertEqual(photo, retrievedPhoto)
+                XCTAssertEqual(useCase.page, 3)
+                expecation2.fulfill()
+            })
+        
+        wait(for: [expecation2], timeout: 5.0)
     }
     
     func testFailureWithNetworkError() {
