@@ -12,4 +12,10 @@ final class PhotoListCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var authorNameLabel: UILabel!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        photoImageView.image = nil
+        authorNameLabel.text = nil
+    }
 }
