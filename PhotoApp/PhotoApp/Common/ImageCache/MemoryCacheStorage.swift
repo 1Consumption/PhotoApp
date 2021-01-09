@@ -8,12 +8,12 @@
 import UIKit
 
 final class MemoryCacheStorage<T> {
-    private let cache: NSCache<NSString, ExpirableObject<T>> = NSCache<NSString, ExpirableObject<T>>()
+    private let cache: NSCache<NSString, ExpirableObject<T?>> = NSCache<NSString, ExpirableObject<T?>>()
     private let lock: NSLock = NSLock()
     private let expireTime: ExpireTime
     private var keys: Set<String> = Set<String>()
     
-    init(size: Int, expireTime: ExpireTime) {
+    init(size: Int = 0, expireTime: ExpireTime) {
         cache.totalCostLimit = size
         self.expireTime = expireTime
         NotificationCenter.default.addObserver(self,
@@ -22,7 +22,7 @@ final class MemoryCacheStorage<T> {
                                                object: nil)
     }
     
-    func insert(_ obejct: T, for key: String) {
+    func insert(_ obejct: T?, for key: String) {
         cache.setObject(ExpirableObject(with: obejct, expireTime: expireTime), forKey: key as NSString)
         keys.insert(key)
     }

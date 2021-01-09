@@ -14,6 +14,8 @@
 		A581F67E25A96E6F009A840F /* MemoryCacheStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A581F67D25A96E6F009A840F /* MemoryCacheStorage.swift */; };
 		A581F68625A96F3F009A840F /* ExpireTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A581F68525A96F3F009A840F /* ExpireTime.swift */; };
 		A581F68A25A96F93009A840F /* ExpireTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A581F68925A96F93009A840F /* ExpireTimeTests.swift */; };
+		A581F69825A9A471009A840F /* ImageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A581F69725A9A471009A840F /* ImageManagerTests.swift */; };
+		A581F69E25A9A486009A840F /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A581F69D25A9A486009A840F /* ImageManager.swift */; };
 		A591B53A25A6E45900B53FA6 /* PhotoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A591B53925A6E45900B53FA6 /* PhotoListCollectionViewCell.swift */; };
 		A593129125A87A9700B286E6 /* RemoteDataDecodableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A593129025A87A9700B286E6 /* RemoteDataDecodableType.swift */; };
 		A593129525A87CC100B286E6 /* PhotoListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A593129425A87CC100B286E6 /* PhotoListViewModelTests.swift */; };
@@ -69,6 +71,8 @@
 		A581F67D25A96E6F009A840F /* MemoryCacheStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCacheStorage.swift; sourceTree = "<group>"; };
 		A581F68525A96F3F009A840F /* ExpireTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpireTime.swift; sourceTree = "<group>"; };
 		A581F68925A96F93009A840F /* ExpireTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpireTimeTests.swift; sourceTree = "<group>"; };
+		A581F69725A9A471009A840F /* ImageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManagerTests.swift; sourceTree = "<group>"; };
+		A581F69D25A9A486009A840F /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		A591B53925A6E45900B53FA6 /* PhotoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCollectionViewCell.swift; sourceTree = "<group>"; };
 		A593129025A87A9700B286E6 /* RemoteDataDecodableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataDecodableType.swift; sourceTree = "<group>"; };
 		A593129425A87CC100B286E6 /* PhotoListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListViewModelTests.swift; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 				A581F66325A961B4009A840F /* ExpirableObjectTests.swift */,
 				A581F67925A96DE8009A840F /* MemoryCacheStorageTests.swift */,
 				A581F68925A96F93009A840F /* ExpireTimeTests.swift */,
+				A581F69725A9A471009A840F /* ImageManagerTests.swift */,
 			);
 			path = ImageCache;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 				A581F66925A9628F009A840F /* ExpirableObject.swift */,
 				A581F67D25A96E6F009A840F /* MemoryCacheStorage.swift */,
 				A581F68525A96F3F009A840F /* ExpireTime.swift */,
+				A581F69D25A9A486009A840F /* ImageManager.swift */,
 			);
 			path = ImageCache;
 			sourceTree = "<group>";
@@ -400,6 +406,7 @@
 				A5D4700025A76968000BF4EE /* Secret.swift in Sources */,
 				A593129B25A87E7800B286E6 /* PhotoListViewModel.swift in Sources */,
 				A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */,
+				A581F69E25A9A486009A840F /* ImageManager.swift in Sources */,
 				A5C0F18325A713E200F80C08 /* NetworkError.swift in Sources */,
 				A5D26C8425A8E9100008CA87 /* PhotoList.swift in Sources */,
 				A5E07C8225A82CEE004C6C24 /* UseCaseError.swift in Sources */,
@@ -436,6 +443,7 @@
 				A5E07C7C25A82934004C6C24 /* Encoder.swift in Sources */,
 				A5D46FF825A76592000BF4EE /* EndPointTests.swift in Sources */,
 				A581F67A25A96DE8009A840F /* MemoryCacheStorageTests.swift in Sources */,
+				A581F69825A9A471009A840F /* ImageManagerTests.swift in Sources */,
 				A581F66425A961B4009A840F /* ExpirableObjectTests.swift in Sources */,
 				A5D46FF225A72535000BF4EE /* NetworkErrorTests.swift in Sources */,
 			);
