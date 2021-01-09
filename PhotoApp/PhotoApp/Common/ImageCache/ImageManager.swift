@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ImageManager {
+final class ImageManager: ImageRetrievable {
     static let shared: ImageManager = ImageManager()
     
     private let networkManageable: NetworkManageable
@@ -40,4 +40,8 @@ final class ImageManager {
             }
         }
     }
+}
+
+protocol ImageRetrievable {
+    func retrieveImage(from url: String, failureHandler: ((NetworkError) -> Void)?, imageHandler: @escaping (UIImage?) -> Void)
 }
