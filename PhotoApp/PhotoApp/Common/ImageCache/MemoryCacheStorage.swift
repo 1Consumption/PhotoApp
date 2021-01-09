@@ -5,7 +5,7 @@
 //  Created by 신한섭 on 2021/01/09.
 //
 
-import Foundation
+import UIKit
 
 final class MemoryCacheStorage<T> {
     private let cache: NSCache<NSString, ExpirableObject<T>> = NSCache<NSString, ExpirableObject<T>>()
@@ -16,6 +16,10 @@ final class MemoryCacheStorage<T> {
     init(size: Int, expireTime: ExpireTime) {
         cache.totalCostLimit = size
         self.expireTime = expireTime
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(cleanUpExpired),
+                                               name: UIApplication.didReceiveMemoryWarningNotification,
+                                               object: nil)
     }
     
     func insert(_ obejct: T, for key: String) {
@@ -48,5 +52,9 @@ final class MemoryCacheStorage<T> {
         }
         
         lock.unlock()
+    }
+    
+    @objc private func cleanUpExpired() {
+        removeExpiredObjects()
     }
 }

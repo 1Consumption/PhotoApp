@@ -74,4 +74,18 @@ final class MemoryCacheStorageTests: XCTestCase {
         XCTAssertNotNil(memoryCacheStorage.object(for: photos[0].id))
         XCTAssertNil(memoryCacheStorage.object(for: photos[1].id))
     }
+    
+    func testReceiveMemoryWarning() {
+        let memoryCacheStorage = MemoryCacheStorage<Photo>(size: 10, expireTime: .second(2))
+        
+        memoryCacheStorage.insert(photos[0], for: photos[0].id)
+        sleep(2)
+        memoryCacheStorage.insert(photos[1], for: photos[1].id)
+        
+        NotificationCenter.default.post(name: UIApplication.didReceiveMemoryWarningNotification,
+                                        object: nil)
+        
+        XCTAssertNotNil(memoryCacheStorage.object(for: photos[1].id))
+        XCTAssertNil(memoryCacheStorage.object(for: photos[0].id))
+    }
 }
