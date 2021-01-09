@@ -22,4 +22,14 @@ final class ExpirableObjectTests: XCTestCase {
         
         XCTAssertFalse(expirableObject.isExpired)
     }
+    
+    func testResetExpectedExpireTime() {
+        let expirableObject = ExpirableObject(with: UIImage(), expireTime: .second(3))
+        
+        sleep(2)
+        expirableObject.resetExpectedExpireDate(.second(3))
+        sleep(2)
+        
+        XCTAssertFalse(expirableObject.isExpired)
+    }
 }

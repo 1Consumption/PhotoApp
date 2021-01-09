@@ -59,4 +59,19 @@ final class MemoryCacheStorageTests: XCTestCase {
         XCTAssertNil(memoryCacheStorage.object(for: photos[0].id))
         XCTAssertEqual(photos[1], memoryCacheStorage.object(for: photos[1].id))
     }
+    
+    func testResetExpireTime() {
+        let memoryCacheStorage = MemoryCacheStorage<Photo>(size: 10, expireTime: .second(3))
+        
+        memoryCacheStorage.insert(photos[0], for: photos[0].id)
+        memoryCacheStorage.insert(photos[1], for: photos[1].id)
+        sleep(2)
+        _ = memoryCacheStorage.object(for: photos[0].id)
+        sleep(2)
+        
+        memoryCacheStorage.removeExpiredObjects()
+        
+        XCTAssertNotNil(memoryCacheStorage.object(for: photos[0].id))
+        XCTAssertNil(memoryCacheStorage.object(for: photos[1].id))
+    }
 }

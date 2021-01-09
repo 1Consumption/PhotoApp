@@ -18,4 +18,8 @@ final class ExpirableObject<T> {
         self.value = value
         expectedExpireDate = Date(timeIntervalSinceNow: expireTime.timeInterval)
     }
+    
+    func resetExpectedExpireDate(_ expireTime: ExpireTime) {
+        expectedExpireDate = Date(timeIntervalSinceNow: expireTime.timeInterval)
+    }
 }
