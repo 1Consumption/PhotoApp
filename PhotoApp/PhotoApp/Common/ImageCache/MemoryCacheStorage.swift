@@ -27,4 +27,8 @@ final class MemoryCacheStorage<T> {
     func removeObject(for key: String) {
         cache.removeObject(forKey: key as NSString)
     }
+    
+    func removeAllObjects() {
+        cache.removeAllObjects()
+    }
 }

@@ -33,4 +33,18 @@ final class MemoryCacheStorageTests: XCTestCase {
         memoryCacheStorage.removeObject(for: "Key")
         XCTAssertNil(memoryCacheStorage.object(for: "Key"))
     }
+    
+    func testMemoryStorageRemoveAllObjects() {
+        let memoryCacheStorage = MemoryCacheStorage<Photo>(size: 10, expireTime: .second(3))
+        
+        photos.forEach {
+            memoryCacheStorage.insert($0, for: $0.id)
+        }
+        
+        memoryCacheStorage.removeAllObjects()
+        
+        photos.forEach {
+            XCTAssertNil(memoryCacheStorage.object(for: $0.id))
+        }
+    }
 }
