@@ -44,8 +44,6 @@ final class ImageManagerTests: XCTestCase {
         let networkManager = NetworkManager(requester: requester)
         let imageManager = ImageManager(networkManageable: networkManager)
         
-
-        
         imageManager.retrieveImage(from: "sample1", failureHandler: { _ in
             expectation.fulfill()
         }) { _ in

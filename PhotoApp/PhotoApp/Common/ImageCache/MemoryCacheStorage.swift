@@ -28,8 +28,14 @@ final class MemoryCacheStorage<T> {
     }
     
     func object(for key: String) -> T? {
-        cache.object(forKey: key as NSString)?.resetExpectedExpireDate(expireTime)
-        return cache.object(forKey: key as NSString)?.value
+        guard let cached = cache.object(forKey: key as NSString) else { return nil }
+        guard !cached.isExpired else {
+            removeObject(for: key)
+            return nil
+        }
+        
+        cached.resetExpectedExpireDate(expireTime)
+        return cached.value
     }
     
     func removeObject(for key: String) {
