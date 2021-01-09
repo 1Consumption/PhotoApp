@@ -25,7 +25,7 @@
 
    * MVC 패턴은 View와 Controller가 서로 강하게 의존하고 있어서 Controller(view에 대한 로직) 부분을 테스트하기가 어려웠음. 하지만 MVVM의 경우는 ViewModel은 View에 대한 비즈니스 로직만 가지기 때문에 테스트할 수 있다.
 
-   * View가 복잡해지면서 View에 대한 비즈니스 로직을 모두 ViewController에서 처리하기에는 너무 비대해짐. 따라서 이를 ViewModel로 역할을 나누어 ViewController가 비대해지는 것을 방지함
+   * View가 복잡해지면서 View에 대한 비즈니스 로직을 모두 ViewController에서 처리하기에는 너무 비대해짐. 따라서 이를 ViewModel로 역할을 나누어 ViewController가 비대해지는 것을 방지함. 하지만 ViewModel도 비대해질 수 있기 때문에, 설계에 각별한 주의가 필요하다.
 
 2. View 업데이트 용이
 
