@@ -10,8 +10,7 @@ import XCTest
 
 final class PhotoListViewModelTests: XCTestCase {
     func testBind() {
-        var range = (0..<1)
-        var count = 0
+        var range = (0..<1).map { IndexPath(item: $0, section: 0) }
         let maxCount = 3
         let photo = [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))]
         guard let encoded = ModelEncoder().encode(with: photo) else {
@@ -24,14 +23,12 @@ final class PhotoListViewModelTests: XCTestCase {
         let photoListViewModel = PhotoListViewModel(networkManageable: networkManager)
         
         let expectation = XCTestExpectation(description: "bindingSuccess")
+        expectation.expectedFulfillmentCount = maxCount
         
         photoListViewModel.bind {
             XCTAssertEqual(range, $0)
-            range = (range.upperBound..<range.upperBound + 1)
-            count += 1
-            if count == maxCount {
-                expectation.fulfill()
-            }
+            range = (range.max()!.item + 1..<range.max()!.item + 2).map { IndexPath(item: $0, section: 0) }
+            expectation.fulfill()
         }
         
         (0..<maxCount).forEach { _ in

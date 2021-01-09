@@ -21,7 +21,8 @@ final class PhotoListViewController: UIViewController {
         
         photoListViewModel.bind({ range in
             DispatchQueue.main.async { [weak self] in
-                self?.photoListCollectionView.insertItems(at: range.map { IndexPath(item: $0, section: 0)})
+                guard let range = range else { return }
+                self?.photoListCollectionView.insertItems(at: range)
             }
         })
         
