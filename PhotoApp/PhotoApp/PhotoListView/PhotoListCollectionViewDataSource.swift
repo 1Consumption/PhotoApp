@@ -19,12 +19,10 @@ final class PhotoListCollectionViewDataSource: NSObject, UICollectionViewDataSou
         
         guard let photo = photoListViewModel?.photo(of: indexPath.item) else { return cell }
         
-        DispatchQueue.global().async {
-            let url = URL(string: photo.urls.regular)!
-            let data = try! Data(contentsOf: url)
+        cell.authorNameLabel.text = "\(photo.user.name)"
+        ImageManager.shared.retrieveImage(from: photo.urls.regular) { image in
             DispatchQueue.main.async {
-                cell.authorNameLabel.text = "\(photo.user.name)"
-                cell.photoImageView.image = UIImage(data: data)
+                cell.photoImageView.image = image
             }
         }
         
