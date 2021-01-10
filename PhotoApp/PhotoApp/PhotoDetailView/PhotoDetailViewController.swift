@@ -23,6 +23,8 @@ final class PhotoDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNavigationBar()
+        setNavigationItemTitle(with: currentIndexPath)
         setPhotoDetailCollectionView()
     }
     
@@ -35,6 +37,24 @@ final class PhotoDetailViewController: UIViewController {
         super.viewWillDisappear(animated)
         currentIndexPath = photoDetailCollectionView.indexPathsForVisibleItems.first
         delegate?.scrollToItem(at: currentIndexPath)
+    }
+    
+    private func setNavigationBar() {
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.barStyle = .black
+        
+        let button = UIBarButtonItem(image: UIImage(named: "close"),
+                                     style: .done,
+                                     target: navigationController,
+                                     action: #selector(UINavigationController.popViewController(animated:)))
+        navigationItem.leftBarButtonItem = button
+
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+    }
+    
+    private func setNavigationItemTitle(with indexPath: IndexPath?) {
+        guard let index = indexPath?.item else { return }
+        navigationItem.title = dataSource?.photoListViewModel?.photo(of: index)?.user.name
     }
     
     private func setPhotoDetailCollectionView() {
@@ -60,5 +80,9 @@ extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
         let height = CGFloat(photo.height)
         
         return CGSize(width: view.frame.width, height: height * view.frame.width / width)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        setNavigationItemTitle(with: indexPath)
     }
 }

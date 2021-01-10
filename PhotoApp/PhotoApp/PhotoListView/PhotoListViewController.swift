@@ -15,20 +15,40 @@ final class PhotoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setPhotoListCollectionVeiw()
+        sendNeedMoreModelEvent()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavigationBar()
+    }
+    
+    private func setPhotoListCollectionVeiw() {
         photoListCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main), forCellWithReuseIdentifier: PhotoCell.identifier)
         dataSource.photoListViewModel = photoListViewModel
         photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
-        
         photoListViewModel.bind({ range in
             DispatchQueue.main.async { [weak self] in
                 guard let range = range else { return }
                 self?.photoListCollectionView.insertItems(at: range)
             }
         })
-        
+    }
+    
+    private func sendNeedMoreModelEvent() {
         photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
                                                 self?.showErrorAlert(with: $0)})
+
+    }
+    
+    private func setNavigationBar() {
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
     }
     
     private func showErrorAlert(with error: UseCaseError) {
@@ -59,8 +79,7 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         
         guard lastIndexPathItem < indexPath.item + 3 else { return }
         
-        photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
-                                                self?.showErrorAlert(with: $0)})
+        sendNeedMoreModelEvent()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
