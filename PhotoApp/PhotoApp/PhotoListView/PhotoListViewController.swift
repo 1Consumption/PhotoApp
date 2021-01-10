@@ -21,17 +21,25 @@ final class PhotoListViewController: UIViewController {
         
         photoListViewModel.bind({ range in
             DispatchQueue.main.async { [weak self] in
-                self?.photoListCollectionView.insertItems(at: range.map { IndexPath(item: $0, section: 0)})
+                guard let range = range else { return }
+                self?.photoListCollectionView.insertItems(at: range)
             }
         })
         
         photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
-                                                self?.showErrorAlert(with: $0.message)})
+                                                self?.showErrorAlert(with: $0)})
     }
     
-    private func showErrorAlert(with message: String) {
-        let alert = UIAlertController().confirmAlert(title: "에러 발생", message: message)
-        present(alert, animated: true, completion: nil)
+    private func showErrorAlert(with error: UseCaseError) {
+        switch error {
+        case .networkError(networkError: .duplicatedRequest):
+            break
+        default:
+            DispatchQueue.main.async { [weak self] in
+                let alert = UIAlertController().confirmAlert(title: "에러 발생", message: error.message)
+                self?.present(alert, animated: true, completion: nil)
+            }
+        }
     }
 }
 
@@ -46,9 +54,9 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let lastIndexPathItem = collectionView.numberOfItems(inSection: 0)
         
-        guard lastIndexPathItem == indexPath.item + 4 else { return }
+        guard lastIndexPathItem < indexPath.item + 3 else { return }
         
         photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
-                                                self?.showErrorAlert(with: $0.message)})
+                                                self?.showErrorAlert(with: $0)})
     }
 }

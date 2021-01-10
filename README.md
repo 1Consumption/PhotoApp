@@ -1,77 +1,131 @@
 # PhotoApp
 
-## PhotoListBinding
+## ImageCache
 
-### MVVM 구조 채택
+### summury
 
-<img width="1006" alt="image" src="https://user-images.githubusercontent.com/37682858/104054787-138fd300-5231-11eb-82e6-6462c3068593.png">
-
-* View
-  * ViewModel에게 이벤트를 전달. 
-  * ViewModel을 관찰하고 있다가 ViewModel이 바뀌면 업데이트
-* ViewModel
-  * View에 대한 로직을 가지고 있음
-  * Model을 소유하고 있음.
-  * Model을 업데이트하고 Model이 바뀌면 변경사항을 방출
-* Model
-  * 데이터를 소유함
-  * 데이터에 대한 비즈니스 로직을 가지고 있음.
+이전 브랜치에서는 서버에서 받아온 이미지를 cell에만 할당해줬다. 그 결과 cell이 재사용 될 때 이전 이미지는 사라지게 되었고, 사라진 이미지를 다시 불러오려면 서버에서 받아와야 하기 때문에 리소스 낭비가 있었다. 따라서 imageCache 브랜치에서는 Image caching을 담당하는 `ImageMaganger` 클래스를 구현하였고, `ImageManager` 클래스를 통해 collectionView의 cell에 이미지를 바인딩해 줬다. cell을 재사용해도 `ImageManager`의 `MemoryCacheStorage`에서 이미지를 가지고 있어서 리소스 낭비를 줄일 수 있었다.
 
 <br>
 
-### 왜 MVVM을 채택했는가?
+<img width="1002" alt="image" src="https://user-images.githubusercontent.com/37682858/104103652-9fb00200-52e6-11eb-97b3-c056d6f58b60.png">
 
-1. 테스트의 용이성 및 ViewController 역할 분리
+### `MemoryCacheStorage`
 
-   * MVC 패턴은 View와 Controller가 서로 강하게 의존하고 있어서 Controller(view에 대한 로직) 부분을 테스트하기가 어려웠음. 하지만 MVVM의 경우는 ViewModel은 View에 대한 비즈니스 로직만 가지기 때문에 테스트할 수 있다.
+`MemoryCacheStorage` 클래스는 만료기한을 가지는 `ExpirableObject`를 캐싱한다. 삽입, 참조, 삭제 등의 기능을 수행할 수 있으며  이미지가 참조되면 만료기한을 초기화하는 동작을 한다.
 
-   * View가 복잡해지면서 View에 대한 비즈니스 로직을 모두 ViewController에서 처리하기에는 너무 비대해짐. 따라서 이를 ViewModel로 역할을 나누어 ViewController가 비대해지는 것을 방지함
+#### `ExpirableObject`
 
-2. View 업데이트 용이
+아래 코드는 `ExpirableObject`의 구현부이다. 해당 오브젝트가 만들어질 때, 인자로 넘겨받은 시간 값과 현재 시간을 더해 만료 기한을 만들었다. 또한 `isExpired` 프로퍼티를 통해 만료 여부를 알 수 있으며, `resetExpectedExpireDate(_:)` 메소드를 통해 만료 기한을 초기화 할 수 있다.
 
-   * MVC 패턴은 이벤트에 의해 ViewController가 Model을 업데이트하고, Model이 업데이트되면 ViewController에게 알려 ViewController가 View를 업데이트 하게 하였음.
-   * 반면 MVVM 패턴은 View가 ViewModel을 관찰하고 있다가 ViewModel의 상태가 변하면 View가 업데이트하기 때문에 View 업데이트가 용이하다.
-
-<br>
-
-### 동작 예시
-
-``` swift
-final class PhotoListViewController: UIViewController {
-    @IBOutlet weak var photoListCollectionView: UICollectionView!
-    ///...
-    private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
+```swift
+final class ExpirableObject<T> {    
+    let value: T
+    private var expectedExpireDate: Date
+    var isExpired: Bool {
+        return Date() > expectedExpireDate
+    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-      	///...
-        photoListViewModel.bind({ range in
-            DispatchQueue.main.async { [weak self] in
-                self?.photoListCollectionView.insertItems(at: range.map { IndexPath(item: $0, section: 0)})
-            }
-        })
-        
-        photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
-                                                self?.showErrorAlert(with: $0.message)})
+    init(with value: T, expireTime: ExpireTime) {
+        self.value = value
+        expectedExpireDate = Date(timeIntervalSinceNow: expireTime.timeInterval)
+    }
+    
+    func resetExpectedExpireDate(_ expireTime: ExpireTime) {
+        expectedExpireDate = Date(timeIntervalSinceNow: expireTime.timeInterval)
     }
 }
 ```
 
-`PhotoListViewModel`을 `PhotoListViewController`에서 소유한다. 그리고 `PhotoListViewController`가 메모리에서 불리고 난 후, View와 ViewModel을 바인딩한다. 여기서는 새로 추가된 model에 대해 cell을 업데이트 해야 하기 때문에 `bind` 메소드 내에서 새로 추가된 model에 대한 cell을 삽입해줬음.
+<br>
 
-바인딩을 한 후 ViewModel에게 이벤트를 전달하여 서버에서 데이터를 받아오도록 함.
+### `ImageManager`
+
+`ImageManager`는 다음과 같은 순서로 이미지를 찾는다.
+
+1. `MemeoryCacheStorage`에 key를 넘겨주고 key에 해당하는 이미지가 있는지 확인한다.
+
+2. `MemeoryCacheStorage`는`cache`프로퍼티에서 key에 해당하는 이미지를 확인한다.
+
+    1) 해당 이미지가 만료되었으면 해당 이미지를 `cache`에서 삭제하고 nil을 반환한다.
+
+    2) 만료되지 않았다면 만료 시간을 초기화하고 handler를 통해 이미지를 외부에 넘겨준다.
+
+3. 2번의 결과가 nil인 경우 로컬에 없다는 뜻이므로 `NetworkManageable`을 사용해 서버에서 이미지를 받아온다.
+
+4. 서버에서 이미지를 받아오면 `MemeoryCacheStorage`에 이미지를 저장하고 handler를 통해 이미지를 외부에 넘겨준다.
 
 <br>
 
+### 트러블 슈팅
+
+#### 배경
+
+<img src = "https://user-images.githubusercontent.com/37682858/104105187-cde60f80-52ef-11eb-94ba-e6d9945b3661.gif" width = "300">
+
+`photoListCollectionView`를 빠르게 스크롤하면 cell에 알맞는 이미지가 들어가지 않고 다른 cell의 이미지와 충돌하여 바뀌는 현상이 발생함.
+
+#### 원인
+
 ``` swift
-func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-    let lastIndexPathItem = collectionView.numberOfItems(inSection: 0)
+func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+  	///...
+    ImageManager.shared.retrieveImage(from: photo.urls.regular) { image in
+        DispatchQueue.main.async {
+            cell.photoImageView.image = image
+        }
+    }
     
-    guard lastIndexPathItem == indexPath.item + 4 else { return }
-    
-    photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
-                                            self?.showErrorAlert(with: $0.message)})
+    return cell
 }
 ```
 
-`UICollectonViewDelegate`의 메소드인 `collectionView(_:willDisplay:forItemAt:)` 메소드에서 특정 IndexPath가 전달되는 이벤트가 발생하면 ViewModel에게 다음 모델을 불러오라는 이벤트를 전달.
+위 코드는 `photoListCollectionViewDataSource`의 `cellForItemAt` 메소드이다. A 셀이 있다고 가정하고, 이 A 셀을 재사용한다고 생각해보자. 아래와 같은 문제가 발생하게 된다.
+
+![셀 재사용 이슈](https://user-images.githubusercontent.com/37682858/104114543-07973480-5349-11eb-8d6f-9652f8c1df83.gif)
+
+1.  `cellForItemAt` 메소드에서 Image A 요청을 한다.
+2. Image A에 대한 응답이 오기 전에 셀이 재사용 된다.
+3. 재사용된 셀이 Image B 요청을 한다.
+4. 재사용되기 전에 보냈던 Image A 응답이 도착한다. 이를 셀에 반영한다.
+5. 재사용된 셀에 대한 Image B 응답이 도착한다. 이를 셀에 반영한다.
+
+즉 이전 요청을 처리하지 않고 모두 응답을 받아서 반영하기 때문에 발생한 문제이다.
+
+#### 해결
+
+``` swift
+func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+  	///...
+    let photoViewModel = PhotoViewModel(photo: photo)
+    
+    cell.bind(photoViewModel)
+
+    return cell
+}
+```
+
+먼저  `cellForItemAt` 메소드를 변경했다.  `cellForItemAt` 메소드에서 이미지 요청을 보내는 것이 아닌 cell에 대한 뷰모델을 만들어서 주입해준다. 이렇게 되면 cell의 재사용과 관련 없이 매번 새로운 `PhotoViewModel`이 만들어진다.
+
+<br>
+
+```swift
+final class PhotoListCollectionViewCell: UICollectionViewCell {
+  	///...
+    private var viewModel: PhotoViewModel?
+  
+    func bind(_ photoViewModel: PhotoViewModel) {
+        viewModel = photoViewModel
+        authorNameLabel.text = viewModel?.photo.user.name
+        viewModel?.bind { [weak self] image in
+            DispatchQueue.main.async {
+                self?.photoImageView.image = image
+            }
+        }
+        viewModel?.retrieveImage()
+    }
+  	///...
+}
+```
+
+그리고 셀의 내부에서 `PhotoViewModel`과 `photoImageView` 를 바인딩해 준다. `PhotoViewModel`에서 값이 방출되면 `photoImageView`은 업데이트를 할 것이다. `PhotoViewModel`이 사라지면 해당 핸들러도 실행되지 않는다는 점이다. 즉 셀이 재사용될 때마다 `PhotoViewModel`을 새로 주입해주기 때문에 cell 재사용 시 이전 이미지 요청에 대한 이슈를 없앨 수 있었다.

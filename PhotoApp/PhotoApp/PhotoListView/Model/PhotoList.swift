@@ -26,7 +26,7 @@ struct PhotoList {
     }
     
     func photo(of index: Int) -> Photo? {
-        guard index < list.count else { return nil }
+        guard (0..<list.count) ~= index else { return nil }
         return list[index]
     }
 }

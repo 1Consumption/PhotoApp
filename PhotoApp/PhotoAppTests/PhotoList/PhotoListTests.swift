@@ -38,5 +38,6 @@ final class PhotoListTests: XCTestCase {
         
         XCTAssertEqual(photos[0], photoList.photo(of: 0))
         XCTAssertNil(photoList.photo(of: photos.count))
+        XCTAssertNil(photoList.photo(of: -1))
     }
 }

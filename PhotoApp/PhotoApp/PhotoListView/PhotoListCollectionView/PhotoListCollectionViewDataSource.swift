@@ -18,15 +18,9 @@ final class PhotoListCollectionViewDataSource: NSObject, UICollectionViewDataSou
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoListCollectionViewCell.identifier, for: indexPath) as? PhotoListCollectionViewCell else { return UICollectionViewCell() }
         
         guard let photo = photoListViewModel?.photo(of: indexPath.item) else { return cell }
+        let photoViewModel = PhotoViewModel(photo: photo)
         
-        DispatchQueue.global().async {
-            let url = URL(string: photo.urls.regular)!
-            let data = try! Data(contentsOf: url)
-            DispatchQueue.main.async {
-                cell.authorNameLabel.text = "\(photo.user.name)"
-                cell.photoImageView.image = UIImage(data: data)
-            }
-        }
+        cell.bind(photoViewModel)
         
         return cell
     }
