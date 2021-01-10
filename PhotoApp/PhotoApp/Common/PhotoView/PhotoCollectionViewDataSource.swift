@@ -1,5 +1,5 @@
 //
-//  PhotoListCollectionViewDataSource.swift
+//  PhotoCollectionViewDataSource.swift
 //  PhotoApp
 //
 //  Created by 신한섭 on 2021/01/09.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PhotoListCollectionViewDataSource: NSObject, UICollectionViewDataSource {
+final class PhotoCollectionViewDataSource: NSObject, UICollectionViewDataSource {
     var photoListViewModel: PhotoListViewModel?
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -15,11 +15,11 @@ final class PhotoListCollectionViewDataSource: NSObject, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoListCollectionViewCell.identifier, for: indexPath) as? PhotoListCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
         
         guard let photo = photoListViewModel?.photo(of: indexPath.item) else { return cell }
         let photoViewModel = PhotoViewModel(photo: photo)
-        
+
         cell.bind(photoViewModel)
         
         return cell

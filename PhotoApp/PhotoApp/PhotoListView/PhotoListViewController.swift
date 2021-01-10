@@ -10,11 +10,12 @@ import UIKit
 final class PhotoListViewController: UIViewController {
     @IBOutlet weak var photoListCollectionView: UICollectionView!
     
-    private let dataSource: PhotoListCollectionViewDataSource = PhotoListCollectionViewDataSource()
+    private let dataSource: PhotoCollectionViewDataSource = PhotoCollectionViewDataSource()
     private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        photoListCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main), forCellWithReuseIdentifier: PhotoCell.identifier)
         dataSource.photoListViewModel = photoListViewModel
         photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
