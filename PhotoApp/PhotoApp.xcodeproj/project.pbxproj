@@ -173,7 +173,6 @@
 		A588F19425A6E38400487FB0 /* PhotoListView */ = {
 			isa = PBXGroup;
 			children = (
-				A5E07C5925A81E4D004C6C24 /* Model */,
 				A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */,
 			);
 			path = PhotoListView;
@@ -237,7 +236,16 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
-		A5E07C5925A81E4D004C6C24 /* Model */ = {
+		A5E4255425AB5B5500618B57 /* Observable */ = {
+			isa = PBXGroup;
+			children = (
+				A55B7ED825A9F9F1004DCD4B /* ObservableTests.swift */,
+				A5E4254825AB42A400618B57 /* CancellableTests.swift */,
+			);
+			path = Observable;
+			sourceTree = "<group>";
+		};
+		A5E4255525AB5B9300618B57 /* PhotoModel */ = {
 			isa = PBXGroup;
 			children = (
 				A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */,
@@ -245,7 +253,16 @@
 				A593129A25A87E7800B286E6 /* PhotoListViewModel.swift */,
 				A5D26C8325A8E9100008CA87 /* PhotoList.swift */,
 			);
-			path = Model;
+			path = PhotoModel;
+			sourceTree = "<group>";
+		};
+		A5E4255825AB5BD800618B57 /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				A5C3D48F25AAE18D008BD95E /* PhotoView */,
+				A5E4255525AB5B9300618B57 /* PhotoModel */,
+			);
+			path = Photo;
 			sourceTree = "<group>";
 		};
 		A5E78E2F25A6B283000B9C76 = {
@@ -284,8 +301,8 @@
 		A5FDA16B25A70DAE00264597 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A5E4255825AB5BD800618B57 /* Photo */,
 				A5A4ABB625AB32B3001482A2 /* Observable */,
-				A5C3D48F25AAE18D008BD95E /* PhotoView */,
 				A581F65525A95D14009A840F /* ImageCache */,
 				A5D26C7425A8D2CF0008CA87 /* Extension */,
 				A5FDA16C25A70DB300264597 /* Network */,
@@ -323,14 +340,13 @@
 		A5FDA18525A7105E00264597 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A5E4255425AB5B5500618B57 /* Observable */,
 				A581F64E25A95C94009A840F /* ImageCache */,
 				A5D46FEA25A721D8000BF4EE /* Extension */,
 				A5FDA18625A7106200264597 /* Network */,
 				A5E07C6C25A82314004C6C24 /* Reqeusters.swift */,
 				A5E07C7B25A82934004C6C24 /* Encoder.swift */,
 				A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */,
-				A55B7ED825A9F9F1004DCD4B /* ObservableTests.swift */,
-				A5E4254825AB42A400618B57 /* CancellableTests.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
