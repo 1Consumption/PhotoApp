@@ -59,4 +59,9 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
                                                 self?.showErrorAlert(with: $0)})
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let photoDetailViewController = storyboard?.instantiateViewController(withIdentifier: PhotoDetailViewController.identifier) as? PhotoDetailViewController else { return }
+        navigationController?.pushViewController(photoDetailViewController, animated: true)
+    }
 }

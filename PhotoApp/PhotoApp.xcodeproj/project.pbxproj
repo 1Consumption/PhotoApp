@@ -27,6 +27,7 @@
 		A5C0F17F25A7134200F80C08 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0F17E25A7134200F80C08 /* NetworkManager.swift */; };
 		A5C0F18325A713E200F80C08 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0F18225A713E200F80C08 /* NetworkError.swift */; };
 		A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0F18725A71A7600F80C08 /* Requestable.swift */; };
+		A5C3D47225AAD81E008BD95E /* PhotoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */; };
 		A5D26C7625A8D2DE0008CA87 /* UIAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7525A8D2DE0008CA87 /* UIAlertViewController.swift */; };
 		A5D26C7A25A8D3CD0008CA87 /* UseCaseErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */; };
 		A5D26C8425A8E9100008CA87 /* PhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C8325A8E9100008CA87 /* PhotoList.swift */; };
@@ -88,6 +89,7 @@
 		A5C0F17E25A7134200F80C08 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		A5C0F18225A713E200F80C08 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		A5C0F18725A71A7600F80C08 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
+		A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailViewController.swift; sourceTree = "<group>"; };
 		A5D26C7525A8D2DE0008CA87 /* UIAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertViewController.swift; sourceTree = "<group>"; };
 		A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseErrorTests.swift; sourceTree = "<group>"; };
 		A5D26C8325A8E9100008CA87 /* PhotoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoList.swift; sourceTree = "<group>"; };
@@ -190,6 +192,14 @@
 			path = PhotoListView;
 			sourceTree = "<group>";
 		};
+		A5C3D47025AAD810008BD95E /* PhotoDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */,
+			);
+			path = PhotoDetailView;
+			sourceTree = "<group>";
+		};
 		A5D26C7425A8D2CF0008CA87 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -252,6 +262,7 @@
 		A5E78E3A25A6B283000B9C76 /* PhotoApp */ = {
 			isa = PBXGroup;
 			children = (
+				A5C3D47025AAD810008BD95E /* PhotoDetailView */,
 				A5FDA16B25A70DAE00264597 /* Common */,
 				A588F19425A6E38400487FB0 /* PhotoListView */,
 				A5E78E3B25A6B283000B9C76 /* AppDelegate.swift */,
@@ -444,6 +455,7 @@
 				A5FDA16E25A70DC300264597 /* NetworkManageable.swift in Sources */,
 				A5E07C5B25A81E54004C6C24 /* Photo.swift in Sources */,
 				A591B53A25A6E45900B53FA6 /* PhotoListCollectionViewCell.swift in Sources */,
+				A5C3D47225AAD81E008BD95E /* PhotoDetailViewController.swift in Sources */,
 				A5D26C7625A8D2DE0008CA87 /* UIAlertViewController.swift in Sources */,
 				A5FDA17125A70E2600264597 /* HTTPMethod.swift in Sources */,
 				A581F66A25A9628F009A840F /* ExpirableObject.swift in Sources */,
