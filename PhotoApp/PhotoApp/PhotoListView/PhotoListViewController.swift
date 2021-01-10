@@ -67,6 +67,7 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         guard let photoDetailViewController = storyboard?.instantiateViewController(withIdentifier: PhotoDetailViewController.identifier) as? PhotoDetailViewController else { return }
         
         photoDetailViewController.dataSource = dataSource
+        photoDetailViewController.currentIndexPath = indexPath
         
         navigationController?.pushViewController(photoDetailViewController, animated: true)
     }

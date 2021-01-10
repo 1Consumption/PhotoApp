@@ -12,7 +12,9 @@ final class PhotoDetailViewController: UIViewController {
     
     @IBOutlet weak var photoDetailCollectionView: UICollectionView!
     
+    private var isLayouted: Bool = false
     var dataSource: PhotoCollectionViewDataSource?
+    var currentIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,14 @@ final class PhotoDetailViewController: UIViewController {
                                            forCellWithReuseIdentifier: PhotoCell.identifier)
         photoDetailCollectionView.dataSource = dataSource
         photoDetailCollectionView.delegate = self
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard !isLayouted else { return }
+        isLayouted = true
+        guard let indexPath = currentIndexPath else { return }
+        photoDetailCollectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally], animated: false)
     }
 }
 
