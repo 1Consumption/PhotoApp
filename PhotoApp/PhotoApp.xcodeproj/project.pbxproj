@@ -179,6 +179,15 @@
 			path = PhotoListView;
 			sourceTree = "<group>";
 		};
+		A5A4ABB625AB32B3001482A2 /* Observable */ = {
+			isa = PBXGroup;
+			children = (
+				A581F6AD25A9EDB2009A840F /* Observable.swift */,
+				A5A4ABB725AB32E8001482A2 /* Cancellable.swift */,
+			);
+			path = Observable;
+			sourceTree = "<group>";
+		};
 		A5C3D47025AAD810008BD95E /* PhotoDetailView */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,6 +284,7 @@
 		A5FDA16B25A70DAE00264597 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A5A4ABB625AB32B3001482A2 /* Observable */,
 				A5C3D48F25AAE18D008BD95E /* PhotoView */,
 				A581F65525A95D14009A840F /* ImageCache */,
 				A5D26C7425A8D2CF0008CA87 /* Extension */,
@@ -282,8 +292,6 @@
 				A5D46FFF25A76968000BF4EE /* Secret.swift */,
 				A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */,
 				A593129025A87A9700B286E6 /* RemoteDataDecodableType.swift */,
-				A581F6AD25A9EDB2009A840F /* Observable.swift */,
-				A5A4ABB725AB32E8001482A2 /* Cancellable.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
