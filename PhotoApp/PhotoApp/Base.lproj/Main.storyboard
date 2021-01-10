@@ -54,13 +54,35 @@
                     <view key="view" contentMode="scaleToFill" id="szx-9a-gor">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hHi-Ln-905">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="4LA-I1-016">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="32A-u4-IWh"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="hHi-Ln-905" firstAttribute="leading" secondItem="32A-u4-IWh" secondAttribute="leading" id="PAj-R7-C7j"/>
+                            <constraint firstItem="hHi-Ln-905" firstAttribute="top" secondItem="szx-9a-gor" secondAttribute="top" id="hyT-rs-FNl"/>
+                            <constraint firstItem="hHi-Ln-905" firstAttribute="trailing" secondItem="32A-u4-IWh" secondAttribute="trailing" id="pzq-Sv-5IC"/>
+                            <constraint firstAttribute="bottom" secondItem="hHi-Ln-905" secondAttribute="bottom" id="v8z-M0-uQs"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="photoDetailCollectionView" destination="hHi-Ln-905" id="Mcs-8o-Rwn"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0ht-vk-dru" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1730" y="94"/>
+            <point key="canvasLocation" x="1728.985507246377" y="93.75"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="oAu-ha-aXa">

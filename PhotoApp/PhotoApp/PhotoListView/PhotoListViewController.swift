@@ -46,9 +46,11 @@ final class PhotoListViewController: UIViewController {
 
 extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let size = dataSource.photo(of: indexPath.item) else { return .zero }
-        let width = CGFloat(size.width)
-        let height = CGFloat(size.height)
+        guard let photo = dataSource.photo(of: indexPath.item) else { return .zero }
+        
+        let width = CGFloat(photo.width)
+        let height = CGFloat(photo.height)
+        
         return CGSize(width: view.frame.width, height: height * view.frame.width / width)
     }
     
@@ -63,6 +65,9 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let photoDetailViewController = storyboard?.instantiateViewController(withIdentifier: PhotoDetailViewController.identifier) as? PhotoDetailViewController else { return }
+        
+        photoDetailViewController.dataSource = dataSource
+        
         navigationController?.pushViewController(photoDetailViewController, animated: true)
     }
 }
