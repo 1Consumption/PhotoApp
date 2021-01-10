@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol PhotoDetailViewControllerDelegate: class {
+    func scrollToItem(at indexPath: IndexPath?)
+}
+
 final class PhotoDetailViewController: UIViewController {
     static let identifier: String = "PhotoDetailViewController"
     
@@ -15,17 +19,32 @@ final class PhotoDetailViewController: UIViewController {
     private var isLayouted: Bool = false
     var dataSource: PhotoCollectionViewDataSource?
     var currentIndexPath: IndexPath?
+    weak var delegate: PhotoDetailViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setPhotoDetailCollectionView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrollPhotoDetailCollectionView()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        currentIndexPath = photoDetailCollectionView.indexPathsForVisibleItems.first
+        delegate?.scrollToItem(at: currentIndexPath)
+    }
+    
+    private func setPhotoDetailCollectionView() {
         photoDetailCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main),
                                            forCellWithReuseIdentifier: PhotoCell.identifier)
         photoDetailCollectionView.dataSource = dataSource
         photoDetailCollectionView.delegate = self
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    private func scrollPhotoDetailCollectionView() {
         guard !isLayouted else { return }
         isLayouted = true
         guard let indexPath = currentIndexPath else { return }

@@ -68,7 +68,15 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         
         photoDetailViewController.dataSource = dataSource
         photoDetailViewController.currentIndexPath = indexPath
+        photoDetailViewController.delegate = self
         
         navigationController?.pushViewController(photoDetailViewController, animated: true)
+    }
+}
+
+extension PhotoListViewController: PhotoDetailViewControllerDelegate {
+    func scrollToItem(at indexPath: IndexPath?) {
+        guard let indexPath = indexPath else { return  }
+        photoListCollectionView.scrollToItem(at: indexPath, at: [.centeredHorizontally, .centeredVertically], animated: false)
     }
 }
