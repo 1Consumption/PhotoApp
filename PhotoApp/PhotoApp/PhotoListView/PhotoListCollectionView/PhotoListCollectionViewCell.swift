@@ -1,5 +1,5 @@
 //
-//  PhotoCell.swift
+//  PhotoListCollectionViewCell.swift
 //  PhotoApp
 //
 //  Created by 신한섭 on 2021/01/10.
@@ -7,16 +7,12 @@
 
 import UIKit
 
-final class PhotoCell: UICollectionViewCell {
-    static let identifier: String = "PhotoCell"
+final class PhotoListCollectionViewCell: UICollectionViewCell {
+    static let identifier: String = "PhotoListCollectionViewCell"
     private var viewModel: PhotoViewModel?
     
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
     
     func bind(_ photoViewModel: PhotoViewModel) {
         viewModel = photoViewModel

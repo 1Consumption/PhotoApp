@@ -17,7 +17,8 @@ final class PhotoDetailViewController: UIViewController {
     @IBOutlet weak var photoDetailCollectionView: UICollectionView!
     
     private var isLayouted: Bool = false
-    var dataSource: PhotoCollectionViewDataSource?
+    private let dataSource: PhotoDetailCollectionViewDataSource = PhotoDetailCollectionViewDataSource()
+    var photoListViewModel: PhotoListViewModel?
     var currentIndexPath: IndexPath?
     weak var delegate: PhotoDetailViewControllerDelegate?
     
@@ -54,12 +55,11 @@ final class PhotoDetailViewController: UIViewController {
     
     private func setNavigationItemTitle(with indexPath: IndexPath?) {
         guard let index = indexPath?.item else { return }
-        navigationItem.title = dataSource?.photoListViewModel?.photo(of: index)?.user.name
+        navigationItem.title = photoListViewModel?.photo(of: index)?.user.name
     }
     
     private func setPhotoDetailCollectionView() {
-        photoDetailCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main),
-                                           forCellWithReuseIdentifier: PhotoCell.identifier)
+        dataSource.photoListViewModel = photoListViewModel
         photoDetailCollectionView.dataSource = dataSource
         photoDetailCollectionView.delegate = self
     }
@@ -74,12 +74,7 @@ final class PhotoDetailViewController: UIViewController {
 
 extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let photo = dataSource?.photo(of: indexPath.item) else { return .zero }
-        
-        let width = CGFloat(photo.width)
-        let height = CGFloat(photo.height)
-        
-        return CGSize(width: view.frame.width, height: height * view.frame.width / width)
+        return collectionView.frame.size
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

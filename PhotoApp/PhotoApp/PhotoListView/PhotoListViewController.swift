@@ -25,7 +25,6 @@ final class PhotoListViewController: UIViewController {
     }
     
     private func setPhotoListCollectionVeiw() {
-        photoListCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main), forCellWithReuseIdentifier: PhotoCell.identifier)
         dataSource.photoListViewModel = photoListViewModel
         photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
@@ -85,7 +84,7 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let photoDetailViewController = storyboard?.instantiateViewController(withIdentifier: PhotoDetailViewController.identifier) as? PhotoDetailViewController else { return }
         
-        photoDetailViewController.dataSource = dataSource
+        photoDetailViewController.photoListViewModel = photoListViewModel
         photoDetailViewController.currentIndexPath = indexPath
         photoDetailViewController.delegate = self
         

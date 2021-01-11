@@ -15,7 +15,7 @@ final class PhotoCollectionViewDataSource: NSObject, UICollectionViewDataSource 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoListCollectionViewCell.identifier, for: indexPath) as? PhotoListCollectionViewCell else { return UICollectionViewCell() }
         
         guard let photo = photoListViewModel?.photo(of: indexPath.item) else { return cell }
         let photoViewModel = PhotoViewModel(photo: photo)
