@@ -13,7 +13,7 @@ final class PhotoViewModel {
     private let imageManager: ImageRetrievable
     private var bag: CancellableBag = CancellableBag()
     
-    init(photo: Photo, imageRetrievable: ImageRetrievable = ImageManager()) {
+    init(photo: Photo, imageRetrievable: ImageRetrievable = ImageManager.shared) {
         self.photo = photo
         self.imageManager = imageRetrievable
     }
