@@ -10,6 +10,7 @@
 		A50D693325ABFBD3002AA358 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D693225ABFBD3002AA358 /* Secret.swift */; };
 		A50D693F25ABFE19002AA358 /* PhotoDetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D693E25ABFE19002AA358 /* PhotoDetailCollectionViewCell.swift */; };
 		A50D694525ABFE5B002AA358 /* PhotoDetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50D694425ABFE5B002AA358 /* PhotoDetailCollectionViewDataSource.swift */; };
+		A5103BB325ACDEF000C4280A /* ImageTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5103BB225ACDEF000C4280A /* ImageTextField.swift */; };
 		A54969F625A8BA7800248856 /* PhotoListCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54969F525A8BA7800248856 /* PhotoListCollectionViewDataSource.swift */; };
 		A55B7ED925A9F9F1004DCD4B /* ObservableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55B7ED825A9F9F1004DCD4B /* ObservableTests.swift */; };
 		A581F66425A961B4009A840F /* ExpirableObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A581F66325A961B4009A840F /* ExpirableObjectTests.swift */; };
@@ -78,6 +79,7 @@
 		A50D693225ABFBD3002AA358 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		A50D693E25ABFE19002AA358 /* PhotoDetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		A50D694425ABFE5B002AA358 /* PhotoDetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		A5103BB225ACDEF000C4280A /* ImageTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTextField.swift; sourceTree = "<group>"; };
 		A54969F525A8BA7800248856 /* PhotoListCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		A55B7ED825A9F9F1004DCD4B /* ObservableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableTests.swift; sourceTree = "<group>"; };
 		A581F66325A961B4009A840F /* ExpirableObjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpirableObjectTests.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			children = (
 				A50D693C25ABFDCC002AA358 /* PhotoListCollectionView */,
 				A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */,
+				A5103BB225ACDEF000C4280A /* ImageTextField.swift */,
 			);
 			path = PhotoListView;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 			files = (
 				A5E07C6225A8214C004C6C24 /* PhotoListUseCase.swift in Sources */,
 				A54969F625A8BA7800248856 /* PhotoListCollectionViewDataSource.swift in Sources */,
+				A5103BB325ACDEF000C4280A /* ImageTextField.swift in Sources */,
 				A5C0F17F25A7134200F80C08 /* NetworkManager.swift in Sources */,
 				A5E07C9225A834A7004C6C24 /* HTTPHeader.swift in Sources */,
 				A593129125A87A9700B286E6 /* RemoteDataDecodableType.swift in Sources */,

@@ -43,7 +43,10 @@ final class PhotoDetailViewController: UIViewController {
     }
     
     private func setNavigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.barStyle = .black
         
         let button = UIBarButtonItem(image: UIImage(named: "close"),
