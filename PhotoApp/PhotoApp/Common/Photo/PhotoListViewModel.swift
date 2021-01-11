@@ -11,6 +11,7 @@ final class PhotoListViewModel {
     private let photoListUseCase: PhotoListUseCase
     private var range: Observable<[IndexPath]> = Observable<[IndexPath]>()
     private var photoList: PhotoList
+    private var bag: CancellableBag = CancellableBag()
     
     var count: Int {
         return photoList.count
@@ -36,6 +37,7 @@ final class PhotoListViewModel {
     
     func bind(_ handler: @escaping (([IndexPath]?) -> Void)) {
         range.bind(handler)
+            .store(in: &bag)
     }
     
     func photo(of index: Int) -> Photo? {

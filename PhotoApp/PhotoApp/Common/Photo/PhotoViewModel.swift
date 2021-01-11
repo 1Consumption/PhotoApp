@@ -11,8 +11,9 @@ final class PhotoViewModel {
     let photo: Photo
     private var image: Observable<UIImage> = Observable<UIImage>()
     private let imageManager: ImageRetrievable
+    private var bag: CancellableBag = CancellableBag()
     
-    init(photo: Photo, imageRetrievable: ImageRetrievable = ImageManager()) {
+    init(photo: Photo, imageRetrievable: ImageRetrievable = ImageManager.shared) {
         self.photo = photo
         self.imageManager = imageRetrievable
     }
@@ -26,5 +27,6 @@ final class PhotoViewModel {
     
     func bind(_ handler: @escaping ((UIImage?) -> Void)) {
         image.bind(handler)
+            .store(in: &bag)
     }
 }
