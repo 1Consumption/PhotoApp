@@ -27,6 +27,7 @@ final class PhotoDetailViewController: UIViewController {
         setNavigationBar()
         setNavigationItemTitle(with: currentIndexPath)
         setPhotoDetailCollectionView()
+        bindPhotoViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -70,6 +71,15 @@ final class PhotoDetailViewController: UIViewController {
         guard let indexPath = currentIndexPath else { return }
         photoDetailCollectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally], animated: false)
     }
+    
+    private func bindPhotoViewModel() {
+        photoListViewModel?.bind { range in
+            guard let range = range else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.photoDetailCollectionView.insertItems(at: range)
+            }
+        }
+    }
 }
 
 extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
@@ -79,5 +89,11 @@ extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         setNavigationItemTitle(with: indexPath)
+        
+        let lastIndex = collectionView.numberOfItems(inSection: 0)
+        
+        guard lastIndex == indexPath.item + 1 else { return }
+        
+        photoListViewModel?.retrievePhotoList(failureHandler: UIAlertController().showUseCaseErrorAlert(_:))
     }
 }

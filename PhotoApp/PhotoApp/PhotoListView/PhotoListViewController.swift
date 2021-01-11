@@ -37,8 +37,7 @@ final class PhotoListViewController: UIViewController {
     }
     
     private func sendNeedMoreModelEvent() {
-        photoListViewModel.retrievePhotoList(failureHandler: { [weak self] in
-                                                self?.showErrorAlert(with: $0)})
+        photoListViewModel.retrievePhotoList(failureHandler: UIAlertController().showUseCaseErrorAlert(_:))
 
     }
     
@@ -48,18 +47,6 @@ final class PhotoListViewController: UIViewController {
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
-    }
-    
-    private func showErrorAlert(with error: UseCaseError) {
-        switch error {
-        case .networkError(networkError: .duplicatedRequest):
-            break
-        default:
-            DispatchQueue.main.async { [weak self] in
-                let alert = UIAlertController().confirmAlert(title: "에러 발생", message: error.message)
-                self?.present(alert, animated: true, completion: nil)
-            }
-        }
     }
 }
 

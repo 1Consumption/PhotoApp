@@ -32,7 +32,7 @@
 		A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0F18725A71A7600F80C08 /* Requestable.swift */; };
 		A5C3D47225AAD81E008BD95E /* PhotoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */; };
 		A5C3D49225AAE1A5008BD95E /* PhotoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3D49025AAE1A5008BD95E /* PhotoListCollectionViewCell.swift */; };
-		A5D26C7625A8D2DE0008CA87 /* UIAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7525A8D2DE0008CA87 /* UIAlertViewController.swift */; };
+		A5D26C7625A8D2DE0008CA87 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7525A8D2DE0008CA87 /* UIAlertController.swift */; };
 		A5D26C7A25A8D3CD0008CA87 /* UseCaseErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */; };
 		A5D26C8425A8E9100008CA87 /* PhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C8325A8E9100008CA87 /* PhotoList.swift */; };
 		A5D26C8825A8EA2D0008CA87 /* PhotoListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C8725A8EA2D0008CA87 /* PhotoListTests.swift */; };
@@ -98,7 +98,7 @@
 		A5C0F18725A71A7600F80C08 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailViewController.swift; sourceTree = "<group>"; };
 		A5C3D49025AAE1A5008BD95E /* PhotoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCollectionViewCell.swift; sourceTree = "<group>"; };
-		A5D26C7525A8D2DE0008CA87 /* UIAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertViewController.swift; sourceTree = "<group>"; };
+		A5D26C7525A8D2DE0008CA87 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseErrorTests.swift; sourceTree = "<group>"; };
 		A5D26C8325A8E9100008CA87 /* PhotoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoList.swift; sourceTree = "<group>"; };
 		A5D26C8725A8EA2D0008CA87 /* PhotoListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListTests.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		A5D26C7425A8D2CF0008CA87 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				A5D26C7525A8D2DE0008CA87 /* UIAlertViewController.swift */,
+				A5D26C7525A8D2DE0008CA87 /* UIAlertController.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -483,7 +483,7 @@
 				A5FDA16E25A70DC300264597 /* NetworkManageable.swift in Sources */,
 				A5E07C5B25A81E54004C6C24 /* Photo.swift in Sources */,
 				A5C3D47225AAD81E008BD95E /* PhotoDetailViewController.swift in Sources */,
-				A5D26C7625A8D2DE0008CA87 /* UIAlertViewController.swift in Sources */,
+				A5D26C7625A8D2DE0008CA87 /* UIAlertController.swift in Sources */,
 				A5FDA17125A70E2600264597 /* HTTPMethod.swift in Sources */,
 				A581F66A25A9628F009A840F /* ExpirableObject.swift in Sources */,
 				A581F67E25A96E6F009A840F /* MemoryCacheStorage.swift in Sources */,
