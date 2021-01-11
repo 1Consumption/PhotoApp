@@ -40,6 +40,8 @@
 		A5D46FF225A72535000BF4EE /* NetworkErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FF125A72535000BF4EE /* NetworkErrorTests.swift */; };
 		A5D46FF825A76592000BF4EE /* EndPointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FF725A76592000BF4EE /* EndPointTests.swift */; };
 		A5D46FFC25A768FD000BF4EE /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D46FFB25A768FD000BF4EE /* EndPoint.swift */; };
+		A5DB72C625AC031C005B468E /* CurrentPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DB72C525AC031C005B468E /* CurrentPageViewModel.swift */; };
+		A5DB72CB25AC055B005B468E /* CurrentPageViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DB72CA25AC055B005B468E /* CurrentPageViewModelTests.swift */; };
 		A5E07C5B25A81E54004C6C24 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C5A25A81E54004C6C24 /* Photo.swift */; };
 		A5E07C6225A8214C004C6C24 /* PhotoListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */; };
 		A5E07C6825A8219C004C6C24 /* PhotoListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */; };
@@ -106,6 +108,8 @@
 		A5D46FF125A72535000BF4EE /* NetworkErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorTests.swift; sourceTree = "<group>"; };
 		A5D46FF725A76592000BF4EE /* EndPointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPointTests.swift; sourceTree = "<group>"; };
 		A5D46FFB25A768FD000BF4EE /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
+		A5DB72C525AC031C005B468E /* CurrentPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPageViewModel.swift; sourceTree = "<group>"; };
+		A5DB72CA25AC055B005B468E /* CurrentPageViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPageViewModelTests.swift; sourceTree = "<group>"; };
 		A5E07C5A25A81E54004C6C24 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListUseCase.swift; sourceTree = "<group>"; };
 		A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListUseCaseTests.swift; sourceTree = "<group>"; };
@@ -213,6 +217,7 @@
 			children = (
 				A50D693D25ABFE0A002AA358 /* PhotoDetailCollectionView */,
 				A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */,
+				A5DB72C525AC031C005B468E /* CurrentPageViewModel.swift */,
 			);
 			path = PhotoDetailView;
 			sourceTree = "<group>";
@@ -245,6 +250,14 @@
 				A5E07C8D25A83189004C6C24 /* Error+Equatable.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		A5DB72C925AC0547005B468E /* PhotoDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				A5DB72CA25AC055B005B468E /* CurrentPageViewModelTests.swift */,
+			);
+			path = PhotoDetailView;
 			sourceTree = "<group>";
 		};
 		A5E4255425AB5B5500618B57 /* Observable */ = {
@@ -333,6 +346,7 @@
 		A5FDA17825A7103400264597 /* PhotoAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				A5DB72C925AC0547005B468E /* PhotoDetailView */,
 				A5D26C8B25A8EB870008CA87 /* PhotoList */,
 				A5FDA18525A7105E00264597 /* Common */,
 				A5FDA17B25A7103400264597 /* Info.plist */,
@@ -490,6 +504,7 @@
 				A5E78E3C25A6B283000B9C76 /* AppDelegate.swift in Sources */,
 				A581F6A425A9E350009A840F /* PhotoViewModel.swift in Sources */,
 				A5A4ABB825AB32E8001482A2 /* Cancellable.swift in Sources */,
+				A5DB72C625AC031C005B468E /* CurrentPageViewModel.swift in Sources */,
 				A50D694525ABFE5B002AA358 /* PhotoDetailCollectionViewDataSource.swift in Sources */,
 				A50D693325ABFBD3002AA358 /* Secret.swift in Sources */,
 				A50D693F25ABFE19002AA358 /* PhotoDetailCollectionViewCell.swift in Sources */,
@@ -522,6 +537,7 @@
 				A581F69825A9A471009A840F /* ImageManagerTests.swift in Sources */,
 				A581F66425A961B4009A840F /* ExpirableObjectTests.swift in Sources */,
 				A5D46FF225A72535000BF4EE /* NetworkErrorTests.swift in Sources */,
+				A5DB72CB25AC055B005B468E /* CurrentPageViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

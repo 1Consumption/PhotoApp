@@ -18,6 +18,7 @@ final class PhotoDetailViewController: UIViewController {
     
     private var isLayouted: Bool = false
     private let dataSource: PhotoDetailCollectionViewDataSource = PhotoDetailCollectionViewDataSource()
+    private let currentPageViewModel: CurrentPageViewModel = CurrentPageViewModel()
     var photoListViewModel: PhotoListViewModel?
     var currentIndexPath: IndexPath?
     weak var delegate: PhotoDetailViewControllerDelegate?
@@ -25,9 +26,9 @@ final class PhotoDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar()
-        setNavigationItemTitle(with: currentIndexPath)
         setPhotoDetailCollectionView()
         bindPhotoViewModel()
+        bindCurrentPageViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -54,11 +55,6 @@ final class PhotoDetailViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
     
-    private func setNavigationItemTitle(with indexPath: IndexPath?) {
-        guard let index = indexPath?.item else { return }
-        navigationItem.title = photoListViewModel?.photo(of: index)?.user.name
-    }
-    
     private func setPhotoDetailCollectionView() {
         dataSource.photoListViewModel = photoListViewModel
         photoDetailCollectionView.dataSource = dataSource
@@ -80,6 +76,15 @@ final class PhotoDetailViewController: UIViewController {
             }
         }
     }
+    
+    private func bindCurrentPageViewModel() {
+        currentPageViewModel.bind { index in
+            guard let index = index else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.navigationItem.title = self?.photoListViewModel?.photo(of: index)?.user.name
+            }
+        }
+    }
 }
 
 extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
@@ -88,12 +93,19 @@ extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        setNavigationItemTitle(with: indexPath)
-        
         let lastIndex = collectionView.numberOfItems(inSection: 0)
         
         guard lastIndex == indexPath.item + 1 else { return }
         
         photoListViewModel?.retrievePhotoList(failureHandler: UIAlertController().showUseCaseErrorAlert(_:))
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentX = scrollView.contentOffset.x
+        
+        let width = view.frame.width
+        let page = Int(round(currentX / width))
+        
+        currentPageViewModel.send(page)
     }
 }
