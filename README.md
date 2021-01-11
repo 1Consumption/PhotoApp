@@ -2,7 +2,7 @@
 
 ## PhotoDetailView
 
-### summury
+### summary
 
 사진 리스트 화면(`PhotoListViewController`)에서 보던 사진을 클릭하면 사진 상세 화면(`PhotoDetailViewController`)으로 전환한다. 이 상세 화면의 기능은 다음과 같다. 
 
