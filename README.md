@@ -2,7 +2,7 @@
 
 ## ImageCache
 
-### summury
+### summary
 
 이전 브랜치에서는 서버에서 받아온 이미지를 cell에만 할당해줬다. 그 결과 cell이 재사용 될 때 이전 이미지는 사라지게 되었고, 사라진 이미지를 다시 불러오려면 서버에서 받아와야 하기 때문에 리소스 낭비가 있었다. 따라서 imageCache 브랜치에서는 Image caching을 담당하는 `ImageMaganger` 클래스를 구현하였고, `ImageManager` 클래스를 통해 collectionView의 cell에 이미지를 바인딩해 줬다. cell을 재사용해도 `ImageManager`의 `MemoryCacheStorage`에서 이미지를 가지고 있어서 리소스 낭비를 줄일 수 있었다.
 
