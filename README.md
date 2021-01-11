@@ -1,131 +1,153 @@
 # PhotoApp
 
-## ImageCache
+## PhotoDetailView
 
 ### summury
 
-이전 브랜치에서는 서버에서 받아온 이미지를 cell에만 할당해줬다. 그 결과 cell이 재사용 될 때 이전 이미지는 사라지게 되었고, 사라진 이미지를 다시 불러오려면 서버에서 받아와야 하기 때문에 리소스 낭비가 있었다. 따라서 imageCache 브랜치에서는 Image caching을 담당하는 `ImageMaganger` 클래스를 구현하였고, `ImageManager` 클래스를 통해 collectionView의 cell에 이미지를 바인딩해 줬다. cell을 재사용해도 `ImageManager`의 `MemoryCacheStorage`에서 이미지를 가지고 있어서 리소스 낭비를 줄일 수 있었다.
+사진 리스트 화면(`PhotoListViewController`)에서 보던 사진을 클릭하면 사진 상세 화면(`PhotoDetailViewController`)으로 전환한다. 이 상세 화면의 기능은 다음과 같다. 
+
+1. 사진을 좌우로 스와이프하여 한 장씩 사진을 넘길 수 있다.
+2. 현재 페이지의 끝 사진에 도달하면 다음 페이지에 해당하는 사진 정보를 받아올 수 있다. 
+3. 상세화면을 닫으면 사진 리스트 화면으로 돌아가는데, 상세화면에서 마지막으로 본 사진이 목록에 나타나야 한다.
+
+따라서 사진정보를 가지고 있는 `PhotoListViewModel`을 `PhotoListColletionViewDataSource`와 `PhotoDetailColletionViewDataSource`가 공유하게 해서 상세 화면과 리스트 화면의 모델을 동기화했고, delegate 패턴을 통해 상세 화면 마지막으로 본 사진이 리스트 화면에서도 보일 수 있게 처리했다.
 
 <br>
 
-<img width="1002" alt="image" src="https://user-images.githubusercontent.com/37682858/104103652-9fb00200-52e6-11eb-97b3-c056d6f58b60.png">
+### `PhotoListViewModel` 공유
 
-### `MemoryCacheStorage`
+`PhotoListViewModel` 의 역할은 이벤트가 발생하면 사진 모델을 받아오고, 추가된 범위를 방출한다. 이를 View들이 관찰하고 있다가 업데이트하는 방식이다. 그런데 왜 `PhotoListViewModel`을 공유했을까? 상세 화면에서 불러온 다음 페이지에 해당하는 사진 모델들도 사진 리스트 화면에 반영이 되어야 하기 때문이다. 즉, `PhotoListCollectionView`와 `PhotoDetailCollectionView`를 동기화 해야 한다.
 
-`MemoryCacheStorage` 클래스는 만료기한을 가지는 `ExpirableObject`를 캐싱한다. 삽입, 참조, 삭제 등의 기능을 수행할 수 있으며  이미지가 참조되면 만료기한을 초기화하는 동작을 한다.
+따라서 하나의 뷰모델을 여러 개의 뷰가 관찰하도록 하고, 변화가 일어나면 관찰하고 있던 뷰들이 상태를 업데이트할 수 있도록 바인딩을 해줬다. 구조는 아래와 같다.
 
-#### `ExpirableObject`
-
-아래 코드는 `ExpirableObject`의 구현부이다. 해당 오브젝트가 만들어질 때, 인자로 넘겨받은 시간 값과 현재 시간을 더해 만료 기한을 만들었다. 또한 `isExpired` 프로퍼티를 통해 만료 여부를 알 수 있으며, `resetExpectedExpireDate(_:)` 메소드를 통해 만료 기한을 초기화 할 수 있다.
-
-```swift
-final class ExpirableObject<T> {    
-    let value: T
-    private var expectedExpireDate: Date
-    var isExpired: Bool {
-        return Date() > expectedExpireDate
-    }
-    
-    init(with value: T, expireTime: ExpireTime) {
-        self.value = value
-        expectedExpireDate = Date(timeIntervalSinceNow: expireTime.timeInterval)
-    }
-    
-    func resetExpectedExpireDate(_ expireTime: ExpireTime) {
-        expectedExpireDate = Date(timeIntervalSinceNow: expireTime.timeInterval)
-    }
-}
-```
+<img width="1246" alt="image" src="https://user-images.githubusercontent.com/37682858/104149704-a2ac0f00-541a-11eb-8e6a-7dcce60a15b3.png">
 
 <br>
 
-### `ImageManager`
-
-`ImageManager`는 다음과 같은 순서로 이미지를 찾는다.
-
-1. `MemeoryCacheStorage`에 key를 넘겨주고 key에 해당하는 이미지가 있는지 확인한다.
-
-2. `MemeoryCacheStorage`는`cache`프로퍼티에서 key에 해당하는 이미지를 확인한다.
-
-    1) 해당 이미지가 만료되었으면 해당 이미지를 `cache`에서 삭제하고 nil을 반환한다.
-
-    2) 만료되지 않았다면 만료 시간을 초기화하고 handler를 통해 이미지를 외부에 넘겨준다.
-
-3. 2번의 결과가 nil인 경우 로컬에 없다는 뜻이므로 `NetworkManageable`을 사용해 서버에서 이미지를 받아온다.
-
-4. 서버에서 이미지를 받아오면 `MemeoryCacheStorage`에 이미지를 저장하고 handler를 통해 이미지를 외부에 넘겨준다.
-
-<br>
-
-### 트러블 슈팅
-
-#### 배경
-
-<img src = "https://user-images.githubusercontent.com/37682858/104105187-cde60f80-52ef-11eb-94ba-e6d9945b3661.gif" width = "300">
-
-`photoListCollectionView`를 빠르게 스크롤하면 cell에 알맞는 이미지가 들어가지 않고 다른 cell의 이미지와 충돌하여 바뀌는 현상이 발생함.
-
-#### 원인
+### Observable 리팩토링
 
 ``` swift
-func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-  	///...
-    ImageManager.shared.retrieveImage(from: photo.urls.regular) { image in
-        DispatchQueue.main.async {
-            cell.photoImageView.image = image
+/// 기존 Observable
+final class Observable<T> {
+    typealias Handler = ((T?) -> Void)
+
+    private var handler: Handler?
+    var value: T? {
+        didSet {
+            handler?(value)
         }
     }
     
-    return cell
+    func bind(_ handler: Handler?) {
+        self.handler = handler
+    }
 }
 ```
 
-위 코드는 `photoListCollectionViewDataSource`의 `cellForItemAt` 메소드이다. A 셀이 있다고 가정하고, 이 A 셀을 재사용한다고 생각해보자. 아래와 같은 문제가 발생하게 된다.
+그런데 기존의 `Observable` 클래스는 1:1 바인딩에 적합한 구조이다. 한 번에 하나의 동작만 저장하고 실행할 수 있기 때문이다. 
 
-![셀 재사용 이슈](https://user-images.githubusercontent.com/37682858/104114543-07973480-5349-11eb-8d6f-9652f8c1df83.gif)
+현재 하나의 `Observable`을  여러개의 view와 바인딩을 해줘야 하는 상황이나, 1:N 바인딩이 불가능하기 때문에 아래와 같이 리팩토링했다.
 
-1.  `cellForItemAt` 메소드에서 Image A 요청을 한다.
-2. Image A에 대한 응답이 오기 전에 셀이 재사용 된다.
-3. 재사용된 셀이 Image B 요청을 한다.
-4. 재사용되기 전에 보냈던 Image A 응답이 도착한다. 이를 셀에 반영한다.
-5. 재사용된 셀에 대한 Image B 응답이 도착한다. 이를 셀에 반영한다.
-
-즉 이전 요청을 처리하지 않고 모두 응답을 받아서 반영하기 때문에 발생한 문제이다.
-
-#### 해결
+<br>
 
 ``` swift
-func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-  	///...
-    let photoViewModel = PhotoViewModel(photo: photo)
-    
-    cell.bind(photoViewModel)
+typealias CancellableBag = Set<Cancellable>
 
-    return cell
+final class Cancellable {
+    private let cancelHandler: () -> Void
+    
+    init(_ cancelHandler: @escaping () -> Void) {
+        self.cancelHandler = cancelHandler
+    }
+    
+    deinit {
+        cancelHandler()
+    }
+    
+    func store(in bag: inout CancellableBag) {
+        bag.insert(self)
+    }
+    
+    func cancel() {
+        cancelHandler()
+    }
 }
 ```
 
-먼저  `cellForItemAt` 메소드를 변경했다.  `cellForItemAt` 메소드에서 이미지 요청을 보내는 것이 아닌 cell에 대한 뷰모델을 만들어서 주입해준다. 이렇게 되면 cell의 재사용과 관련 없이 매번 새로운 `PhotoViewModel`이 만들어진다.
+이에 앞서 `Cancellable` 클래스를 만들었는데, 하나의 `Observable`이 여러 뷰와 바인딩 되어 있는 도중 하나의 뷰가 바인딩을 끊고 싶을 때 해당 클래스를 통해 끊을 수 있도록 하기 위함이다.  `Cancellable` 클래스는 생성자에서 클로저를 받아 `cancel()` 메소드가 호출되거나 메모리에서 해제될 때 해당 클로저를 실행한다. 또한 `store(in:)` 메소드를 통해 자기 자신을 매개변수에 저장할 수 있다. 
 
 <br>
 
 ```swift
-final class PhotoListCollectionViewCell: UICollectionViewCell {
-  	///...
-    private var viewModel: PhotoViewModel?
-  
-    func bind(_ photoViewModel: PhotoViewModel) {
-        viewModel = photoViewModel
-        authorNameLabel.text = viewModel?.photo.user.name
-        viewModel?.bind { [weak self] image in
-            DispatchQueue.main.async {
-                self?.photoImageView.image = image
+/// 변경된 Observable
+final class Observable<T> {
+    typealias Handler = (T?) -> Void
+
+    private var observers: [UUID: Handler?] = [:]
+    
+    var value: T? {
+        didSet {
+            observers.values.forEach {
+                $0?(value)
             }
         }
-        viewModel?.retrieveImage()
     }
-  	///...
+    
+    func bind(_ handler: Handler?) -> Cancellable {
+        let id = UUID()
+        observers[id] = handler
+        
+        let cancellable = Cancellable { [weak self] in
+            self?.observers[id] = nil
+        }
+        
+        return cancellable
+    }
 }
 ```
 
-그리고 셀의 내부에서 `PhotoViewModel`과 `photoImageView` 를 바인딩해 준다. `PhotoViewModel`에서 값이 방출되면 `photoImageView`은 업데이트를 할 것이다. `PhotoViewModel`이 사라지면 해당 핸들러도 실행되지 않는다는 점이다. 즉 셀이 재사용될 때마다 `PhotoViewModel`을 새로 주입해주기 때문에 cell 재사용 시 이전 이미지 요청에 대한 이슈를 없앨 수 있었다.
+`observser` 프로퍼티가 추가되었다. 이 프로퍼티는 동작에 고유한 id 값을 부여해서 관리한다. 동작 별로 id 값을 부여한 이유는 하나의 옵저버블에 A, B가 바인딩 되어있는데, B가 바인딩을 끊었을 때 B의 동작을 제거해주기 위함이다.
+
+ `bind(_:) -> Cancellable` 메소드 내부의 동작은 다음과 같다.
+
+1. `observers`에 고유한 `id` 값을 key로 `handler`를 등록한다.
+2. `id`에 해당하는 `handler `를 `observers`에서 삭제하는 클로저를 `Cancellable`에 생성자로 넘겨준다.
+3. 생성된 `Cancellable`을 반환한다.
+
+여기서 반환된 `Cancellalbe`을 저장하지 않는다면 어떻게 될까? 
+
+1. 해당 `Cancellalbe`의 참조 카운트는 0이 될 것이므로 메모리에서 해제된다.
+2. `Cancellable`의 deinit이 실행되면서 `cancelHandler`가 실행된다.
+3. `observers`에서 해당 동작이 삭제된다.
+
+따라서 바인딩을 유지하고자 한다면 다음과 같이 `Cancellable`을 어딘가에 저장해놓아야 한다. 여기서 `PhotoViewModel`이 메모리에서 해제된다는 것은 `bag` 도 해제가 된다는 것이고, `bag`이 해제가 된다는 것은 내부의 `Cancellable`도 해제가 된다는 말이다. 즉 `PhotoViewModel`이 해제가 된다면 이와 바인딩 되어있던 동작들도 해제가 된다는 것을 의미한다.
+
+``` swift
+final class PhotoViewModel {
+  	///...
+    private var bag: CancellableBag = CancellableBag()
+
+  	///...
+    func bind(_ handler: @escaping ((UIImage?) -> Void)) {
+        image.bind(handler)
+            .store(in: &bag)
+    }
+}
+```
+
+<br>
+
+위와 같이 리팩토링한 결과 1:N 바인딩을 안정적으로 할 수 있었다.
+
+<br>
+
+### appendix
+
+navigation controller의 status bar color는 직접 바꿀 수 없다. 다만, 이를 `barStyle` 프로퍼티를 변경해서 바꿀 수 있다.
+
+즉 `barStyle` 프로퍼티 `preferredStatusBarStyle`을 결정한다.
+
+```swift
+self.navigationController!.navigationBar.barStyle = .black
+```
+
