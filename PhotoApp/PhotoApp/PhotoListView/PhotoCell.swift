@@ -1,14 +1,14 @@
 //
-//  PhotoListCollectionViewCell.swift
+//  PhotoCell.swift
 //  PhotoApp
 //
-//  Created by 신한섭 on 2021/01/10.
+//  Created by 신한섭 on 2021/01/13.
 //
 
 import UIKit
 
-final class PhotoListCollectionViewCell: UICollectionViewCell {
-    static let identifier: String = "PhotoListCollectionViewCell"
+final class PhotoCell: UICollectionViewCell {
+    static let identifier: String = "PhotoCell"
     private var viewModel: PhotoViewModel?
     
     @IBOutlet weak var photoImageView: UIImageView!

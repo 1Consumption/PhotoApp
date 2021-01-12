@@ -18,7 +18,7 @@ final class PhotoListViewController: UIViewController {
         searchViewModelInput.cancelButtonPushed.fire()
     }
     
-    private let dataSource: PhotoCollectionViewDataSource = PhotoCollectionViewDataSource()
+    private let photoListDataSource: PhotoCollectionViewDataSource = PhotoCollectionViewDataSource()
     private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
     private let searchViewModel: SearchViewModel = SearchViewModel()
     private let searchViewModelInput: SearchViewModelInput = SearchViewModelInput()
@@ -37,9 +37,10 @@ final class PhotoListViewController: UIViewController {
     }
     
     private func setPhotoListCollectionVeiw() {
-        dataSource.photoListViewModel = photoListViewModel
+        photoListDataSource.photoListViewModel = photoListViewModel
+        photoListCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main), forCellWithReuseIdentifier: PhotoCell.identifier)
         photoListCollectionView.contentInset = UIEdgeInsets(top: 96, left: 0, bottom: 0, right: 0)
-        photoListCollectionView.dataSource = dataSource
+        photoListCollectionView.dataSource = photoListDataSource
         photoListCollectionView.delegate = self
         photoListViewModel.bind({ range in
             DispatchQueue.main.async { [weak self] in
@@ -82,7 +83,9 @@ final class PhotoListViewController: UIViewController {
         
         output.useCaseErrorOccurred.bind {
             guard let error = $0 else { return }
-            UIAlertController().showUseCaseErrorAlert(error)
+            DispatchQueue.main.async {
+                UIAlertController().showUseCaseErrorAlert(error)
+            }
         }.store(in: &bag)
         
         output.isResultsExist.bind { [weak self] in
@@ -117,7 +120,7 @@ extension PhotoListViewController: UITextFieldDelegate {
 
 extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let photo = dataSource.photo(of: indexPath.item) else { return .zero }
+        guard let photo = photoListDataSource.photo(of: indexPath.item) else { return .zero }
         
         let width = CGFloat(photo.width)
         let height = CGFloat(photo.height)
