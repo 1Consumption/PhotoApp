@@ -65,7 +65,7 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="oiF-ve-tE6" customClass="IgnoreTouchStackView" customModule="PhotoApp" customModuleProvider="target">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="oiF-ve-tE6" userLabel="Search View" customClass="IgnoreTouchStackView" customModule="PhotoApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="rXI-wT-Gqk">
@@ -80,21 +80,20 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="f8p-cu-qDk">
                                                             <rect key="frame" x="20.5" y="44" width="373" height="44"/>
                                                             <subviews>
-                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search photos" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xf5-Kz-T7H" customClass="ImageTextField" customModule="PhotoApp" customModuleProvider="target">
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search photos" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XO8-fo-oYc" customClass="ImageTextField" customModule="PhotoApp" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="373" height="44"/>
                                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <color key="tintColor" name="CustomTextFieldColor"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="height" constant="44" id="EDC-ft-pTq"/>
+                                                                        <constraint firstAttribute="height" constant="44" id="5cH-B8-qOM"/>
                                                                     </constraints>
                                                                     <color key="textColor" name="CustomLabelColor"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <textInputTraits key="textInputTraits"/>
+                                                                    <textInputTraits key="textInputTraits" returnKeyType="search"/>
                                                                     <userDefinedRuntimeAttributes>
                                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                             <real key="value" value="10"/>
                                                                         </userDefinedRuntimeAttribute>
-                                                                        <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="close"/>
                                                                         <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
                                                                             <real key="value" value="10"/>
                                                                         </userDefinedRuntimeAttribute>
@@ -202,7 +201,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="photoListCollectionView" destination="EdK-gR-4DE" id="ZPA-7f-JGr"/>
-                        <outlet property="searchBar" destination="xf5-Kz-T7H" id="knj-n4-kOt"/>
+                        <outlet property="searchBar" destination="XO8-fo-oYc" id="PZP-va-Zh9"/>
                         <outlet property="searchCancelButton" destination="zd7-4P-EUG" id="2K8-he-9kg"/>
                         <outlet property="searchContainer" destination="rXI-wT-Gqk" id="yfA-l8-7v7"/>
                     </connections>
@@ -292,12 +291,11 @@
         </scene>
     </scenes>
     <designables>
-        <designable name="xf5-Kz-T7H">
+        <designable name="XO8-fo-oYc">
             <size key="intrinsicContentSize" width="110.5" height="22"/>
         </designable>
     </designables>
     <resources>
-        <image name="close" width="21.333333969116211" height="21.333333969116211"/>
         <namedColor name="CustomLabelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>

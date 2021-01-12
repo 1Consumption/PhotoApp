@@ -13,6 +13,7 @@ final class PhotoListViewController: UIViewController {
     @IBOutlet weak var searchContainer: UIView!
     @IBOutlet weak var searchCancelButton: UIButton!
     @IBOutlet weak var searchBar: UITextField!
+    @IBOutlet weak var noResultView: UIView!
     @IBAction func searchCancelTouchedUp(_ sender: Any) {
         searchViewModelInput.cancelButtonPushed.fire()
     }
@@ -77,6 +78,11 @@ final class PhotoListViewController: UIViewController {
                 self?.searchBar.text = nil
             }
         }.store(in: &bag)
+        
+        output.useCaseErrorOccurred.bind {
+            guard let error = $0 else { return }
+            UIAlertController().showUseCaseErrorAlert(error)
+        }.store(in: &bag)
     }
     
     private func animate(_ handler: @escaping () -> Void) {
@@ -92,6 +98,12 @@ final class PhotoListViewController: UIViewController {
 extension PhotoListViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         searchViewModelInput.textFieldEditBegan.fire()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchViewModelInput.sendQuery.value = textField.text
+        textField.resignFirstResponder()
+        return true
     }
 }
 

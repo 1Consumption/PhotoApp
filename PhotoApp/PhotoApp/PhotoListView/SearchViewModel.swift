@@ -10,15 +10,24 @@ import Foundation
 struct SearchViewModelInput {
     let textFieldEditBegan: Observable<Void> = Observable<Void>()
     let cancelButtonPushed: Observable<Void> = Observable<Void>()
+    let sendQuery: Observable<String> = Observable<String>()
 }
 
 struct SearchViewModelOutput {
     let textFieldEditBegan: Observable<Bool> = Observable<Bool>()
     let cancelButtonPushed: Observable<Bool> = Observable<Bool>()
+    let useCaseErrorOccurred: Observable<UseCaseError> = Observable<UseCaseError>()
 }
 
 final class SearchViewModel {
     private var bag: CancellableBag = CancellableBag()
+    private var photoList: PhotoList
+    private let searchPhotoUseCase: SearchPhotoUseCase
+    
+    init(networkManageable: NetworkManageable = NetworkManager()) {
+        photoList = PhotoList()
+        searchPhotoUseCase = SearchPhotoUseCase(networkManageable: networkManageable)
+    }
     
     func transform(input: SearchViewModelInput) -> SearchViewModelOutput {
         let output = SearchViewModelOutput()
@@ -29,6 +38,17 @@ final class SearchViewModel {
         
         input.cancelButtonPushed.bind { _ in
             output.cancelButtonPushed.value = true
+        }.store(in: &bag)
+        
+        input.sendQuery.bind { [weak self] in
+            guard let query = $0 else { return }
+            self?.searchPhotoUseCase
+                .retrievePhotoList(with: query,
+                                   failureHandler: {
+                                    output.useCaseErrorOccurred.value = $0
+                                   },
+                                   successHandler: { _ in
+                                   })
         }.store(in: &bag)
         
         return output

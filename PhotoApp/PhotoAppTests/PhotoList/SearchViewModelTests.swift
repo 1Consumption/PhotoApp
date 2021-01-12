@@ -39,4 +39,22 @@ final class SearchViewModelTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1.0)
     }
+    
+    func testUseCaseErrorOccurred() {
+        let failureRequest = InvalidDataRequester()
+        let failureManager = NetworkManager(requester: failureRequest)
+        let failureViewModel = SearchViewModel(networkManageable: failureManager)
+        let expectation = XCTestExpectation(description: "test useCase Error Occured")
+        
+        let output = failureViewModel.transform(input: input)
+        output.useCaseErrorOccurred.bind {
+            XCTAssertEqual(UseCaseError.networkError(networkError: .invalidData), $0)
+            expectation.fulfill()
+        }.store(in: &bag)
+        
+        input.sendQuery.value = nil
+        input.sendQuery.value = "test"
+        
+        wait(for: [expectation], timeout: 1.0)
+    }
 }
