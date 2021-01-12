@@ -31,4 +31,21 @@ final class ObservableTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
     }
+    
+    func fire() {
+        var bag = CancellableBag()
+        let expectation = XCTestExpectation(description: "observable bind")
+        expectation.expectedFulfillmentCount = 2
+        
+        let observable = Observable<Void>()
+        
+        observable.bind { _ in
+            expectation.fulfill()
+        }.store(in: &bag)
+        
+        observable.fire()
+        observable.fire()
+        
+        wait(for: [expectation], timeout: 1.0)
+    }
 }

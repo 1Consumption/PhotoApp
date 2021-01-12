@@ -14,12 +14,13 @@ final class PhotoListViewController: UIViewController {
     @IBOutlet weak var searchCancelButton: UIButton!
     @IBOutlet weak var searchBar: UITextField!
     @IBAction func searchCancelTouchedUp(_ sender: Any) {
-        isEditingViewModel.send(state: false)
+        searchViewModelInput.cancelButtonPushed.fire()
     }
     
     private let dataSource: PhotoCollectionViewDataSource = PhotoCollectionViewDataSource()
     private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
-    private let isEditingViewModel: IsEditingViewModel = IsEditingViewModel()
+    private let searchViewModel: SearchViewModel = SearchViewModel()
+    private let searchViewModelInput: SearchViewModelInput = SearchViewModelInput()
     private var bag: CancellableBag = CancellableBag()
     
     override func viewDidLoad() {
@@ -59,27 +60,38 @@ final class PhotoListViewController: UIViewController {
     }
     
     private func bindSearchView() {
-        isEditingViewModel.bind {
+        let output = searchViewModel.transform(input: searchViewModelInput)
+        
+        output.textFieldEditBegan.bind { [weak self] in
             guard let hiddenFactor = $0 else { return }
-            UIViewPropertyAnimator
-                .runningPropertyAnimator(withDuration: 0.2,
-                                         delay: 0,
-                                         options: .allowUserInteraction,
-                                         animations: { [weak self] in
-                                            self?.searchCancelButton.isHidden = !hiddenFactor
-                                            
-                                            guard !hiddenFactor else { return }
-                                            self?.view.endEditing(true)
-                                            self?.searchBar.text = ""
-                                         },
-                                         completion: nil)
-        }
+            self?.animate { [weak self] in
+                self?.searchCancelButton.isHidden = hiddenFactor
+            }
+        }.store(in: &bag)
+        
+        output.cancelButtonPushed.bind { [weak self] in
+            guard let hiddenFactor = $0 else { return }
+            self?.animate { [weak self] in
+                self?.searchCancelButton.isHidden = hiddenFactor
+                self?.view.endEditing(hiddenFactor)
+                self?.searchBar.text = nil
+            }
+        }.store(in: &bag)
+    }
+    
+    private func animate(_ handler: @escaping () -> Void) {
+        UIViewPropertyAnimator
+            .runningPropertyAnimator(withDuration: 0.2,
+                                     delay: 0,
+                                     options: .allowUserInteraction,
+                                     animations: handler,
+                                     completion: nil)
     }
 }
 
 extension PhotoListViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        isEditingViewModel.send(state: true)
+        searchViewModelInput.textFieldEditBegan.fire()
     }
 }
 
