@@ -16,10 +16,13 @@ final class PhotoDetailViewController: UIViewController {
     
     @IBOutlet weak var photoDetailCollectionView: UICollectionView!
     
+    private var bag: CancellableBag = CancellableBag()
     private var isLayouted: Bool = false
     private let dataSource: PhotoDetailCollectionViewDataSource = PhotoDetailCollectionViewDataSource()
     private let currentPageViewModel: CurrentPageViewModel = CurrentPageViewModel()
-    var photoListViewModel: PhotoListViewModel?
+    var photoListViewModelInput: SendEventType?
+    var photoListViewModelOutput: DeliverInsertedIndexPathType?
+    var photoList: PhotoList?
     var currentIndexPath: IndexPath?
     weak var delegate: PhotoDetailViewControllerDelegate?
     
@@ -59,7 +62,7 @@ final class PhotoDetailViewController: UIViewController {
     }
     
     private func setPhotoDetailCollectionView() {
-        dataSource.photoListViewModel = photoListViewModel
+        dataSource.photoList = photoList
         photoDetailCollectionView.dataSource = dataSource
         photoDetailCollectionView.delegate = self
     }
@@ -72,19 +75,26 @@ final class PhotoDetailViewController: UIViewController {
     }
     
     private func bindPhotoViewModel() {
-        photoListViewModel?.bind { range in
+        photoListViewModelOutput?.errorOccurred.bind { error in
+            guard let error = error else { return }
+            DispatchQueue.main.async {
+                UIAlertController().showUseCaseErrorAlert(error)
+            }
+        }.store(in: &bag)
+        
+        photoListViewModelOutput?.changedIndexPath.bind { range in
             guard let range = range else { return }
             DispatchQueue.main.async { [weak self] in
                 self?.photoDetailCollectionView.insertItems(at: range)
             }
-        }
+        }.store(in: &bag)
     }
     
     private func bindCurrentPageViewModel() {
         currentPageViewModel.bind { index in
             guard let index = index else { return }
             DispatchQueue.main.async { [weak self] in
-                self?.navigationItem.title = self?.photoListViewModel?.photo(of: index)?.user.name
+                self?.navigationItem.title = self?.photoList?.photo(of: index)?.user.name
             }
         }
     }
@@ -100,7 +110,7 @@ extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
         
         guard lastIndex == indexPath.item + 1 else { return }
         
-        photoListViewModel?.retrievePhotoList(failureHandler: UIAlertController().showUseCaseErrorAlert(_:))
+        photoListViewModelInput?.sendEvent.fire()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

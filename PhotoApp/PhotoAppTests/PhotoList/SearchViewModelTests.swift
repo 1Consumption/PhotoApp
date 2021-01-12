@@ -47,7 +47,7 @@ final class SearchViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "test useCase Error Occured")
         
         let output = failureViewModel.transform(input: input)
-        output.useCaseErrorOccurred.bind {
+        output.errorOccurred.bind {
             XCTAssertEqual(UseCaseError.networkError(networkError: .invalidData), $0)
             expectation.fulfill()
         }.store(in: &bag)

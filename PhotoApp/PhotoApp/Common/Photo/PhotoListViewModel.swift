@@ -7,37 +7,43 @@
 
 import Foundation
 
+struct PhotoListViewModelInput: SendEventType {
+    let sendEvent: Observable<Void> = Observable<Void>()
+}
+
+struct PhotoListViewModelOutput: DeliverInsertedIndexPathType {
+    let errorOccurred: Observable<UseCaseError> = Observable<UseCaseError>()
+    let changedIndexPath: Observable<[IndexPath]> = Observable<[IndexPath]>()
+}
+
 final class PhotoListViewModel {
     private let photoListUseCase: PhotoListUseCase
-    private var range: Observable<[IndexPath]> = Observable<[IndexPath]>()
-    private var photoList: PhotoList
-    private var bag: CancellableBag = CancellableBag()
     
-    var count: Int {
-        return photoList.count
-    }
+    private var bag: CancellableBag = CancellableBag()
+    var photoList: PhotoList = PhotoList()
     
     init(networkManageable: NetworkManageable = NetworkManager()) {
-        photoList = PhotoList()
         photoListUseCase = PhotoListUseCase(networkManageable: networkManageable)
     }
     
-    func retrievePhotoList(failureHandler: @escaping (UseCaseError) -> Void) {
-        photoListUseCase.retrievePhotoList(failureHandler: failureHandler,
-                                           successHandler: { [weak self] in
-                                            guard let self = self else { return }
-                                            let startIndex = self.photoList.count
-                                            let endIndex = startIndex + $0.count
-                                            self.photoList.append(contentsOf: $0)
-                                            self.range.value = (startIndex..<endIndex).map {
-                                                IndexPath(item: $0, section: 0)
-                                            }
-                                           })
-    }
-    
-    func bind(_ handler: @escaping (([IndexPath]?) -> Void)) {
-        range.bind(handler)
-            .store(in: &bag)
+    func transfrom(_ input: SendEventType?) -> DeliverInsertedIndexPathType {
+        let output = PhotoListViewModelOutput()
+        input?.sendEvent.bind { [weak self] _ in
+            self?.photoListUseCase.retrievePhotoList(failureHandler: {
+                output.errorOccurred.value = $0
+            },
+            successHandler: { [weak self] in
+                guard let count = self?.photoList.count else { return }
+                let startIndex = count
+                let endIndex = startIndex + $0.count
+                self?.photoList.append(contentsOf: $0)
+                output.changedIndexPath.value = (startIndex..<endIndex).map {
+                    IndexPath(item: $0, section: 0)
+                }
+            })
+        }.store(in: &bag)
+        
+        return output
     }
     
     func photo(of index: Int) -> Photo? {

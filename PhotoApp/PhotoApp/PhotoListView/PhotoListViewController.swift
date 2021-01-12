@@ -20,6 +20,10 @@ final class PhotoListViewController: UIViewController {
     
     private let photoListDataSource: PhotoCollectionViewDataSource = PhotoCollectionViewDataSource()
     private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
+    private let photoListViewModelInput: PhotoListViewModelInput = PhotoListViewModelInput()
+    private var photoListViewModelOutput: DeliverInsertedIndexPathType?
+    
+    //search
     private let searchViewModel: SearchViewModel = SearchViewModel()
     private let searchViewModelInput: SearchViewModelInput = SearchViewModelInput()
     private var bag: CancellableBag = CancellableBag()
@@ -28,7 +32,7 @@ final class PhotoListViewController: UIViewController {
         super.viewDidLoad()
         setPhotoListCollectionVeiw()
         setSearchView()
-        sendNeedMoreModelEvent()
+        photoListViewModelInput.sendEvent.fire()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,21 +41,30 @@ final class PhotoListViewController: UIViewController {
     }
     
     private func setPhotoListCollectionVeiw() {
-        photoListDataSource.photoListViewModel = photoListViewModel
+        photoListDataSource.photoList = photoListViewModel.photoList
         photoListCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main), forCellWithReuseIdentifier: PhotoCell.identifier)
         photoListCollectionView.contentInset = UIEdgeInsets(top: 96, left: 0, bottom: 0, right: 0)
         photoListCollectionView.dataSource = photoListDataSource
         photoListCollectionView.delegate = self
-        photoListViewModel.bind({ range in
-            DispatchQueue.main.async { [weak self] in
-                guard let range = range else { return }
-                self?.photoListCollectionView.insertItems(at: range)
-            }
-        })
+        bindPhotoViewModel()
     }
     
-    private func sendNeedMoreModelEvent() {
-        photoListViewModel.retrievePhotoList(failureHandler: UIAlertController().showUseCaseErrorAlert(_:))
+    private func bindPhotoViewModel() {
+        photoListViewModelOutput = photoListViewModel.transfrom(photoListViewModelInput)
+        
+        photoListViewModelOutput?.errorOccurred.bind { error in
+            guard let error = error else { return }
+            DispatchQueue.main.async {
+                UIAlertController().showUseCaseErrorAlert(error)
+            }
+        }.store(in: &bag)
+        
+        photoListViewModelOutput?.changedIndexPath.bind { range in
+            guard let range = range else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.photoListCollectionView.insertItems(at: range)
+            }
+        }.store(in: &bag)
     }
     
     private func setSearchView() {
@@ -81,7 +94,7 @@ final class PhotoListViewController: UIViewController {
             }
         }.store(in: &bag)
         
-        output.useCaseErrorOccurred.bind {
+        output.errorOccurred.bind {
             guard let error = $0 else { return }
             DispatchQueue.main.async {
                 UIAlertController().showUseCaseErrorAlert(error)
@@ -133,13 +146,15 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         
         guard lastIndexPathItem < indexPath.item + 3 else { return }
         
-        sendNeedMoreModelEvent()
+        photoListViewModelInput.sendEvent.fire()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let photoDetailViewController = storyboard?.instantiateViewController(withIdentifier: PhotoDetailViewController.identifier) as? PhotoDetailViewController else { return }
         
-        photoDetailViewController.photoListViewModel = photoListViewModel
+        photoDetailViewController.photoList = photoListViewModel.photoList
+        photoDetailViewController.photoListViewModelInput = photoListViewModelInput
+        photoDetailViewController.photoListViewModelOutput = photoListViewModelOutput
         photoDetailViewController.currentIndexPath = indexPath
         photoDetailViewController.delegate = self
         

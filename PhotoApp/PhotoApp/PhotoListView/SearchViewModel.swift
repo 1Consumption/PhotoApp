@@ -13,20 +13,20 @@ struct SearchViewModelInput {
     let sendQuery: Observable<String> = Observable<String>()
 }
 
-struct SearchViewModelOutput {
+struct SearchViewModelOutput: DeliverInsertedIndexPathType {
     let textFieldEditBegan: Observable<Bool> = Observable<Bool>()
     let cancelButtonPushed: Observable<Bool> = Observable<Bool>()
-    let useCaseErrorOccurred: Observable<UseCaseError> = Observable<UseCaseError>()
+    let errorOccurred: Observable<UseCaseError> = Observable<UseCaseError>()
     let isResultsExist: Observable<Bool> = Observable<Bool>()
+    let changedIndexPath: Observable<[IndexPath]> = Observable<[IndexPath]>()
 }
 
 final class SearchViewModel {
-    private var bag: CancellableBag = CancellableBag()
-    private var photoList: PhotoList
     private let searchPhotoUseCase: SearchPhotoUseCase
+    private var bag: CancellableBag = CancellableBag()
+    var photoList: PhotoList = PhotoList()
     
     init(networkManageable: NetworkManageable = NetworkManager()) {
-        photoList = PhotoList()
         searchPhotoUseCase = SearchPhotoUseCase(networkManageable: networkManageable)
     }
     
@@ -46,7 +46,7 @@ final class SearchViewModel {
             self?.searchPhotoUseCase
                 .retrievePhotoList(with: query,
                                    failureHandler: {
-                                    output.useCaseErrorOccurred.value = $0
+                                    output.errorOccurred.value = $0
                                     output.isResultsExist.value = false
                                    },
                                    successHandler: {

@@ -7,21 +7,18 @@
 
 import Foundation
 
-struct PhotoList {
-    var list: [Photo]
+final class PhotoList {
+    private var list: [Photo] = [Photo]()
+    
     var count: Int {
         return list.count
     }
     
-    init() {
-        list = [Photo]()
-    }
-    
-    mutating func append(contentsOf photoList: [Photo]) {
+    func append(contentsOf photoList: [Photo]) {
         list.append(contentsOf: photoList)
     }
     
-    mutating func append(_ element: Photo) {
+    func append(_ element: Photo) {
         list.append(element)
     }
     
