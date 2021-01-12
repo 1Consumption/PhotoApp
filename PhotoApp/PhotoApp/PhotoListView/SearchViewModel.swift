@@ -17,6 +17,7 @@ struct SearchViewModelOutput {
     let textFieldEditBegan: Observable<Bool> = Observable<Bool>()
     let cancelButtonPushed: Observable<Bool> = Observable<Bool>()
     let useCaseErrorOccurred: Observable<UseCaseError> = Observable<UseCaseError>()
+    let isResultsExist: Observable<Bool> = Observable<Bool>()
 }
 
 final class SearchViewModel {
@@ -46,8 +47,13 @@ final class SearchViewModel {
                 .retrievePhotoList(with: query,
                                    failureHandler: {
                                     output.useCaseErrorOccurred.value = $0
+                                    output.isResultsExist.value = false
                                    },
-                                   successHandler: { _ in
+                                   successHandler: {
+                                    let model = $0.results
+                                    output.isResultsExist.value = !model.isEmpty
+                                    
+                                    guard !model.isEmpty else { return }
                                    })
         }.store(in: &bag)
         

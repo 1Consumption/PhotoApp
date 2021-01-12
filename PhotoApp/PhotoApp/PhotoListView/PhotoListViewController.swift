@@ -74,6 +74,7 @@ final class PhotoListViewController: UIViewController {
             guard let hiddenFactor = $0 else { return }
             self?.animate { [weak self] in
                 self?.searchCancelButton.isHidden = hiddenFactor
+                self?.noResultView.isHidden = hiddenFactor
                 self?.view.endEditing(hiddenFactor)
                 self?.searchBar.text = nil
             }
@@ -82,6 +83,13 @@ final class PhotoListViewController: UIViewController {
         output.useCaseErrorOccurred.bind {
             guard let error = $0 else { return }
             UIAlertController().showUseCaseErrorAlert(error)
+        }.store(in: &bag)
+        
+        output.isResultsExist.bind { [weak self] in
+            guard let hiddenFactor = $0 else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.noResultView.isHidden = hiddenFactor
+            }
         }.store(in: &bag)
     }
     

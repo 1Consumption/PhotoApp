@@ -200,6 +200,7 @@
                     <navigationItem key="navigationItem" id="rIZ-Fp-vUP"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="noResultView" destination="Ykv-xe-ErI" id="umm-np-D2C"/>
                         <outlet property="photoListCollectionView" destination="EdK-gR-4DE" id="ZPA-7f-JGr"/>
                         <outlet property="searchBar" destination="XO8-fo-oYc" id="PZP-va-Zh9"/>
                         <outlet property="searchCancelButton" destination="zd7-4P-EUG" id="2K8-he-9kg"/>
