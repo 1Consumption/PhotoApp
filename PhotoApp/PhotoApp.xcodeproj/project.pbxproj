@@ -33,6 +33,8 @@
 		A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C0F18725A71A7600F80C08 /* Requestable.swift */; };
 		A5C3D47225AAD81E008BD95E /* PhotoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */; };
 		A5C3D49225AAE1A5008BD95E /* PhotoListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3D49025AAE1A5008BD95E /* PhotoListCollectionViewCell.swift */; };
+		A5D2594825AD8CC40008C487 /* IgnoreTouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D2594725AD8CC40008C487 /* IgnoreTouchView.swift */; };
+		A5D2594E25AD8D100008C487 /* IgnoreTouchStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D2594D25AD8D100008C487 /* IgnoreTouchStackView.swift */; };
 		A5D26C7625A8D2DE0008CA87 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7525A8D2DE0008CA87 /* UIAlertController.swift */; };
 		A5D26C7A25A8D3CD0008CA87 /* UseCaseErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */; };
 		A5D26C8425A8E9100008CA87 /* PhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5D26C8325A8E9100008CA87 /* PhotoList.swift */; };
@@ -102,6 +104,8 @@
 		A5C0F18725A71A7600F80C08 /* Requestable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
 		A5C3D47125AAD81E008BD95E /* PhotoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailViewController.swift; sourceTree = "<group>"; };
 		A5C3D49025AAE1A5008BD95E /* PhotoListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCollectionViewCell.swift; sourceTree = "<group>"; };
+		A5D2594725AD8CC40008C487 /* IgnoreTouchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoreTouchView.swift; sourceTree = "<group>"; };
+		A5D2594D25AD8D100008C487 /* IgnoreTouchStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IgnoreTouchStackView.swift; sourceTree = "<group>"; };
 		A5D26C7525A8D2DE0008CA87 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseErrorTests.swift; sourceTree = "<group>"; };
 		A5D26C8325A8E9100008CA87 /* PhotoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoList.swift; sourceTree = "<group>"; };
@@ -201,7 +205,6 @@
 			children = (
 				A50D693C25ABFDCC002AA358 /* PhotoListCollectionView */,
 				A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */,
-				A5103BB225ACDEF000C4280A /* ImageTextField.swift */,
 			);
 			path = PhotoListView;
 			sourceTree = "<group>";
@@ -223,6 +226,16 @@
 				A5DB72C525AC031C005B468E /* CurrentPageViewModel.swift */,
 			);
 			path = PhotoDetailView;
+			sourceTree = "<group>";
+		};
+		A5D2593B25AD81200008C487 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				A5103BB225ACDEF000C4280A /* ImageTextField.swift */,
+				A5D2594725AD8CC40008C487 /* IgnoreTouchView.swift */,
+				A5D2594D25AD8D100008C487 /* IgnoreTouchStackView.swift */,
+			);
+			path = CustomView;
 			sourceTree = "<group>";
 		};
 		A5D26C7425A8D2CF0008CA87 /* Extension */ = {
@@ -320,6 +333,7 @@
 		A5FDA16B25A70DAE00264597 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A5D2593B25AD81200008C487 /* CustomView */,
 				A5E4255825AB5BD800618B57 /* Photo */,
 				A5A4ABB625AB32B3001482A2 /* Observable */,
 				A581F65525A95D14009A840F /* ImageCache */,
@@ -501,6 +515,7 @@
 				A5FDA16E25A70DC300264597 /* NetworkManageable.swift in Sources */,
 				A5E07C5B25A81E54004C6C24 /* Photo.swift in Sources */,
 				A5C3D47225AAD81E008BD95E /* PhotoDetailViewController.swift in Sources */,
+				A5D2594825AD8CC40008C487 /* IgnoreTouchView.swift in Sources */,
 				A5D26C7625A8D2DE0008CA87 /* UIAlertController.swift in Sources */,
 				A5FDA17125A70E2600264597 /* HTTPMethod.swift in Sources */,
 				A581F66A25A9628F009A840F /* ExpirableObject.swift in Sources */,
@@ -512,6 +527,7 @@
 				A50D694525ABFE5B002AA358 /* PhotoDetailCollectionViewDataSource.swift in Sources */,
 				A50D693325ABFBD3002AA358 /* Secret.swift in Sources */,
 				A50D693F25ABFE19002AA358 /* PhotoDetailCollectionViewCell.swift in Sources */,
+				A5D2594E25AD8D100008C487 /* IgnoreTouchStackView.swift in Sources */,
 				A581F68625A96F3F009A840F /* ExpireTime.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

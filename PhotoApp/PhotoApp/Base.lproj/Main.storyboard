@@ -65,108 +65,125 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rXI-wT-Gqk">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="104"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="oiF-ve-tE6" customClass="IgnoreTouchStackView" customModule="PhotoApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
-                                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fsc-Kc-Uhe">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="104"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="0TH-7S-9tr">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="104"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </view>
-                                        <blurEffect style="regular"/>
-                                    </visualEffectView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qFV-mL-i3Y">
-                                        <rect key="frame" x="0.0" y="44" width="414" height="60"/>
+                                    <view contentMode="scaleToFill" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="rXI-wT-Gqk">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="hSi-CP-vga">
-                                                <rect key="frame" x="20.5" y="8" width="373" height="44"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="f8p-cu-qDk">
-                                                        <rect key="frame" x="0.0" y="0.0" width="373" height="44"/>
-                                                        <subviews>
-                                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search photos" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xf5-Kz-T7H" customClass="ImageTextField" customModule="PhotoApp" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="373" height="44"/>
-                                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <color key="tintColor" name="CustomTextFieldColor"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="44" id="EDC-ft-pTq"/>
-                                                                </constraints>
-                                                                <color key="textColor" name="CustomLabelColor"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <textInputTraits key="textInputTraits"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                        <real key="value" value="10"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                    <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="close"/>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
-                                                                        <real key="value" value="10"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </textField>
-                                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="759" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zd7-4P-EUG">
-                                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
-                                                                <state key="normal" title="Cancel">
-                                                                    <color key="titleColor" name="CustomLabelColor"/>
-                                                                </state>
-                                                                <connections>
-                                                                    <action selector="searchCancelTouchedUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="21j-T2-E1B"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xf0-hG-Qhd">
-                                                        <rect key="frame" x="0.0" y="0.0" width="373" height="1"/>
-                                                        <segments>
-                                                            <segment title="First"/>
-                                                            <segment title="Second"/>
-                                                        </segments>
-                                                    </segmentedControl>
-                                                </subviews>
-                                            </stackView>
+                                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fsc-Kc-Uhe">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="0TH-7S-9tr">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="f8p-cu-qDk">
+                                                            <rect key="frame" x="20.5" y="44" width="373" height="44"/>
+                                                            <subviews>
+                                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search photos" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xf5-Kz-T7H" customClass="ImageTextField" customModule="PhotoApp" customModuleProvider="target">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="373" height="44"/>
+                                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                    <color key="tintColor" name="CustomTextFieldColor"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="44" id="EDC-ft-pTq"/>
+                                                                    </constraints>
+                                                                    <color key="textColor" name="CustomLabelColor"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <textInputTraits key="textInputTraits"/>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                            <real key="value" value="10"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                        <userDefinedRuntimeAttribute type="image" keyPath="leftImage" value="close"/>
+                                                                        <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
+                                                                            <real key="value" value="10"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                    </userDefinedRuntimeAttributes>
+                                                                </textField>
+                                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="759" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zd7-4P-EUG">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                                                                    <state key="normal" title="Cancel">
+                                                                        <color key="titleColor" name="CustomLabelColor"/>
+                                                                    </state>
+                                                                    <connections>
+                                                                        <action selector="searchCancelTouchedUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="21j-T2-E1B"/>
+                                                                    </connections>
+                                                                </button>
+                                                            </subviews>
+                                                        </stackView>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="f8p-cu-qDk" secondAttribute="bottom" constant="8" id="SAP-Kr-av9"/>
+                                                        <constraint firstItem="f8p-cu-qDk" firstAttribute="top" secondItem="0TH-7S-9tr" secondAttribute="top" constant="44" id="cie-KU-qb6"/>
+                                                        <constraint firstItem="f8p-cu-qDk" firstAttribute="centerX" secondItem="0TH-7S-9tr" secondAttribute="centerX" id="nSt-p9-K9M"/>
+                                                        <constraint firstItem="f8p-cu-qDk" firstAttribute="width" secondItem="0TH-7S-9tr" secondAttribute="width" multiplier="0.9" id="yBW-Vm-pR3"/>
+                                                    </constraints>
+                                                </view>
+                                                <blurEffect style="regular"/>
+                                            </visualEffectView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="fsc-Kc-Uhe" firstAttribute="top" secondItem="rXI-wT-Gqk" secondAttribute="top" id="7rT-oL-NBI"/>
+                                            <constraint firstAttribute="bottom" secondItem="fsc-Kc-Uhe" secondAttribute="bottom" id="EY9-uc-OIi"/>
+                                            <constraint firstItem="fsc-Kc-Uhe" firstAttribute="leading" secondItem="rXI-wT-Gqk" secondAttribute="leading" id="YWl-Pk-CjV"/>
+                                            <constraint firstAttribute="trailing" secondItem="fsc-Kc-Uhe" secondAttribute="trailing" id="zPl-qu-2ft"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rF7-AH-eol" customClass="IgnoreTouchView" customModule="PhotoApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="96" width="414" height="800"/>
+                                        <subviews>
+                                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qK6-Ye-Jmf">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="800"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="91d-kC-wbr">
+                                                    <size key="itemSize" width="128" height="128"/>
+                                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                </collectionViewFlowLayout>
+                                                <cells>
+                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="SP6-BG-uaH">
+                                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="OF7-d4-dk7">
+                                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </collectionViewCellContentView>
+                                                    </collectionViewCell>
+                                                </cells>
+                                            </collectionView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="hSi-CP-vga" firstAttribute="top" secondItem="qFV-mL-i3Y" secondAttribute="top" constant="8" id="8GY-Jx-YWf"/>
-                                            <constraint firstAttribute="bottom" secondItem="hSi-CP-vga" secondAttribute="bottom" constant="8" id="Wb8-g2-HO2"/>
-                                            <constraint firstItem="hSi-CP-vga" firstAttribute="centerX" secondItem="qFV-mL-i3Y" secondAttribute="centerX" id="fpV-hW-DKJ"/>
-                                            <constraint firstItem="hSi-CP-vga" firstAttribute="width" secondItem="qFV-mL-i3Y" secondAttribute="width" multiplier="0.9" id="rHp-Cj-SJr"/>
+                                            <constraint firstAttribute="bottom" secondItem="qK6-Ye-Jmf" secondAttribute="bottom" id="3CS-54-UbK"/>
+                                            <constraint firstAttribute="trailing" secondItem="qK6-Ye-Jmf" secondAttribute="trailing" id="RIi-ry-Qsz"/>
+                                            <constraint firstItem="qK6-Ye-Jmf" firstAttribute="top" secondItem="rF7-AH-eol" secondAttribute="top" id="Rlo-31-cOm"/>
+                                            <constraint firstItem="qK6-Ye-Jmf" firstAttribute="leading" secondItem="rF7-AH-eol" secondAttribute="leading" id="mXy-FA-kW7"/>
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="qFV-mL-i3Y" secondAttribute="trailing" id="232-DA-mIW"/>
-                                    <constraint firstItem="fsc-Kc-Uhe" firstAttribute="top" secondItem="rXI-wT-Gqk" secondAttribute="top" id="7rT-oL-NBI"/>
-                                    <constraint firstAttribute="bottom" secondItem="qFV-mL-i3Y" secondAttribute="bottom" id="9wf-85-F1C"/>
-                                    <constraint firstAttribute="bottom" secondItem="fsc-Kc-Uhe" secondAttribute="bottom" id="EY9-uc-OIi"/>
-                                    <constraint firstItem="qFV-mL-i3Y" firstAttribute="leading" secondItem="rXI-wT-Gqk" secondAttribute="leading" id="WNZ-Os-nyt"/>
-                                    <constraint firstItem="fsc-Kc-Uhe" firstAttribute="leading" secondItem="rXI-wT-Gqk" secondAttribute="leading" id="YWl-Pk-CjV"/>
-                                    <constraint firstAttribute="trailing" secondItem="fsc-Kc-Uhe" secondAttribute="trailing" id="zPl-qu-2ft"/>
-                                </constraints>
-                            </view>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="oiF-ve-tE6" secondAttribute="bottom" id="8Gf-kF-nIY"/>
+                            <constraint firstItem="oiF-ve-tE6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="B5Z-wA-Mg0"/>
                             <constraint firstItem="EdK-gR-4DE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Ex1-zf-YhY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EdK-gR-4DE" secondAttribute="trailing" id="T1S-di-sGo"/>
                             <constraint firstItem="EdK-gR-4DE" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="T9E-0L-c9R"/>
                             <constraint firstAttribute="bottom" secondItem="EdK-gR-4DE" secondAttribute="bottom" id="ULg-qE-D2r"/>
-                            <constraint firstItem="rXI-wT-Gqk" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="X5Z-nZ-6fq"/>
-                            <constraint firstItem="qFV-mL-i3Y" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="YYa-Ie-86b"/>
-                            <constraint firstItem="rXI-wT-Gqk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="aGT-NF-eZe"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="rXI-wT-Gqk" secondAttribute="trailing" id="cUe-bu-w7g"/>
+                            <constraint firstItem="oiF-ve-tE6" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="fKM-gd-vt4"/>
+                            <constraint firstItem="oiF-ve-tE6" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="jXT-eK-LL1"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rIZ-Fp-vUP"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="photoListCollectionView" destination="EdK-gR-4DE" id="ZPA-7f-JGr"/>
-                        <outlet property="scopeButton" destination="xf0-hG-Qhd" id="K1j-1M-GB7"/>
                         <outlet property="searchBar" destination="xf5-Kz-T7H" id="knj-n4-kOt"/>
-                        <outlet property="searchCacnelButton" destination="zd7-4P-EUG" id="2K8-he-9kg"/>
+                        <outlet property="searchCancelButton" destination="zd7-4P-EUG" id="2K8-he-9kg"/>
                         <outlet property="searchContainer" destination="rXI-wT-Gqk" id="yfA-l8-7v7"/>
                     </connections>
                 </viewController>

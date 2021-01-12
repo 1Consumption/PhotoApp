@@ -11,9 +11,8 @@ final class PhotoListViewController: UIViewController {
     @IBOutlet weak var photoListCollectionView: UICollectionView!
     // search
     @IBOutlet weak var searchContainer: UIView!
-    @IBOutlet weak var searchCacnelButton: UIButton!
+    @IBOutlet weak var searchCancelButton: UIButton!
     @IBOutlet weak var searchBar: UITextField!
-    @IBOutlet weak var scopeButton: UISegmentedControl!
     @IBAction func searchCancelTouchedUp(_ sender: Any) {
         isEditingObservable.value = false
     }
@@ -37,7 +36,7 @@ final class PhotoListViewController: UIViewController {
     
     private func setPhotoListCollectionVeiw() {
         dataSource.photoListViewModel = photoListViewModel
-        photoListCollectionView.contentInset = UIEdgeInsets(top: 104, left: 0, bottom: 0, right: 0)
+        photoListCollectionView.contentInset = UIEdgeInsets(top: 96, left: 0, bottom: 0, right: 0)
         photoListCollectionView.dataSource = dataSource
         photoListCollectionView.delegate = self
         photoListViewModel.bind({ range in
@@ -54,7 +53,7 @@ final class PhotoListViewController: UIViewController {
     
     private func setSearchView() {
         searchContainer.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        searchBar.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        searchBar.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         searchBar.delegate = self
         bindSearchView()
     }
@@ -67,8 +66,7 @@ final class PhotoListViewController: UIViewController {
                                          delay: 0,
                                          options: .allowUserInteraction,
                                          animations: { [weak self] in
-                                            self?.scopeButton.isHidden = !hiddenFactor
-                                            self?.searchCacnelButton.isHidden = !hiddenFactor
+                                            self?.searchCancelButton.isHidden = !hiddenFactor
                                             
                                             guard !hiddenFactor else { return }
                                             self?.view.endEditing(true)
