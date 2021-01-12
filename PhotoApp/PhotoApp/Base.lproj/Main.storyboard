@@ -153,13 +153,33 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ykv-xe-ErI" userLabel="No Result View">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="800"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkR-DY-CWj">
+                                                        <rect key="frame" x="132" y="382" width="150.5" height="36"/>
+                                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="dkR-DY-CWj" firstAttribute="centerY" secondItem="Ykv-xe-ErI" secondAttribute="centerY" id="6ST-a9-3gk"/>
+                                                    <constraint firstItem="dkR-DY-CWj" firstAttribute="centerX" secondItem="Ykv-xe-ErI" secondAttribute="centerX" id="mHO-cH-yNY"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="qK6-Ye-Jmf" secondAttribute="bottom" id="3CS-54-UbK"/>
+                                            <constraint firstItem="Ykv-xe-ErI" firstAttribute="leading" secondItem="rF7-AH-eol" secondAttribute="leading" id="D29-nZ-gqh"/>
                                             <constraint firstAttribute="trailing" secondItem="qK6-Ye-Jmf" secondAttribute="trailing" id="RIi-ry-Qsz"/>
                                             <constraint firstItem="qK6-Ye-Jmf" firstAttribute="top" secondItem="rF7-AH-eol" secondAttribute="top" id="Rlo-31-cOm"/>
+                                            <constraint firstItem="Ykv-xe-ErI" firstAttribute="top" secondItem="rF7-AH-eol" secondAttribute="top" id="RpJ-xU-906"/>
+                                            <constraint firstAttribute="trailing" secondItem="Ykv-xe-ErI" secondAttribute="trailing" id="iAH-Fa-cWX"/>
                                             <constraint firstItem="qK6-Ye-Jmf" firstAttribute="leading" secondItem="rF7-AH-eol" secondAttribute="leading" id="mXy-FA-kW7"/>
+                                            <constraint firstAttribute="bottom" secondItem="Ykv-xe-ErI" secondAttribute="bottom" id="w1i-3B-PZn"/>
                                         </constraints>
                                     </view>
                                 </subviews>

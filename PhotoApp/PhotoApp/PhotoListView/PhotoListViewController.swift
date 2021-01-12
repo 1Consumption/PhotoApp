@@ -14,12 +14,12 @@ final class PhotoListViewController: UIViewController {
     @IBOutlet weak var searchCancelButton: UIButton!
     @IBOutlet weak var searchBar: UITextField!
     @IBAction func searchCancelTouchedUp(_ sender: Any) {
-        isEditingObservable.value = false
+        isEditingViewModel.send(state: false)
     }
     
     private let dataSource: PhotoCollectionViewDataSource = PhotoCollectionViewDataSource()
     private let photoListViewModel: PhotoListViewModel = PhotoListViewModel()
-    private let isEditingObservable: Observable<Bool> = Observable<Bool>()
+    private let isEditingViewModel: IsEditingViewModel = IsEditingViewModel()
     private var bag: CancellableBag = CancellableBag()
     
     override func viewDidLoad() {
@@ -59,7 +59,7 @@ final class PhotoListViewController: UIViewController {
     }
     
     private func bindSearchView() {
-        isEditingObservable.bind {
+        isEditingViewModel.bind {
             guard let hiddenFactor = $0 else { return }
             UIViewPropertyAnimator
                 .runningPropertyAnimator(withDuration: 0.2,
@@ -73,13 +73,13 @@ final class PhotoListViewController: UIViewController {
                                             self?.searchBar.text = ""
                                          },
                                          completion: nil)
-        }.store(in: &bag)
+        }
     }
 }
 
 extension PhotoListViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        isEditingObservable.value = true
+        isEditingViewModel.send(state: true)
     }
 }
 
