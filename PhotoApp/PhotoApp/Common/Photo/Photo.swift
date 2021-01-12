@@ -23,3 +23,7 @@ struct URLs: Decodable {
 struct User: Decodable {
     let name: String
 }
+
+struct PhotoSearchResult: Decodable {
+    let results: [Photo]
+}

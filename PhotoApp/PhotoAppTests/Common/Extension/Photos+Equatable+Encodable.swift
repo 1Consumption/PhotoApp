@@ -18,7 +18,7 @@ extension Photo: Encodable {
         try container.encode(user, forKey: .user)
     }
     
-    enum CodingKeys: String, CodingKey{
+    enum CodingKeys: String, CodingKey {
         case id
         case width
         case height
@@ -40,7 +40,7 @@ extension URLs: Encodable {
         try container.encode(regular, forKey: .regular)
     }
     
-    enum CodingKeys: String, CodingKey{
+    enum CodingKeys: String, CodingKey {
         case full
         case regular
     }
@@ -52,7 +52,7 @@ extension User: Encodable {
         try container.encode(name, forKey: .name)
     }
     
-    enum CodingKeys: String, CodingKey{
+    enum CodingKeys: String, CodingKey {
         case name
     }
 }

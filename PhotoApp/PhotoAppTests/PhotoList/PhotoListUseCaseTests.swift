@@ -11,6 +11,7 @@ import XCTest
 final class PhotoListUseCaseTests: XCTestCase {
     func testSuccess() {
         let expectation = XCTestExpectation(description: "success")
+        expectation.expectedFulfillmentCount = 2
         
         let photo = [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "name"))]
         guard let encoded = ModelEncoder().encode(with: photo) else {
@@ -32,9 +33,6 @@ final class PhotoListUseCaseTests: XCTestCase {
                 expectation.fulfill()
             })
         
-        wait(for: [expectation], timeout: 5.0)
-        
-        let expecation2 = XCTestExpectation(description: "success2")
         useCase.retrievePhotoList(
             failureHandler: { _ in
                 XCTFail()
@@ -43,10 +41,10 @@ final class PhotoListUseCaseTests: XCTestCase {
                 let retrievedPhoto = $0
                 XCTAssertEqual(photo, retrievedPhoto)
                 XCTAssertEqual(useCase.page, 3)
-                expecation2.fulfill()
+                expectation.fulfill()
             })
         
-        wait(for: [expecation2], timeout: 5.0)
+        wait(for: [expectation], timeout: 5.0)
     }
     
     func testFailureWithNetworkError() {
