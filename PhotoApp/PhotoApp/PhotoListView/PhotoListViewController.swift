@@ -194,7 +194,11 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
 
 extension PhotoListViewController: PhotoDetailViewControllerDelegate {
     func scrollToItem(at indexPath: IndexPath?) {
-        guard let indexPath = indexPath else { return  }
-        photoListCollectionView.scrollToItem(at: indexPath, at: [.centeredHorizontally, .centeredVertically], animated: false)
+        guard let indexPath = indexPath else { return }
+        if searchCollectionView.isHidden {
+            photoListCollectionView.scrollToItem(at: indexPath, at: [.centeredHorizontally, .centeredVertically], animated: false)
+        } else {
+            searchCollectionView.scrollToItem(at: indexPath, at: [.centeredHorizontally, .centeredVertically], animated: false)
+        }
     }
 }
