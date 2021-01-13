@@ -6,6 +6,7 @@
 //
 
 import class UIKit.UIImage
+import Foundation
 
 struct PhotoViewModelInput {
     let sendEvent: Observable<Void> = Observable<Void>()
@@ -19,6 +20,7 @@ final class PhotoViewModel: ViewModelType {
     let photo: Photo
     private let imageManager: ImageRetrievable
     private(set) var bag: CancellableBag = CancellableBag()
+    private var request: URLSessionDataTask?
     
     init(photo: Photo, imageRetrievable: ImageRetrievable = ImageManager.shared) {
         self.photo = photo
@@ -30,11 +32,18 @@ final class PhotoViewModel: ViewModelType {
         
         input.sendEvent.bind { [weak self] _ in
             guard let url = self?.photo.urls.regular else { return }
-            self?.imageManager.retrieveImage(from: url, failureHandler: nil, imageHandler: {
-                output.receivedImage.value = $0
-            })
+            self?.imageManager.retrieveImage(from: url,
+                                             dataTaskHandler: { [weak self] in self?.request = $0 },
+                                             failureHandler: nil,
+                                             imageHandler: {
+                                                output.receivedImage.value = $0
+                                             })
         }.store(in: &bag)
         
         return output
+    }
+    
+    deinit {
+        request?.cancel()
     }
 }

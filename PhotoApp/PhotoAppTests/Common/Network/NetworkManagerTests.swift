@@ -9,7 +9,7 @@
 import XCTest
 
 final class NetworkManagerTests: XCTestCase {
-    private var networkManager: NetworkManageable!
+    private var networkManager: NetworkManager!
     
     func testSuccess() {
         let expectation = XCTestExpectation(description: "requestSuccess")
@@ -27,7 +27,7 @@ final class NetworkManagerTests: XCTestCase {
                                         XCTFail()
                                     }
                                    })
-
+        
         wait(for: [expectation], timeout: 5.0)
         XCTAssertNotNil(resultData)
     }
@@ -63,7 +63,7 @@ final class NetworkManagerTests: XCTestCase {
                     networkError: .invalidData)
     }
     
-    func testFailureWithDuplicatedRequest() {
+    func testFailureWithIsLoading() {
         let invalidExpectation = XCTestExpectation(description: "invalid")
         let duplicateExpectation = XCTestExpectation(description: "duplicate")
         
@@ -115,7 +115,7 @@ final class NetworkManagerTests: XCTestCase {
                                         expectation.fulfill()
                                     }
                                    })
-
+        
         wait(for: [expectation], timeout: 5.0)
     }
 }

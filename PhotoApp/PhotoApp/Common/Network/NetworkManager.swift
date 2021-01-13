@@ -8,26 +8,27 @@
 import Foundation
 
 final class NetworkManager: NetworkManageable {
-    private(set) var requestBag: Set<URLRequest> = Set<URLRequest>()
     private(set) var requester: Requestable
+    private var isLoading: Bool = false
     
     init(requester: Requestable = DefaultRequester()) {
         self.requester = requester
     }
     
     @discardableResult
-    func requestData(from url: URL?, method: HTTPMethod, header: [HTTPHeader]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
+    func requestData(from url: URL?, isPermitDuplicate: Bool = false, method: HTTPMethod, header: [HTTPHeader]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
         guard let urlRequest = makeURLRequest(url: url, method: method, headers: header) else {
             completionHandler(.failure(.invalidURL))
             return nil
         }
         
-        guard !requestBag.contains(urlRequest) else {
-            completionHandler(.failure(.duplicatedRequest))
-            return nil
+        if isPermitDuplicate == false {
+            guard !isLoading else {
+                completionHandler(.failure(.duplicatedRequest))
+                return nil
+            }
+            isLoading = true
         }
-        
-        requestBag.insert(urlRequest)
         
         let dataTask = requester.dataTask(with: urlRequest) { data , response, error in
             guard error == nil else {
@@ -69,7 +70,7 @@ final class NetworkManager: NetworkManageable {
     }
     
     func requestCompleted(with url: URLRequest, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler) {
-        requestBag.remove(url)
+        isLoading = false
         handler(result)
     }
     
@@ -86,14 +87,16 @@ final class NetworkManager: NetworkManageable {
         
         return urlRequest
     }
-    
-    deinit {
-        requestBag = Set<URLRequest>()
-    }
 }
 
 final class DefaultRequester: Requestable {
     func dataTask(with url: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         return URLSession.shared.dataTask(with: url, completionHandler: completionHandler)
+    }
+}
+
+final class ImageRequster: Requestable {
+    func dataTask(with url: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        return URLSession(configuration: .ephemeral).dataTask(with: url, completionHandler: completionHandler)
     }
 }

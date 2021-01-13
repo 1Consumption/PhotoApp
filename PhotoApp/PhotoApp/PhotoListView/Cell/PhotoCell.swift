@@ -35,7 +35,8 @@ final class PhotoCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         viewModelInput = PhotoViewModelInput()
-        bag.removeAll()
+        bag = CancellableBag()
+        viewModel = nil
         photoImageView.image = nil
         userNameLabel.text = nil
         acitivityIndicator.startAnimating()

@@ -23,11 +23,17 @@ final class MemoryCacheStorage<T> {
     }
     
     func insert(_ obejct: T?, for key: String) {
+        lock.lock()
+        defer { lock.unlock() }
+        
         cache.setObject(ExpirableObject(with: obejct, expireTime: expireTime), forKey: key as NSString)
         keys.insert(key)
     }
     
     func object(for key: String) -> T? {
+        lock.lock()
+        defer { lock.unlock() }
+        
         guard let cached = cache.object(forKey: key as NSString) else { return nil }
         guard !cached.isExpired else {
             removeObject(for: key)

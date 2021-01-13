@@ -23,6 +23,7 @@ extension RemoteDataDecodableType {
         modelWillDeliverHandler: (() -> Void)? = nil,
         successHandler: @escaping (T) -> Void) {
         networkManager.requestData(from: url,
+                                   isPermitDuplicate: false,
                                    method: .get,
                                    header: [.authorization(key: Secret.APIKey)],
                                    completionHandler: {

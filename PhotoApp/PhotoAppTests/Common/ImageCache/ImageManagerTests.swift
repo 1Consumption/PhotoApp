@@ -11,6 +11,7 @@ import XCTest
 final class ImageManagerTests: XCTestCase {
     func testRetrievImage() {
         let expectation = XCTestExpectation(description: "retrieveImage")
+        expectation.expectedFulfillmentCount = 4
         let image = UIImage(named: "sample1")
         guard let data = image?.jpegData(compressionQuality: 1) else {
             XCTFail()
@@ -21,20 +22,25 @@ final class ImageManagerTests: XCTestCase {
         let networkManager = NetworkManager(requester: requester)
         let imageManager = ImageManager(networkManageable: networkManager)
         
-        imageManager.retrieveImage(from: "sample1") {
+        imageManager.retrieveImage(from: "sample1", dataTaskHandler: {
+            XCTAssertNotNil($0)
+            expectation.fulfill()
+        }) {
+            XCTAssertNotNil($0)
+            expectation.fulfill()
+        }
+        
+        sleep(2)
+        
+        imageManager.retrieveImage(from: "sample1", dataTaskHandler: {
+            XCTAssertNil($0)
+            expectation.fulfill()
+        }) {
             XCTAssertNotNil($0)
             expectation.fulfill()
         }
         
         wait(for: [expectation], timeout: 5.0)
-        
-        let expectation2 = XCTestExpectation(description: "alreadyCached")
-        imageManager.retrieveImage(from: "sample1") {
-            XCTAssertNotNil($0)
-            expectation2.fulfill()
-        }
-        
-        wait(for: [expectation2], timeout: 5.0)
     }
     
     func testRetrievImageFailure() {
@@ -44,7 +50,7 @@ final class ImageManagerTests: XCTestCase {
         let networkManager = NetworkManager(requester: requester)
         let imageManager = ImageManager(networkManageable: networkManager)
         
-        imageManager.retrieveImage(from: "sample1", failureHandler: { _ in
+        imageManager.retrieveImage(from: "sample1", dataTaskHandler: { _ in }, failureHandler: { _ in
             expectation.fulfill()
         }) { _ in
             XCTFail()
