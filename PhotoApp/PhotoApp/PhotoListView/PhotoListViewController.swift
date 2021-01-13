@@ -176,9 +176,15 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let photoDetailViewController = storyboard?.instantiateViewController(withIdentifier: PhotoDetailViewController.identifier) as? PhotoDetailViewController else { return }
         
-        photoDetailViewController.photoList = photoListViewModel.photoList
-        photoDetailViewController.photoListViewModelInput = photoListViewModelInput
-        photoDetailViewController.photoListViewModelOutput = photoListViewModelOutput
+        if collectionView == photoListCollectionView {
+            photoDetailViewController.photoList = photoListViewModel.photoList
+            photoDetailViewController.photoListViewModelInput = photoListViewModelInput
+            photoDetailViewController.photoListViewModelOutput = photoListViewModelOutput
+        } else {
+            photoDetailViewController.photoList = searchViewModel.photoList
+            photoDetailViewController.photoListViewModelInput = searchViewModelInput
+            photoDetailViewController.photoListViewModelOutput = searchViewModelOutput
+        }
         photoDetailViewController.currentIndexPath = indexPath
         photoDetailViewController.delegate = self
         
