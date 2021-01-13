@@ -115,8 +115,8 @@ final class PhotoListViewController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 self?.noResultView.isHidden = hiddenFactor
                 self?.searchCollectionView.isHidden = !hiddenFactor
-                self?.searchCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
                 self?.searchCollectionView.reloadData()
+                self?.searchCollectionView.setContentOffset(.zero, animated: false)
             }
         }.store(in: &bag)
         
