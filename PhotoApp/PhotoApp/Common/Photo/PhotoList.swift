@@ -26,4 +26,8 @@ final class PhotoList {
         guard (0..<list.count) ~= index else { return nil }
         return list[index]
     }
+    
+    func reset() {
+        list = [Photo]()
+    }
 }

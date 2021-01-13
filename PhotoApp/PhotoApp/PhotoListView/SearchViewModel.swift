@@ -43,17 +43,16 @@ final class SearchViewModel {
         
         input.sendQuery.bind { [weak self] in
             guard let query = $0 else { return }
-            self?.searchPhotoUseCase
-                .retrievePhotoList(with: query,
+            self?.searchPhotoUseCase.retrievePhotoList(with: query,
                                    failureHandler: {
                                     output.errorOccurred.value = $0
                                     output.isResultsExist.value = false
                                    },
                                    successHandler: {
                                     let model = $0.results
+                                    self?.photoList.reset()
+                                    self?.photoList.append(contentsOf: model)
                                     output.isResultsExist.value = !model.isEmpty
-                                    
-                                    guard !model.isEmpty else { return }
                                    })
         }.store(in: &bag)
         

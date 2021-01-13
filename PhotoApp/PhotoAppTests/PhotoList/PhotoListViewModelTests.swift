@@ -32,6 +32,7 @@ final class PhotoListViewModelTests: XCTestCase {
         
         output.changedIndexPath.bind {
             XCTAssertEqual(range, $0!)
+            XCTAssertEqual(photo[0], photoListViewModel.photo(of: range.min()!.item))
             range = (range.max()!.item + 1..<range.max()!.item + 2).map { IndexPath(item: $0, section: 0) }
             expectation.fulfill()
         }.store(in: &bag)

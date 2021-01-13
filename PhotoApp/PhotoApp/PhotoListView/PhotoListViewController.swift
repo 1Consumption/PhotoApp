@@ -14,6 +14,7 @@ final class PhotoListViewController: UIViewController {
     @IBOutlet weak var searchCancelButton: UIButton!
     @IBOutlet weak var searchBar: UITextField!
     @IBOutlet weak var noResultView: UIView!
+    @IBOutlet weak var searchCollectionView: UICollectionView!
     @IBAction func searchCancelTouchedUp(_ sender: Any) {
         searchViewModelInput.cancelButtonPushed.fire()
     }
@@ -24,8 +25,10 @@ final class PhotoListViewController: UIViewController {
     private var photoListViewModelOutput: DeliverInsertedIndexPathType?
     
     //search
+    private let searchDataSource: PhotoCollectionViewDataSource = PhotoCollectionViewDataSource()
     private let searchViewModel: SearchViewModel = SearchViewModel()
     private let searchViewModelInput: SearchViewModelInput = SearchViewModelInput()
+    private var searchViewModelOutput: SearchViewModelOutput?
     private var bag: CancellableBag = CancellableBag()
     
     override func viewDidLoad() {
@@ -71,40 +74,49 @@ final class PhotoListViewController: UIViewController {
         searchContainer.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         searchBar.backgroundColor = UIColor.lightGray.withAlphaComponent(0.7)
         searchBar.delegate = self
+        searchCollectionView.contentInset = UIEdgeInsets(top: 96, left: 0, bottom: 0, right: 0)
+        searchDataSource.photoList = searchViewModel.photoList
+        searchCollectionView.register(UINib(nibName: "PhotoCell", bundle: .main), forCellWithReuseIdentifier: PhotoCell.identifier)
+        searchCollectionView.dataSource = searchDataSource
+        searchCollectionView.delegate = self
         bindSearchView()
     }
     
     private func bindSearchView() {
-        let output = searchViewModel.transform(input: searchViewModelInput)
+        searchViewModelOutput = searchViewModel.transform(input: searchViewModelInput)
         
-        output.textFieldEditBegan.bind { [weak self] in
+        searchViewModelOutput?.textFieldEditBegan.bind { [weak self] in
             guard let hiddenFactor = $0 else { return }
             self?.animate { [weak self] in
                 self?.searchCancelButton.isHidden = hiddenFactor
             }
         }.store(in: &bag)
         
-        output.cancelButtonPushed.bind { [weak self] in
+        searchViewModelOutput?.cancelButtonPushed.bind { [weak self] in
             guard let hiddenFactor = $0 else { return }
             self?.animate { [weak self] in
                 self?.searchCancelButton.isHidden = hiddenFactor
                 self?.noResultView.isHidden = hiddenFactor
                 self?.view.endEditing(hiddenFactor)
                 self?.searchBar.text = nil
+                self?.searchCollectionView.isHidden = hiddenFactor
             }
         }.store(in: &bag)
         
-        output.errorOccurred.bind {
+        searchViewModelOutput?.errorOccurred.bind {
             guard let error = $0 else { return }
             DispatchQueue.main.async {
                 UIAlertController().showUseCaseErrorAlert(error)
             }
         }.store(in: &bag)
         
-        output.isResultsExist.bind { [weak self] in
+        searchViewModelOutput?.isResultsExist.bind { [weak self] in
             guard let hiddenFactor = $0 else { return }
             DispatchQueue.main.async { [weak self] in
                 self?.noResultView.isHidden = hiddenFactor
+                self?.searchCollectionView.isHidden = !hiddenFactor
+                self?.searchCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: false)
+                self?.searchCollectionView.reloadData()
             }
         }.store(in: &bag)
     }
@@ -133,7 +145,8 @@ extension PhotoListViewController: UITextFieldDelegate {
 
 extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let photo = photoListDataSource.photo(of: indexPath.item) else { return .zero }
+        guard let dataSource = collectionView.dataSource as? PhotoCollectionViewDataSource else { return .zero }
+        guard let photo = dataSource.photo(of: indexPath.item) else { return .zero }
         
         let width = CGFloat(photo.width)
         let height = CGFloat(photo.height)

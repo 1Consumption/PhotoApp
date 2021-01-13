@@ -26,7 +26,7 @@ final class PhotoListViewModel {
         photoListUseCase = PhotoListUseCase(networkManageable: networkManageable)
     }
     
-    func transfrom(_ input: SendEventType?) -> DeliverInsertedIndexPathType {
+    func transfrom(_ input: PhotoListViewModelInput?) -> PhotoListViewModelOutput {
         let output = PhotoListViewModelOutput()
         input?.sendEvent.bind { [weak self] _ in
             self?.photoListUseCase.retrievePhotoList(failureHandler: {
