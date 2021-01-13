@@ -30,4 +30,10 @@ final class Observable<T> {
         
         return cancelable
     }
+    
+    func fire() where T == Void {
+        observers.values.forEach {
+            $0?(value)
+        }
+    }
 }

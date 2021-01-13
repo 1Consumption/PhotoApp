@@ -16,11 +16,10 @@ final class PhotoListUseCase: RemoteDataDecodableType {
     }
     
     func retrievePhotoList(failureHandler: @escaping (UseCaseError) -> Void, successHandler: @escaping ([Photo]) -> Void) {
-        let url = EndPoint(queryItems: .photoList(page: page)).url
+        let url = EndPoint(urlInfomation: .photoList(page: page)).url
         retrieveModel(from: url,
                       failureHandler: failureHandler,
                       modelWillDeliverHandler: { [weak self] in self?.page += 1 },
                       successHandler: successHandler)
     }
 }
-

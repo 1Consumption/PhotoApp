@@ -40,4 +40,20 @@ final class PhotoListTests: XCTestCase {
         XCTAssertNil(photoList.photo(of: photos.count))
         XCTAssertNil(photoList.photo(of: -1))
     }
+    
+    func testReset() {
+        let photos = [
+            Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "")),
+            Photo(id: "2", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "")),
+            Photo(id: "3", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))
+        ]
+        
+        photoList.append(contentsOf: photos)
+        
+        XCTAssertEqual(photoList.count, photoList.count)
+        
+        photoList.reset()
+        
+        XCTAssertEqual(photoList.count, 0)
+    }
 }

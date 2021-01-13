@@ -9,9 +9,11 @@
 import XCTest
 
 final class EndPointTests: XCTestCase {
-    
     func testURL() {
-        let endPoint = EndPoint(queryItems: .photoList(page: 1))
+        var endPoint = EndPoint(urlInfomation: .photoList(page: 1))
         XCTAssertEqual(endPoint.url, URL(string: "https://api.unsplash.com/photos?page=1"))
+        
+        endPoint = EndPoint(urlInfomation: .search(query: "office", page: 1))
+        XCTAssertEqual(endPoint.url, URL(string: "https://api.unsplash.com/search/photos?query=office&page=1"))
     }
 }

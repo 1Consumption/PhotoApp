@@ -8,16 +8,16 @@
 import UIKit
 
 final class PhotoDetailCollectionViewDataSource: NSObject, UICollectionViewDataSource {
-    var photoListViewModel: PhotoListViewModel?
+    var photoList: PhotoList?
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoListViewModel?.count ?? 0
+        return photoList?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoDetailCollectionViewCell.identifier, for: indexPath) as? PhotoDetailCollectionViewCell else { return UICollectionViewCell() }
         
-        guard let photo = photoListViewModel?.photo(of: indexPath.item) else { return cell }
+        guard let photo = photoList?.photo(of: indexPath.item) else { return cell }
         let photoViewModel = PhotoViewModel(photo: photo)
 
         cell.bind(photoViewModel)
