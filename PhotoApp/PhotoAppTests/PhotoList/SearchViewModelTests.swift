@@ -100,4 +100,49 @@ final class SearchViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 2.0)
     }
+    
+    func testSendEventOutputErrorOccured() {
+        let expectation = XCTestExpectation(description: "test send event output error occured")
+        let networkManager = NetworkManager(requester: SuccessRequester())
+        let emptyQueryViewModel = SearchViewModel(networkManageable: networkManager)
+        
+        emptyQueryViewModel.transform(input: input).errorOccurred.bind {
+            XCTAssertEqual($0, .networkError(networkError: .invalidURL))
+            expectation.fulfill()
+        }.store(in: &bag)
+        
+        input.sendEvent.fire()
+        
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testSendEventOutputSuccess() {
+        let expectation = XCTestExpectation(description: "test send event output success")
+        expectation.expectedFulfillmentCount = 2
+        let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))])
+        guard let data = ModelEncoder().encode(with: photo) else {
+            XCTFail()
+            return
+        }
+        
+        let request = SuccessRequester(data: data)
+        let manager = NetworkManager(requester: request)
+        let viewModel = SearchViewModel(networkManageable: manager)
+        
+        let output = viewModel.transform(input: input)
+        
+        output.isResultsExist.bind { _ in
+            expectation.fulfill()
+        }.store(in: &bag)
+        
+        output.changedIndexPath.bind {
+            XCTAssertEqual($0, [[0,1]])
+            expectation.fulfill()
+        }.store(in: &bag)
+        
+        input.sendQuery.value = "test"
+        input.sendEvent.fire()
+        
+        wait(for: [expectation], timeout: 2.0)
+    }
 }

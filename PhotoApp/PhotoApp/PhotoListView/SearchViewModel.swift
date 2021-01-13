@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct SearchViewModelInput {
+struct SearchViewModelInput: SendEventType {
     let textFieldEditBegan: Observable<Void> = Observable<Void>()
     let cancelButtonPushed: Observable<Void> = Observable<Void>()
     let sendQuery: Observable<String> = Observable<String>()
+    let sendEvent: Observable<Void> = Observable<Void>()
 }
 
 struct SearchViewModelOutput: DeliverInsertedIndexPathType {
@@ -57,6 +58,25 @@ final class SearchViewModel {
                                    })
         }.store(in: &bag)
         
+        input.sendEvent.bind { [weak self] _ in
+            self?.searchPhotoUseCase.retrievePhotoList(with: nil,
+                                                       failureHandler: { output.errorOccurred.value = $0 },
+                                                       successHandler: { [weak self] in
+                                                        let model = $0.results
+                                                        
+                                                        guard !model.isEmpty else { return }
+                                                        
+                                                        guard let count = self?.photoList.count else { return }
+                                                        
+                                                        let startIndex = count
+                                                        let endIndex = startIndex + model.count
+                                                        self?.photoList.append(contentsOf: model)
+                                                        output.changedIndexPath.value = (startIndex..<endIndex).map {
+                                                            IndexPath(item: $0, section: 0)
+                                                        }
+                                                       })
+        }.store(in: &bag)
+    
         return output
     }
 }

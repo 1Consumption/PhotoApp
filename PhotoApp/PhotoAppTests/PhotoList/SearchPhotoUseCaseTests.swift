@@ -33,7 +33,7 @@ final class SearchPhotoUseCaseTests: XCTestCase {
             })
         
         useCase.retrievePhotoList(
-            with: "query",
+            with: nil,
             failureHandler: { _ in
                 XCTFail()
             },
@@ -66,6 +66,24 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    func testQueryAndPreQueryIsNil() {
+        let expectation = XCTestExpectation(description: "empty query")
+        
+        let networkManager = NetworkManager(requester: SuccessRequester())
+        let useCase = SearchPhotoUseCase(networkManageable: networkManager)
+        useCase.retrievePhotoList(
+            with: nil,
+            failureHandler: {
+                XCTAssertEqual($0, .networkError(networkError: .invalidURL))
+                expectation.fulfill()
+            }, successHandler: { _ in
+                XCTFail()
+            })
+        
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
     func testResetPage() {
         let expectation = XCTestExpectation(description: "page reset")
         expectation.expectedFulfillmentCount = 2

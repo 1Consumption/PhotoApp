@@ -119,6 +119,13 @@ final class PhotoListViewController: UIViewController {
                 self?.searchCollectionView.reloadData()
             }
         }.store(in: &bag)
+        
+        searchViewModelOutput?.changedIndexPath.bind { range in
+            guard let range = range else { return }
+            DispatchQueue.main.async { [weak self] in
+                self?.searchCollectionView.insertItems(at: range)
+            }
+        }.store(in: &bag)
     }
     
     private func animate(_ handler: @escaping () -> Void) {
@@ -159,7 +166,11 @@ extension PhotoListViewController: UICollectionViewDelegateFlowLayout {
         
         guard lastIndexPathItem < indexPath.item + 3 else { return }
         
-        photoListViewModelInput.sendEvent.fire()
+        if collectionView == photoListCollectionView {
+            photoListViewModelInput.sendEvent.fire()
+        } else {
+            searchViewModelInput.sendEvent.fire()
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
