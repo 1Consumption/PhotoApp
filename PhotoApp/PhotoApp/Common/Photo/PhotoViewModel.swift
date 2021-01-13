@@ -7,26 +7,34 @@
 
 import class UIKit.UIImage
 
-final class PhotoViewModel {
+struct PhotoViewModelInput {
+    let sendEvent: Observable<Void> = Observable<Void>()
+}
+
+struct PhotoViewModelOutput {
+    let receivedImage: Observable<UIImage> = Observable<UIImage>()
+}
+
+final class PhotoViewModel: ViewModelType {
     let photo: Photo
-    private var image: Observable<UIImage> = Observable<UIImage>()
     private let imageManager: ImageRetrievable
-    private var bag: CancellableBag = CancellableBag()
+    private(set) var bag: CancellableBag = CancellableBag()
     
     init(photo: Photo, imageRetrievable: ImageRetrievable = ImageManager.shared) {
         self.photo = photo
         self.imageManager = imageRetrievable
     }
     
-    func retrieveImage() {
-        let url = photo.urls.regular
-        imageManager.retrieveImage(from: url, failureHandler: nil, imageHandler: { [weak self] in
-            self?.image.value = $0
-        })
-    }
-    
-    func bind(_ handler: @escaping ((UIImage?) -> Void)) {
-        image.bind(handler)
-            .store(in: &bag)
+    func transform(input: PhotoViewModelInput) -> PhotoViewModelOutput {
+        let output = PhotoViewModelOutput()
+        
+        input.sendEvent.bind { [weak self] _ in
+            guard let url = self?.photo.urls.regular else { return }
+            self?.imageManager.retrieveImage(from: url, failureHandler: nil, imageHandler: {
+                output.receivedImage.value = $0
+            })
+        }.store(in: &bag)
+        
+        return output
     }
 }

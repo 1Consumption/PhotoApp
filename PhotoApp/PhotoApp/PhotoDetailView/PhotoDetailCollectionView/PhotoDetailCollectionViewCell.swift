@@ -10,19 +10,25 @@ import UIKit
 final class PhotoDetailCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "PhotoDetailCollectionViewCell"
     private var viewModel: PhotoViewModel?
+    private var bag: CancellableBag = CancellableBag()
+    private let viewModelInput: PhotoViewModelInput = PhotoViewModelInput()
     
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     func bind(_ photoViewModel: PhotoViewModel) {
         viewModel = photoViewModel
-        viewModel?.bind { image in
+        
+        let output = viewModel?.transform(input: viewModelInput)
+        
+        output?.receivedImage.bind { image in
             DispatchQueue.main.async { [weak self] in
                 self?.photoImageView.image = image
                 self?.activityIndicator.stopAnimating()
             }
-        }
-        viewModel?.retrieveImage()
+        }.store(in: &bag)
+        
+        viewModelInput.sendEvent.fire()
     }
     
     override func prepareForReuse() {

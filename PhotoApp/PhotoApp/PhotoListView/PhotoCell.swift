@@ -10,6 +10,8 @@ import UIKit
 final class PhotoCell: UICollectionViewCell {
     static let identifier: String = "PhotoCell"
     private var viewModel: PhotoViewModel?
+    private var bag: CancellableBag = CancellableBag()
+    private let viewModelInput: PhotoViewModelInput = PhotoViewModelInput()
     
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -18,13 +20,16 @@ final class PhotoCell: UICollectionViewCell {
     func bind(_ photoViewModel: PhotoViewModel) {
         viewModel = photoViewModel
         userNameLabel.text = viewModel?.photo.user.name
-        viewModel?.bind { image in
+        
+        let output = viewModel?.transform(input: viewModelInput)
+        output?.receivedImage.bind { image in
             DispatchQueue.main.async { [weak self] in
                 self?.acitivityIndicator.stopAnimating()
                 self?.photoImageView.image = image
             }
-        }
-        viewModel?.retrieveImage()
+        }.store(in: &bag)
+        
+        viewModelInput.sendEvent.fire()
     }
     
     override func prepareForReuse() {

@@ -68,6 +68,7 @@
 		A5E78E4325A6B283000B9C76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E78E4125A6B283000B9C76 /* Main.storyboard */; };
 		A5E78E4525A6B286000B9C76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5E78E4425A6B286000B9C76 /* Assets.xcassets */; };
 		A5E78E4825A6B286000B9C76 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5E78E4625A6B286000B9C76 /* LaunchScreen.storyboard */; };
+		A5FCEE6C25AEEDC7001B327E /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FCEE6B25AEEDC7001B327E /* ViewModelType.swift */; };
 		A5FDA16E25A70DC300264597 /* NetworkManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FDA16D25A70DC300264597 /* NetworkManageable.swift */; };
 		A5FDA17125A70E2600264597 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FDA17025A70E2600264597 /* HTTPMethod.swift */; };
 		A5FDA17A25A7103400264597 /* NetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FDA17925A7103400264597 /* NetworkManagerTests.swift */; };
@@ -147,6 +148,7 @@
 		A5E78E4425A6B286000B9C76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5E78E4725A6B286000B9C76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5E78E4925A6B286000B9C76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5FCEE6B25AEEDC7001B327E /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		A5FDA16D25A70DC300264597 /* NetworkManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManageable.swift; sourceTree = "<group>"; };
 		A5FDA17025A70E2600264597 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		A5FDA17725A7103400264597 /* PhotoAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotoAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -352,6 +354,7 @@
 				A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */,
 				A593129025A87A9700B286E6 /* RemoteDataDecodableType.swift */,
 				A50D693225ABFBD3002AA358 /* Secret.swift */,
+				A5FCEE6B25AEEDC7001B327E /* ViewModelType.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				A593129125A87A9700B286E6 /* RemoteDataDecodableType.swift in Sources */,
 				A593129B25A87E7800B286E6 /* PhotoListViewModel.swift in Sources */,
 				A5C0F18825A71A7600F80C08 /* Requestable.swift in Sources */,
+				A5FCEE6C25AEEDC7001B327E /* ViewModelType.swift in Sources */,
 				A581F69E25A9A486009A840F /* ImageManager.swift in Sources */,
 				A5C0F18325A713E200F80C08 /* NetworkError.swift in Sources */,
 				A5D26C8425A8E9100008CA87 /* PhotoList.swift in Sources */,

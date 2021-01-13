@@ -13,12 +13,17 @@ final class PhotoViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "bindSuccess")
         let photo = Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))
         let viewModel = PhotoViewModel(photo: photo, imageRetrievable: SuccessRetriever())
+        let viewModelInput = PhotoViewModelInput()
+        var bag = CancellableBag()
         
-        viewModel.bind {
+        let output = viewModel.transform(input: viewModelInput)
+        
+        output.receivedImage.bind {
             XCTAssertNotNil($0)
             expectation.fulfill()
-        }
-        viewModel.retrieveImage()
+        }.store(in: &bag)
+        
+        viewModelInput.sendEvent.fire()
         
         wait(for: [expectation], timeout: 5.0)
     }

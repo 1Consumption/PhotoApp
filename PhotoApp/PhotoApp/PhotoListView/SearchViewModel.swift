@@ -22,9 +22,9 @@ struct SearchViewModelOutput: DeliverInsertedIndexPathType {
     let changedIndexPath: Observable<[IndexPath]> = Observable<[IndexPath]>()
 }
 
-final class SearchViewModel {
+final class SearchViewModel: ViewModelType {
     private let searchPhotoUseCase: SearchPhotoUseCase
-    private var bag: CancellableBag = CancellableBag()
+    private(set) var bag: CancellableBag = CancellableBag()
     var photoList: PhotoList = PhotoList()
     
     init(networkManageable: NetworkManageable = NetworkManager()) {

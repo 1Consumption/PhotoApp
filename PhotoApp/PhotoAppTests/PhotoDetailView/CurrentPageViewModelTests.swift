@@ -12,22 +12,25 @@ final class CurrentPageViewModelTests: XCTestCase {
     func testBind() {
         let expectation = XCTestExpectation(description: "currentPageViewModel bind success")
         expectation.expectedFulfillmentCount = 3
-        let viewModel = CurrentPageViewModel()
-
-        viewModel.bind { _ in
+        let viewModel: CurrentPageViewModel = CurrentPageViewModel()
+        let viewModelInput: CurrentPageViewModelInput = CurrentPageViewModelInput()
+        var bag: CancellableBag = CancellableBag()
+        
+        let output = viewModel.transform(input: viewModelInput)
+        
+        output.index.bind { _ in
             expectation.fulfill()
-        }
+        }.store(in: &bag)
         
-        viewModel.send(0)
-        viewModel.send(0)
-        viewModel.send(0)
-        viewModel.send(1)
-        viewModel.send(1)
-        viewModel.send(1)
-        viewModel.send(1)
-        viewModel.send(2)
-        viewModel.send(2)
-        
+        viewModelInput.page.value = 0
+        viewModelInput.page.value = 0
+        viewModelInput.page.value = 0
+        viewModelInput.page.value = 1
+        viewModelInput.page.value = 1
+        viewModelInput.page.value = 1
+        viewModelInput.page.value = 1
+        viewModelInput.page.value = 2
+        viewModelInput.page.value = 2
         
         wait(for: [expectation], timeout: 2.0)
     }

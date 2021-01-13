@@ -20,6 +20,8 @@ final class PhotoDetailViewController: UIViewController {
     private var isLayouted: Bool = false
     private let dataSource: PhotoDetailCollectionViewDataSource = PhotoDetailCollectionViewDataSource()
     private let currentPageViewModel: CurrentPageViewModel = CurrentPageViewModel()
+    private let currentPageViewModelInput: CurrentPageViewModelInput = CurrentPageViewModelInput()
+    
     var photoListViewModelInput: SendEventType?
     var photoListViewModelOutput: DeliverInsertedIndexPathType?
     var photoList: PhotoList?
@@ -91,12 +93,14 @@ final class PhotoDetailViewController: UIViewController {
     }
     
     private func bindCurrentPageViewModel() {
-        currentPageViewModel.bind { index in
+        let output = currentPageViewModel.transform(input: currentPageViewModelInput)
+        
+        output.index.bind { index in
             guard let index = index else { return }
             DispatchQueue.main.async { [weak self] in
                 self?.navigationItem.title = self?.photoList?.photo(of: index)?.user.name
             }
-        }
+        }.store(in: &bag)
     }
 }
 
@@ -119,6 +123,6 @@ extension PhotoDetailViewController: UICollectionViewDelegateFlowLayout {
         let width = view.frame.width
         let page = Int(round(currentX / width))
         
-        currentPageViewModel.send(page)
+        currentPageViewModelInput.page.value = page
     }
 }
