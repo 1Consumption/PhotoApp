@@ -12,12 +12,14 @@ final class PhotoDetailCollectionViewCell: UICollectionViewCell {
     private var viewModel: PhotoViewModel?
     
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     func bind(_ photoViewModel: PhotoViewModel) {
         viewModel = photoViewModel
-        viewModel?.bind { [weak self] image in
-            DispatchQueue.main.async {
+        viewModel?.bind { image in
+            DispatchQueue.main.async { [weak self] in
                 self?.photoImageView.image = image
+                self?.activityIndicator.stopAnimating()
             }
         }
         viewModel?.retrieveImage()
@@ -26,5 +28,6 @@ final class PhotoDetailCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         photoImageView.image = nil
+        activityIndicator.startAnimating()
     }
 }

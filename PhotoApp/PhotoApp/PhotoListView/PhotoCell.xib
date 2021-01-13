@@ -26,6 +26,10 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="EbD-rC-eXt">
+                        <rect key="frame" x="85" y="91" width="37" height="37"/>
+                        <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </activityIndicatorView>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
@@ -34,13 +38,16 @@
                 <constraint firstItem="CAW-UG-5pO" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="EHM-lK-gQ4"/>
                 <constraint firstItem="1vQ-Cp-Zd6" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="JJz-eJ-stU"/>
                 <constraint firstAttribute="trailing" secondItem="1vQ-Cp-Zd6" secondAttribute="trailing" id="N64-HY-LY1"/>
+                <constraint firstItem="EbD-rC-eXt" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="Spt-bL-yIh"/>
                 <constraint firstAttribute="bottom" secondItem="CAW-UG-5pO" secondAttribute="bottom" constant="20" id="UOZ-JQ-ajJ"/>
                 <constraint firstItem="1vQ-Cp-Zd6" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="hK8-TP-VJG"/>
                 <constraint firstAttribute="bottom" secondItem="1vQ-Cp-Zd6" secondAttribute="bottom" id="nyV-wn-lBp"/>
                 <constraint firstItem="CAW-UG-5pO" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="vBn-7z-CyG"/>
+                <constraint firstItem="EbD-rC-eXt" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="veP-I6-eOa"/>
             </constraints>
             <size key="customSize" width="207" height="219"/>
             <connections>
+                <outlet property="acitivityIndicator" destination="EbD-rC-eXt" id="e4k-I5-WmV"/>
                 <outlet property="photoImageView" destination="1vQ-Cp-Zd6" id="HKA-4s-ZvW"/>
                 <outlet property="userNameLabel" destination="CAW-UG-5pO" id="TSh-TA-Yog"/>
             </connections>

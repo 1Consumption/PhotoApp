@@ -13,12 +13,14 @@ final class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var acitivityIndicator: UIActivityIndicatorView!
     
     func bind(_ photoViewModel: PhotoViewModel) {
         viewModel = photoViewModel
         userNameLabel.text = viewModel?.photo.user.name
-        viewModel?.bind { [weak self] image in
-            DispatchQueue.main.async {
+        viewModel?.bind { image in
+            DispatchQueue.main.async { [weak self] in
+                self?.acitivityIndicator.stopAnimating()
                 self?.photoImageView.image = image
             }
         }
@@ -29,5 +31,6 @@ final class PhotoCell: UICollectionViewCell {
         super.prepareForReuse()
         photoImageView.image = nil
         userNameLabel.text = nil
+        acitivityIndicator.startAnimating()
     }
 }
