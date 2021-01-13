@@ -33,7 +33,8 @@ final class SearchViewModel {
     func transform(input: SearchViewModelInput) -> SearchViewModelOutput {
         let output = SearchViewModelOutput()
         
-        input.textFieldEditBegan.bind { _ in
+        input.textFieldEditBegan.bind { [weak self] _ in
+            self?.searchPhotoUseCase.resetPage()
             output.textFieldEditBegan.value = false
         }.store(in: &bag)
         

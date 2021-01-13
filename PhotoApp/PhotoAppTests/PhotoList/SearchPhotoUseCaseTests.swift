@@ -66,4 +66,42 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5.0)
     }
+    func testResetPage() {
+        let expectation = XCTestExpectation(description: "page reset")
+        expectation.expectedFulfillmentCount = 2
+        let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "name"))])
+        
+        guard let encoded = ModelEncoder().encode(with: photo) else {
+            XCTFail()
+            return
+        }
+        
+        let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
+        let useCase = SearchPhotoUseCase(networkManageable: networkManager)
+        useCase.retrievePhotoList(
+            with: "query",
+            failureHandler: { _ in
+                XCTFail()
+            }, successHandler: {
+                let result = $0
+                XCTAssertEqual(photo, result)
+                XCTAssertEqual(useCase.page, 2)
+                useCase.resetPage()
+                expectation.fulfill()
+            })
+        
+        useCase.retrievePhotoList(
+            with: "query",
+            failureHandler: { _ in
+                XCTFail()
+            },
+            successHandler: {
+                let retrievedPhoto = $0
+                XCTAssertEqual(photo, retrievedPhoto)
+                XCTAssertEqual(useCase.page, 2)
+                expectation.fulfill()
+            })
+        
+        wait(for: [expectation], timeout: 5.0)
+    }
 }

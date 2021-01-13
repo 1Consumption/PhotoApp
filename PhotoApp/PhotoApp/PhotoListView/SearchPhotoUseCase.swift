@@ -22,4 +22,8 @@ final class SearchPhotoUseCase: RemoteDataDecodableType {
                       modelWillDeliverHandler: { [weak self] in self?.page += 1 },
                       successHandler: successHandler)
     }
+    
+    func resetPage() {
+        page = 1
+    }
 }
