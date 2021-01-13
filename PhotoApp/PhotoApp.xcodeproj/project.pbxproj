@@ -195,10 +195,10 @@
 		A581F65525A95D14009A840F /* ImageCache */ = {
 			isa = PBXGroup;
 			children = (
-				A581F66925A9628F009A840F /* ExpirableObject.swift */,
-				A581F67D25A96E6F009A840F /* MemoryCacheStorage.swift */,
 				A581F68525A96F3F009A840F /* ExpireTime.swift */,
+				A581F66925A9628F009A840F /* ExpirableObject.swift */,
 				A581F69D25A9A486009A840F /* ImageManager.swift */,
+				A581F67D25A96E6F009A840F /* MemoryCacheStorage.swift */,
 			);
 			path = ImageCache;
 			sourceTree = "<group>";
@@ -206,12 +206,11 @@
 		A588F19425A6E38400487FB0 /* PhotoListView */ = {
 			isa = PBXGroup;
 			children = (
+				A5FCEE7125AF1B50001B327E /* Cell */,
 				A54969F525A8BA7800248856 /* PhotoCollectionViewDataSource.swift */,
 				A5E78E3F25A6B283000B9C76 /* PhotoListViewController.swift */,
 				A5D2595525AD956F0008C487 /* SearchViewModel.swift */,
 				A5CC0DD325ADE5AF009514F7 /* SearchPhotoUseCase.swift */,
-				A5AFFFAB25ADFE7400C82FF4 /* PhotoCell.swift */,
-				A5AFFFAC25ADFE7400C82FF4 /* PhotoCell.xib */,
 			);
 			path = PhotoListView;
 			sourceTree = "<group>";
@@ -297,11 +296,11 @@
 		A5E4255825AB5BD800618B57 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
-				A581F6A325A9E350009A840F /* PhotoViewModel.swift */,
-				A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */,
 				A5E07C5A25A81E54004C6C24 /* Photo.swift */,
-				A593129A25A87E7800B286E6 /* PhotoListViewModel.swift */,
+				A581F6A325A9E350009A840F /* PhotoViewModel.swift */,
 				A5D26C8325A8E9100008CA87 /* PhotoList.swift */,
+				A593129A25A87E7800B286E6 /* PhotoListViewModel.swift */,
+				A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
@@ -339,6 +338,15 @@
 			path = PhotoApp;
 			sourceTree = "<group>";
 		};
+		A5FCEE7125AF1B50001B327E /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				A5AFFFAB25ADFE7400C82FF4 /* PhotoCell.swift */,
+				A5AFFFAC25ADFE7400C82FF4 /* PhotoCell.xib */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		A5FDA16B25A70DAE00264597 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -360,8 +368,8 @@
 			isa = PBXGroup;
 			children = (
 				A5FDA16D25A70DC300264597 /* NetworkManageable.swift */,
-				A5FDA17025A70E2600264597 /* HTTPMethod.swift */,
 				A5C0F17E25A7134200F80C08 /* NetworkManager.swift */,
+				A5FDA17025A70E2600264597 /* HTTPMethod.swift */,
 				A5C0F18225A713E200F80C08 /* NetworkError.swift */,
 				A5C0F18725A71A7600F80C08 /* Requestable.swift */,
 				A5D46FFB25A768FD000BF4EE /* EndPoint.swift */,
