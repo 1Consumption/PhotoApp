@@ -64,10 +64,7 @@ final class SearchViewModelTests: XCTestCase {
         let emptySearchResult = PhotoSearchResult(results: [])
         let notEmptySearchResult = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))])
         
-        guard let emptyListData = ModelEncoder().encode(with: emptySearchResult) else {
-            XCTFail()
-            return
-        }
+        let emptyListData = try! JSONEncoder().encode(emptySearchResult)
        
         let emptyListRequest = SuccessRequester(data: emptyListData)
         let emptyListManager = NetworkManager(requester: emptyListRequest)
@@ -81,10 +78,7 @@ final class SearchViewModelTests: XCTestCase {
         
         input.sendQuery.value = "test"
         
-        guard let notEmptyListData = ModelEncoder().encode(with: notEmptySearchResult) else {
-            XCTFail()
-            return
-        }
+        let notEmptyListData = try! JSONEncoder().encode(notEmptySearchResult)
         
         let notEmptyListRequest = SuccessRequester(data: notEmptyListData)
         let notEmptyListManager = NetworkManager(requester: notEmptyListRequest)
@@ -120,10 +114,7 @@ final class SearchViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "test send event output success")
         expectation.expectedFulfillmentCount = 2
         let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))])
-        guard let data = ModelEncoder().encode(with: photo) else {
-            XCTFail()
-            return
-        }
+        let data = try! JSONEncoder().encode(photo)
         
         let request = SuccessRequester(data: data)
         let manager = NetworkManager(requester: request)

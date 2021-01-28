@@ -14,35 +14,31 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "name"))])
         
-        guard let encoded = ModelEncoder().encode(with: photo) else {
-            XCTFail()
-            return
-        }
+        let encoded = try! JSONEncoder().encode(photo)
         
         let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
         let useCase = SearchPhotoUseCase(networkManageable: networkManager)
-        useCase.retrievePhotoList(
-            with: "query",
-            failureHandler: { _ in
-                XCTFail()
-            }, successHandler: {
-                let result = $0
-                XCTAssertEqual(photo, result)
+        useCase.retrievePhotoList(with: "query") { result in
+            switch result {
+            case .success(let model):
+                XCTAssertEqual(photo, model)
                 XCTAssertEqual(useCase.page, 2)
                 expectation.fulfill()
-            })
-        
-        useCase.retrievePhotoList(
-            with: nil,
-            failureHandler: { _ in
+            case .failure:
                 XCTFail()
-            },
-            successHandler: {
-                let retrievedPhoto = $0
-                XCTAssertEqual(photo, retrievedPhoto)
+            }
+        }
+        
+        useCase.retrievePhotoList(with: nil) { result in
+            switch result {
+            case .success(let model):
+                XCTAssertEqual(photo, model)
                 XCTAssertEqual(useCase.page, 3)
                 expectation.fulfill()
-            })
+            case .failure:
+                XCTFail()
+            }
+        }
         
         wait(for: [expectation], timeout: 5.0)
     }
@@ -53,16 +49,16 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         let networkManager = NetworkManager(requester: InvalidStatusCodeReqeuster(with: 300))
         let useCase = SearchPhotoUseCase(networkManageable: networkManager)
         
-        useCase.retrievePhotoList(
-            with: "query",
-            failureHandler: { error in
+        useCase.retrievePhotoList(with: "query") { result in
+            switch result {
+            case .success:
+                XCTFail()
+            case .failure(let error):
                 XCTAssertEqual(error, .networkError(networkError: .invalidStatusCode(with: 300)))
                 XCTAssertEqual(useCase.page, 1)
                 expectation.fulfill()
-            },
-            successHandler: { _ in
-                XCTFail()
-            })
+            }
+        }
         
         wait(for: [expectation], timeout: 5.0)
     }
@@ -72,14 +68,15 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         
         let networkManager = NetworkManager(requester: SuccessRequester())
         let useCase = SearchPhotoUseCase(networkManageable: networkManager)
-        useCase.retrievePhotoList(
-            with: nil,
-            failureHandler: {
-                XCTAssertEqual($0, .networkError(networkError: .invalidURL))
-                expectation.fulfill()
-            }, successHandler: { _ in
+        useCase.retrievePhotoList(with: nil) { result in
+            switch result {
+            case .success:
                 XCTFail()
-            })
+            case .failure(let error):
+                XCTAssertEqual(error, .networkError(networkError: .invalidURL))
+                expectation.fulfill()
+            }
+        }
         
         wait(for: [expectation], timeout: 5.0)
     }
@@ -89,36 +86,32 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "name"))])
         
-        guard let encoded = ModelEncoder().encode(with: photo) else {
-            XCTFail()
-            return
-        }
+        let encoded = try! JSONEncoder().encode(photo)
         
         let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
         let useCase = SearchPhotoUseCase(networkManageable: networkManager)
-        useCase.retrievePhotoList(
-            with: "query",
-            failureHandler: { _ in
-                XCTFail()
-            }, successHandler: {
-                let result = $0
-                XCTAssertEqual(photo, result)
+        useCase.retrievePhotoList(with: "query") { result in
+            switch result {
+            case .success(let model):
+                XCTAssertEqual(photo, model)
                 XCTAssertEqual(useCase.page, 2)
                 useCase.resetPage()
                 expectation.fulfill()
-            })
-        
-        useCase.retrievePhotoList(
-            with: "query",
-            failureHandler: { _ in
+            case .failure:
                 XCTFail()
-            },
-            successHandler: {
-                let retrievedPhoto = $0
-                XCTAssertEqual(photo, retrievedPhoto)
+            }
+        }
+        
+        useCase.retrievePhotoList(with: "query") { result in
+            switch result {
+            case .success(let model):
+                XCTAssertEqual(photo, model)
                 XCTAssertEqual(useCase.page, 2)
                 expectation.fulfill()
-            })
+            case .failure:
+                XCTFail()
+            }
+        }
         
         wait(for: [expectation], timeout: 5.0)
     }

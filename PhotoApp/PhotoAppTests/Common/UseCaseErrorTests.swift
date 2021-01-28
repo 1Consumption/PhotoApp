@@ -28,7 +28,7 @@ final class UseCaseErrorTests: XCTestCase {
         message = UseCaseError.networkError(networkError: .requestError(description: "error")).message
         XCTAssertEqual(message, NetworkError.requestError(description: "error").description)
         
-        message = UseCaseError.decodeError(description: "decodeError").message
+        message = UseCaseError.decodeError.message
         XCTAssertEqual(message, "decodeError")
     }
 }

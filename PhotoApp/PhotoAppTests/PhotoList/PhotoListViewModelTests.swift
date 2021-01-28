@@ -16,10 +16,7 @@ final class PhotoListViewModelTests: XCTestCase {
         let maxCount = 3
         let photo = [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: ""))]
        
-        guard let encoded = ModelEncoder().encode(with: photo) else {
-            XCTFail()
-            return
-        }
+        let encoded = try! JSONEncoder().encode(photo)
         
         let requester = SuccessRequester(data: encoded)
         let networkManager = NetworkManager(requester: requester)

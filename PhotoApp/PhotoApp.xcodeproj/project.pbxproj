@@ -54,7 +54,6 @@
 		A5E07C6225A8214C004C6C24 /* PhotoListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */; };
 		A5E07C6825A8219C004C6C24 /* PhotoListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */; };
 		A5E07C6D25A82314004C6C24 /* Reqeusters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C6C25A82314004C6C24 /* Reqeusters.swift */; };
-		A5E07C7C25A82934004C6C24 /* Encoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C7B25A82934004C6C24 /* Encoder.swift */; };
 		A5E07C8225A82CEE004C6C24 /* UseCaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */; };
 		A5E07C8625A83017004C6C24 /* UseCaseError+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8525A83017004C6C24 /* UseCaseError+Equatable.swift */; };
 		A5E07C8A25A83051004C6C24 /* Photos+Equatable+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E07C8925A83051004C6C24 /* Photos+Equatable+Encodable.swift */; };
@@ -131,7 +130,6 @@
 		A5E07C6125A8214C004C6C24 /* PhotoListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListUseCase.swift; sourceTree = "<group>"; };
 		A5E07C6725A8219C004C6C24 /* PhotoListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListUseCaseTests.swift; sourceTree = "<group>"; };
 		A5E07C6C25A82314004C6C24 /* Reqeusters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reqeusters.swift; sourceTree = "<group>"; };
-		A5E07C7B25A82934004C6C24 /* Encoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encoder.swift; sourceTree = "<group>"; };
 		A5E07C8125A82CEE004C6C24 /* UseCaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCaseError.swift; sourceTree = "<group>"; };
 		A5E07C8525A83017004C6C24 /* UseCaseError+Equatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UseCaseError+Equatable.swift"; sourceTree = "<group>"; };
 		A5E07C8925A83051004C6C24 /* Photos+Equatable+Encodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photos+Equatable+Encodable.swift"; sourceTree = "<group>"; };
@@ -397,7 +395,6 @@
 				A5D46FEA25A721D8000BF4EE /* Extension */,
 				A5FDA18625A7106200264597 /* Network */,
 				A5E07C6C25A82314004C6C24 /* Reqeusters.swift */,
-				A5E07C7B25A82934004C6C24 /* Encoder.swift */,
 				A5D26C7925A8D3CD0008CA87 /* UseCaseErrorTests.swift */,
 			);
 			path = Common;
@@ -575,7 +572,6 @@
 				A5E07C6D25A82314004C6C24 /* Reqeusters.swift in Sources */,
 				A5E4254925AB42A400618B57 /* CancellableTests.swift in Sources */,
 				A5E07C6825A8219C004C6C24 /* PhotoListUseCaseTests.swift in Sources */,
-				A5E07C7C25A82934004C6C24 /* Encoder.swift in Sources */,
 				A5D46FF825A76592000BF4EE /* EndPointTests.swift in Sources */,
 				A581F67A25A96DE8009A840F /* MemoryCacheStorageTests.swift in Sources */,
 				A581F69825A9A471009A840F /* ImageManagerTests.swift in Sources */,
