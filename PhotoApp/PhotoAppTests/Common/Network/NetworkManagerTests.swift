@@ -63,43 +63,6 @@ final class NetworkManagerTests: XCTestCase {
                     networkError: .invalidData)
     }
     
-    func testFailureWithIsLoading() {
-        let invalidExpectation = XCTestExpectation(description: "invalid")
-        let duplicateExpectation = XCTestExpectation(description: "duplicate")
-        
-        let duplicate = DuplicateRequest()
-        duplicate.delayTime = 3
-        let manager = NetworkManager(requester: duplicate)
-        
-        manager.requestData(from: URL(string: "duplicate"),
-                                   method: .get,
-                                   completionHandler: { result in
-                                    switch result {
-                                    case .success(_):
-                                        XCTFail()
-                                    case .failure(let error):
-                                        XCTAssertEqual(error, .invalidData)
-                                        invalidExpectation.fulfill()
-                                    }
-                                   })
-        
-        duplicate.delayTime = 0
-        
-        manager.requestData(from: URL(string: "duplicate"),
-                                   method: .get,
-                                   completionHandler: { result in
-                                    switch result {
-                                    case .success(_):
-                                        XCTFail()
-                                    case .failure(let error):
-                                        XCTAssertEqual(error, .duplicatedRequest)
-                                        duplicateExpectation.fulfill()
-                                    }
-                                   })
-        
-        wait(for: [invalidExpectation, duplicateExpectation], timeout: 5.0)
-    }
-    
     private func failureCase(description: String, requester: Requestable, path: String = "failure", networkError: NetworkError, time: TimeInterval = 0) {
         let expectation = XCTestExpectation(description: description)
         

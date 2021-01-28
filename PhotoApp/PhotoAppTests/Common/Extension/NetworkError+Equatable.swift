@@ -21,8 +21,6 @@ extension NetworkError: Equatable {
             return left == right
         case (.invalidData, .invalidData):
             return true
-        case (.duplicatedRequest, .duplicatedRequest):
-            return true
         default:
             return false
         }

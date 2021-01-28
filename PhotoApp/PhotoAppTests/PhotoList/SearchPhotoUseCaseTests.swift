@@ -9,20 +9,28 @@
 import XCTest
 
 final class SearchPhotoUseCaseTests: XCTestCase {
+    
+    private var useCase: SearchPhotoUseCase!
+    private let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "name"))])
+    private var encoded: Data!
+    
+    override func setUpWithError() throws {
+        encoded = try! JSONEncoder().encode(photo)
+    }
+    
     func testSuccess() {
         let expectation = XCTestExpectation(description: "success")
         expectation.expectedFulfillmentCount = 2
-        let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "name"))])
         
-        let encoded = try! JSONEncoder().encode(photo)
+        
         
         let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
-        let useCase = SearchPhotoUseCase(networkManageable: networkManager)
+        useCase = SearchPhotoUseCase(networkManageable: networkManager)
         useCase.retrievePhotoList(with: "query") { result in
             switch result {
             case .success(let model):
-                XCTAssertEqual(photo, model)
-                XCTAssertEqual(useCase.page, 2)
+                XCTAssertEqual(self.photo, model)
+                XCTAssertEqual(self.useCase.page, 2)
                 expectation.fulfill()
             case .failure:
                 XCTFail()
@@ -32,8 +40,8 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         useCase.retrievePhotoList(with: nil) { result in
             switch result {
             case .success(let model):
-                XCTAssertEqual(photo, model)
-                XCTAssertEqual(useCase.page, 3)
+                XCTAssertEqual(self.photo, model)
+                XCTAssertEqual(self.useCase.page, 3)
                 expectation.fulfill()
             case .failure:
                 XCTFail()
@@ -47,7 +55,7 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         let expectation = XCTestExpectation(description: "failureWithNetworkError")
         
         let networkManager = NetworkManager(requester: InvalidStatusCodeReqeuster(with: 300))
-        let useCase = SearchPhotoUseCase(networkManageable: networkManager)
+        useCase = SearchPhotoUseCase(networkManageable: networkManager)
         
         useCase.retrievePhotoList(with: "query") { result in
             switch result {
@@ -55,7 +63,7 @@ final class SearchPhotoUseCaseTests: XCTestCase {
                 XCTFail()
             case .failure(let error):
                 XCTAssertEqual(error, .networkError(networkError: .invalidStatusCode(with: 300)))
-                XCTAssertEqual(useCase.page, 1)
+                XCTAssertEqual(self.useCase.page, 1)
                 expectation.fulfill()
             }
         }
@@ -67,7 +75,7 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         let expectation = XCTestExpectation(description: "empty query")
         
         let networkManager = NetworkManager(requester: SuccessRequester())
-        let useCase = SearchPhotoUseCase(networkManageable: networkManager)
+        useCase = SearchPhotoUseCase(networkManageable: networkManager)
         useCase.retrievePhotoList(with: nil) { result in
             switch result {
             case .success:
@@ -84,18 +92,15 @@ final class SearchPhotoUseCaseTests: XCTestCase {
     func testResetPage() {
         let expectation = XCTestExpectation(description: "page reset")
         expectation.expectedFulfillmentCount = 2
-        let photo = PhotoSearchResult(results: [Photo(id: "1", width: 0, height: 0, urls: URLs(full: "", regular: ""), user: User(name: "name"))])
-        
-        let encoded = try! JSONEncoder().encode(photo)
         
         let networkManager = NetworkManager(requester: SuccessRequester(data: encoded))
-        let useCase = SearchPhotoUseCase(networkManageable: networkManager)
+        useCase = SearchPhotoUseCase(networkManageable: networkManager)
         useCase.retrievePhotoList(with: "query") { result in
             switch result {
             case .success(let model):
-                XCTAssertEqual(photo, model)
-                XCTAssertEqual(useCase.page, 2)
-                useCase.resetPage()
+                XCTAssertEqual(self.photo, model)
+                XCTAssertEqual(self.useCase.page, 2)
+                self.useCase.resetPage()
                 expectation.fulfill()
             case .failure:
                 XCTFail()
@@ -105,8 +110,8 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         useCase.retrievePhotoList(with: "query") { result in
             switch result {
             case .success(let model):
-                XCTAssertEqual(photo, model)
-                XCTAssertEqual(useCase.page, 2)
+                XCTAssertEqual(self.photo, model)
+                XCTAssertEqual(self.useCase.page, 2)
                 expectation.fulfill()
             case .failure:
                 XCTFail()
@@ -114,5 +119,40 @@ final class SearchPhotoUseCaseTests: XCTestCase {
         }
         
         wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func testIsLoading() {
+        let expectation = XCTestExpectation(description: "isLoading")
+        expectation.expectedFulfillmentCount = 2
+        defer { wait(for: [expectation], timeout: 3.0) }
+        
+        let networkManager = MockSuccessNetworkManager(data: encoded, delay: .now() + 1)
+        useCase = SearchPhotoUseCase(networkManageable: networkManager)
+        
+        useCase.retrievePhotoList(with: "test") { result in
+            switch result {
+            case .success:
+                networkManager.verify(url: EndPoint.init(urlInfomation: .search(query: "test", page: 1)).url,
+                                      method: .get,
+                                      header: [.authorization(key: Secret.APIKey)])
+                expectation.fulfill()
+            case .failure(let error):
+                print(error)
+                XCTFail()
+            }
+        }
+        
+        useCase.retrievePhotoList(with: "test") { result in
+            switch result {
+            case .success:
+                XCTFail()
+            case .failure(let error):
+                networkManager.verify(url: EndPoint.init(urlInfomation: .search(query: "test", page: 1)).url,
+                                      method: .get,
+                                      header: [.authorization(key: Secret.APIKey)])
+                XCTAssertEqual(error, .duplicatedRequest)
+                expectation.fulfill()
+            }
+        }
     }
 }

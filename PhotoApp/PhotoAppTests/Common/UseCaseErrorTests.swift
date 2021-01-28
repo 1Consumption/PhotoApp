@@ -10,8 +10,8 @@ import XCTest
 
 final class UseCaseErrorTests: XCTestCase {
     func testMessage() {
-        var message = UseCaseError.networkError(networkError: .duplicatedRequest).message
-        XCTAssertEqual(message, NetworkError.duplicatedRequest.description)
+        var message = UseCaseError.duplicatedRequest.message
+        XCTAssertEqual(message, "duplicated request")
         
         message = UseCaseError.networkError(networkError: .invalidData).message
         XCTAssertEqual(message, NetworkError.invalidData.description)

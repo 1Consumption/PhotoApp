@@ -25,8 +25,5 @@ final class NetworkErrorTests: XCTestCase {
         
         description = NetworkError.invalidData.description
         XCTAssertEqual(description, "invalid data")
-        
-        description = NetworkError.duplicatedRequest.description
-        XCTAssertEqual(description, "duplicated request")
     }
 }
