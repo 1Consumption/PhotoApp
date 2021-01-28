@@ -9,35 +9,45 @@
 import XCTest
 
 final class ImageManagerTests: XCTestCase {
+    
+    private let image = UIImage(named: "sample1")
+    private var imageManager: ImageManager!
+    private var data: Data!
+    
+    override func setUpWithError() throws {
+        data = image!.jpegData(compressionQuality: 1)
+    }
+    
     func testRetrievImage() {
         let expectation = XCTestExpectation(description: "retrieveImage")
-        expectation.expectedFulfillmentCount = 4
-        let image = UIImage(named: "sample1")
-        guard let data = image?.jpegData(compressionQuality: 1) else {
-            XCTFail()
-            return
-        }
+        expectation.expectedFulfillmentCount = 2
         
-        let requester = SuccessRequester(data: data)
-        let networkManager = NetworkManager(requester: requester)
-        let imageManager = ImageManager(networkManageable: networkManager)
+        let networkManager = MockSuccessNetworkManager(data: data)
+        imageManager = ImageManager(networkManageable: networkManager)
         
-        imageManager.retrieveImage(from: "sample1", dataTaskHandler: {
-            XCTAssertNotNil($0)
-            expectation.fulfill()
-        }) {
-            XCTAssertNotNil($0)
-            expectation.fulfill()
+        let _ = imageManager.retrieveImage(from: "sample1") { result in
+            switch result {
+            case .success(let image):
+                networkManager.verify(url: URL(string: "sample1"),
+                                      method: .get,
+                                      header: nil)
+                XCTAssertNotNil(image)
+                expectation.fulfill()
+            case .failure:
+                XCTFail()
+            }
         }
         
         sleep(2)
         
-        imageManager.retrieveImage(from: "sample1", dataTaskHandler: {
-            XCTAssertNil($0)
-            expectation.fulfill()
-        }) {
-            XCTAssertNotNil($0)
-            expectation.fulfill()
+        let _ = imageManager.retrieveImage(from: "sample1") { result in
+            switch result {
+            case .success(let image):
+                XCTAssertNotNil(image)
+                expectation.fulfill()
+            case .failure:
+                XCTFail()
+            }
         }
         
         wait(for: [expectation], timeout: 5.0)
@@ -46,14 +56,16 @@ final class ImageManagerTests: XCTestCase {
     func testRetrievImageFailure() {
         let expectation = XCTestExpectation(description: "retrieveImageFailure")
         
-        let requester = InvalidDataRequester()
-        let networkManager = NetworkManager(requester: requester)
-        let imageManager = ImageManager(networkManageable: networkManager)
+        let networkManager = MockFailureNetworkManager(error: .invalidURL)
+        imageManager = ImageManager(networkManageable: networkManager)
         
-        imageManager.retrieveImage(from: "sample1", dataTaskHandler: { _ in }, failureHandler: { _ in
-            expectation.fulfill()
-        }) { _ in
-            XCTFail()
+        let _ = imageManager.retrieveImage(from: "sample1") { result in
+            switch result {
+            case .success:
+                XCTFail()
+            case .failure:
+                expectation.fulfill()
+            }
         }
         
         wait(for: [expectation], timeout: 5.0)

@@ -30,8 +30,10 @@ final class PhotoViewModelTests: XCTestCase {
 }
 
 final class SuccessRetriever: ImageRetrievable {
-    func retrieveImage(from url: String, dataTaskHandler: @escaping ((URLSessionDataTask?) -> Void), failureHandler: ((NetworkError) -> Void)?, imageHandler: @escaping (UIImage?) -> Void) {
+    func retrieveImage(from url: String, completionHandler: @escaping (Result<UIImage?, NetworkError>) -> Void) -> Cancellable? {
         
-        imageHandler(UIImage(named: "sample1"))
+        completionHandler(.success(UIImage(named: "sample1")))
+        
+        return nil
     }
 }
