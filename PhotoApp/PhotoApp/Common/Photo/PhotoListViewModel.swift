@@ -29,18 +29,20 @@ final class PhotoListViewModel {
     func transfrom(_ input: PhotoListViewModelInput?) -> PhotoListViewModelOutput {
         let output = PhotoListViewModelOutput()
         input?.sendEvent.bind { [weak self] _ in
-            self?.photoListUseCase.retrievePhotoList(failureHandler: {
-                output.errorOccurred.value = $0
-            },
-            successHandler: { [weak self] in
-                guard let count = self?.photoList.count else { return }
-                let startIndex = count
-                let endIndex = startIndex + $0.count
-                self?.photoList.append(contentsOf: $0)
-                output.changedIndexPath.value = (startIndex..<endIndex).map {
-                    IndexPath(item: $0, section: 0)
+            self?.photoListUseCase.retrievePhotoList { [weak self] result in
+                switch result {
+                case .success(let model):
+                    guard let count = self?.photoList.count else { return }
+                    let startIndex = count
+                    let endIndex = startIndex + model.count
+                    self?.photoList.append(contentsOf: model)
+                    output.changedIndexPath.value = (startIndex..<endIndex).map {
+                        IndexPath(item: $0, section: 0)
+                    }
+                case .failure(let error):
+                    output.errorOccurred.value = error
                 }
-            })
+            }
         }.store(in: &bag)
         
         return output

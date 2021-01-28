@@ -45,38 +45,42 @@ final class SearchViewModel: ViewModelType {
         
         input.sendQuery.bind { [weak self] in
             guard let query = $0 else { return }
-            self?.searchPhotoUseCase.retrievePhotoList(with: query,
-                                   failureHandler: {
-                                    output.errorOccurred.value = $0
-                                    output.isResultsExist.value = false
-                                   },
-                                   successHandler: {
-                                    let model = $0.results
-                                    self?.photoList.reset()
-                                    self?.photoList.append(contentsOf: model)
-                                    output.isResultsExist.value = !model.isEmpty
-                                   })
+            self?.searchPhotoUseCase.retrievePhotoList(with: query) { result in
+                switch result {
+                case .success(let model):
+                    let model = model.results
+                    self?.photoList.reset()
+                    self?.photoList.append(contentsOf: model)
+                    output.isResultsExist.value = !model.isEmpty
+                case .failure(let error):
+                    output.errorOccurred.value = error
+                    output.isResultsExist.value = false
+                }
+            }
         }.store(in: &bag)
         
         input.sendEvent.bind { [weak self] _ in
-            self?.searchPhotoUseCase.retrievePhotoList(with: nil,
-                                                       failureHandler: { output.errorOccurred.value = $0 },
-                                                       successHandler: { [weak self] in
-                                                        let model = $0.results
-                                                        
-                                                        guard !model.isEmpty else { return }
-                                                        
-                                                        guard let count = self?.photoList.count else { return }
-                                                        
-                                                        let startIndex = count
-                                                        let endIndex = startIndex + model.count
-                                                        self?.photoList.append(contentsOf: model)
-                                                        output.changedIndexPath.value = (startIndex..<endIndex).map {
-                                                            IndexPath(item: $0, section: 0)
-                                                        }
-                                                       })
+            self?.searchPhotoUseCase.retrievePhotoList(with: nil) { [weak self] result in
+                switch result {
+                case .success(let model):
+                    let model = model.results
+                    
+                    guard !model.isEmpty else { return }
+                    
+                    guard let count = self?.photoList.count else { return }
+                    
+                    let startIndex = count
+                    let endIndex = startIndex + model.count
+                    self?.photoList.append(contentsOf: model)
+                    output.changedIndexPath.value = (startIndex..<endIndex).map {
+                        IndexPath(item: $0, section: 0)
+                    }
+                case .failure(let error):
+                    output.errorOccurred.value = error
+                }
+            }
         }.store(in: &bag)
-    
+        
         return output
     }
 }

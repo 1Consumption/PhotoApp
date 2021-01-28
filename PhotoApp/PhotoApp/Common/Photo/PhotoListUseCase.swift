@@ -15,11 +15,10 @@ final class PhotoListUseCase: RemoteDataDecodableType {
         self.networkManager = networkManageable
     }
     
-    func retrievePhotoList(failureHandler: @escaping (UseCaseError) -> Void, successHandler: @escaping ([Photo]) -> Void) {
+    func retrievePhotoList(completionHandler: @escaping (Result<[Photo], UseCaseError>) -> Void) {
         let url = EndPoint(urlInfomation: .photoList(page: page)).url
         retrieveModel(from: url,
-                      failureHandler: failureHandler,
                       modelWillDeliverHandler: { [weak self] in self?.page += 1 },
-                      successHandler: successHandler)
+                      completionHandler: completionHandler)
     }
 }

@@ -11,34 +11,30 @@ protocol RemoteDataDecodableType {
     var networkManager: NetworkManageable { get }
     
     func retrieveModel<T: Decodable>(from url: URL?,
-                                     failureHandler: @escaping (UseCaseError) -> Void,
                                      modelWillDeliverHandler: (() -> Void)?,
-                                     successHandler: @escaping (T) -> Void)
+                                     completionHandler: @escaping (Result<T, UseCaseError>) -> Void)
 }
 
 extension RemoteDataDecodableType {
-    func retrieveModel<T: Decodable>(
-        from url: URL?,
-        failureHandler: @escaping (UseCaseError) -> Void,
-        modelWillDeliverHandler: (() -> Void)? = nil,
-        successHandler: @escaping (T) -> Void) {
+    func retrieveModel<T: Decodable>(from url: URL?, modelWillDeliverHandler: (() -> Void)?, completionHandler: @escaping (Result<T, UseCaseError>) -> Void) {
         networkManager.requestData(from: url,
                                    isPermitDuplicate: false,
                                    method: .get,
                                    header: [.authorization(key: Secret.APIKey)],
                                    completionHandler: {
-                                    switch $0 {
-                                    case .success(let data):
+                                    let result = $0.flatMapError { error -> Result<Data, UseCaseError> in
+                                        return .failure(.networkError(networkError: error))
+                                    }.flatMap { data -> Result<T, UseCaseError> in
                                         do {
                                             let model = try JSONDecoder().decode(T.self, from: data)
                                             modelWillDeliverHandler?()
-                                            successHandler(model)
+                                            return .success(model)
                                         } catch {
-                                            failureHandler(.decodeError(description: error.localizedDescription))
+                                            return .failure(.decodeError)
                                         }
-                                    case .failure(let networkError):
-                                        failureHandler(.networkError(networkError: networkError))
                                     }
+                                    
+                                    completionHandler(result)
                                    })
     }
 }

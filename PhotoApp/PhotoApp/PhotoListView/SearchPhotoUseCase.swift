@@ -16,7 +16,7 @@ final class SearchPhotoUseCase: RemoteDataDecodableType {
         self.networkManager = networkManageable
     }
     
-    func retrievePhotoList(with query: String?, failureHandler: @escaping (UseCaseError) -> Void, successHandler: @escaping (PhotoSearchResult) -> Void) {
+    func retrievePhotoList(with query: String?, completionHandler: @escaping (Result<PhotoSearchResult, UseCaseError>) -> Void) {
         var queryString = ""
         
         if let query = query {
@@ -24,17 +24,14 @@ final class SearchPhotoUseCase: RemoteDataDecodableType {
             prevQuery = query
         } else {
             guard let prevQuery = prevQuery else {
-                failureHandler(.networkError(networkError: .invalidURL))
+                completionHandler(.failure(.networkError(networkError: .invalidURL)))
                 return
             }
             queryString = prevQuery
         }
         
         let url = EndPoint(urlInfomation: .search(query: queryString, page: page)).url
-        retrieveModel(from: url,
-                      failureHandler: failureHandler,
-                      modelWillDeliverHandler: { [weak self] in self?.page += 1 },
-                      successHandler: successHandler)
+        retrieveModel(from: url, modelWillDeliverHandler: { [weak self] in self?.page += 1 }, completionHandler: completionHandler)
     }
     
     func resetPage() {
