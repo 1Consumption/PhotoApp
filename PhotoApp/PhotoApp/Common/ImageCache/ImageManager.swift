@@ -18,32 +18,36 @@ final class ImageManager: ImageRetrievable {
         self.networkManageable = networkManageable
     }
     
-    func retrieveImage(from url: String, dataTaskHandler: @escaping ((URLSessionDataTask?) -> Void),  failureHandler: ((NetworkError) -> Void)? = nil, imageHandler: @escaping (UIImage?) -> Void) {
-        imageManageQueue.async { [weak self] in
-            if let image = self?.memoryCacheStorage.object(for: url) {
-                imageHandler(image)
-                dataTaskHandler(nil)
-            } else {
-                let urls = URL(string: url)
-                let dataTask = self?.networkManageable.requestData(from: urls,
-                                                                   method: .get,
-                                                                   header: nil,
-                                                                   completionHandler: { result in
-                                                                    switch result {
-                                                                    case .failure(let error):
-                                                                        failureHandler?(error)
-                                                                    case .success(let data):
-                                                                        let image = UIImage(data: data)
-                                                                        imageHandler(image)
-                                                                        self?.memoryCacheStorage.insert(image, for: url)
-                                                                    }
-                                                                   })
-                dataTaskHandler(dataTask)
+    func retrieveImage(from url: String, completionHandler: @escaping (Result<UIImage?, NetworkError>) -> Void) -> Cancellable? {
+        if let image = memoryCacheStorage.object(for: url) {
+            imageManageQueue.async {
+                completionHandler(.success(image))
+            }
+        } else {
+            let urls = URL(string: url)
+            let dataTask = networkManageable.requestData(from: urls,
+                                                         method: .get,
+                                                         header: nil,
+                                                         completionHandler: { [weak self] result in
+                                                            switch result {
+                                                            case .failure(let error):
+                                                                completionHandler(.failure(error))
+                                                            case .success(let data):
+                                                                self?.imageManageQueue.async {
+                                                                    let image = UIImage(data: data)
+                                                                    completionHandler(.success(image))
+                                                                    self?.memoryCacheStorage.insert(image, for: url)
+                                                                }
+                                                            }
+                                                         })
+            return Cancellable {
+                dataTask?.cancel()
             }
         }
+        return nil
     }
 }
 
 protocol ImageRetrievable {
-    func retrieveImage(from url: String, dataTaskHandler: @escaping ((URLSessionDataTask?) -> Void), failureHandler: ((NetworkError) -> Void)?, imageHandler: @escaping (UIImage?) -> Void)
+    func retrieveImage(from url: String, completionHandler: @escaping (Result<UIImage?, NetworkError>) -> Void) -> Cancellable?
 }
