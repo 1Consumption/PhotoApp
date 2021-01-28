@@ -8,7 +8,9 @@
 import Foundation
 
 final class PhotoListUseCase: RemoteDataDecodableType {
+    typealias T = [Photo]
     private(set) var page: Int = 1
+    private var isLoading: Bool = false
     let networkManager: NetworkManageable
     
     init(networkManageable: NetworkManageable) {
@@ -16,9 +18,21 @@ final class PhotoListUseCase: RemoteDataDecodableType {
     }
     
     func retrievePhotoList(completionHandler: @escaping (Result<[Photo], UseCaseError>) -> Void) {
+        guard !isLoading else {
+            completionHandler(.failure(.duplicatedRequest))
+            return
+        }
+        
+        isLoading = true
+        
         let url = EndPoint(urlInfomation: .photoList(page: page)).url
         retrieveModel(from: url,
-                      modelWillDeliverHandler: { [weak self] in self?.page += 1 },
-                      completionHandler: completionHandler)
+                      completionHandler: { [weak self] result in
+                        if ((try? result.get()) != nil) {
+                            self?.page += 1
+                        }
+                        self?.isLoading = false
+                        completionHandler(result)
+                      })
     }
 }

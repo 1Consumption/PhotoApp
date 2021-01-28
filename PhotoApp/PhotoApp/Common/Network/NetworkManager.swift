@@ -9,69 +9,45 @@ import Foundation
 
 final class NetworkManager: NetworkManageable {
     private(set) var requester: Requestable
-    private var isLoading: Bool = false
     
     init(requester: Requestable = DefaultRequester()) {
         self.requester = requester
     }
     
     @discardableResult
-    func requestData(from url: URL?, isPermitDuplicate: Bool = false, method: HTTPMethod, header: [HTTPHeader]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
+    func requestData(from url: URL?, method: HTTPMethod, header: [HTTPHeader]? = nil, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask? {
         guard let urlRequest = makeURLRequest(url: url, method: method, headers: header) else {
             completionHandler(.failure(.invalidURL))
             return nil
         }
         
-        if isPermitDuplicate == false {
-            guard !isLoading else {
-                completionHandler(.failure(.duplicatedRequest))
-                return nil
-            }
-            isLoading = true
-        }
-        
         let dataTask = requester.dataTask(with: urlRequest) { data , response, error in
             guard error == nil else {
-                self.requestCompleted(with: urlRequest,
-                                      result: .failure(.requestError(description: error!.localizedDescription)),
-                                      handler: completionHandler)
+                completionHandler(.failure(.requestError(description: error!.localizedDescription)))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                self.requestCompleted(with: urlRequest,
-                                      result: .failure(.invalidHTTPResponse),
-                                      handler: completionHandler)
+                completionHandler(.failure(.invalidHTTPResponse))
                 return
             }
             
             guard (200...299) ~= httpResponse.statusCode else {
-                self.requestCompleted(with: urlRequest,
-                                      result: .failure(.invalidStatusCode(with: httpResponse.statusCode)),
-                                      handler: completionHandler)
+                completionHandler(.failure(.invalidStatusCode(with: httpResponse.statusCode)))
                 return
             }
             
             guard let data = data else {
-                self.requestCompleted(with: urlRequest,
-                                      result: .failure(.invalidData),
-                                      handler: completionHandler)
+                completionHandler(.failure(.invalidData))
                 return
             }
             
-            self.requestCompleted(with: urlRequest,
-                                  result: .success(data),
-                                  handler: completionHandler)
+            completionHandler(.success(data))
         }
         
         dataTask.resume()
         
         return dataTask
-    }
-    
-    func requestCompleted(with url: URLRequest, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler) {
-        isLoading = false
-        handler(result)
     }
     
     private func makeURLRequest(url: URL?, method: HTTPMethod, headers: [HTTPHeader]?) -> URLRequest? {

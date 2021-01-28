@@ -8,17 +8,17 @@
 import Foundation
 
 protocol RemoteDataDecodableType {
+    associatedtype T: Decodable
+    
     var networkManager: NetworkManageable { get }
     
-    func retrieveModel<T: Decodable>(from url: URL?,
-                                     modelWillDeliverHandler: (() -> Void)?,
+    func retrieveModel(from url: URL?,
                                      completionHandler: @escaping (Result<T, UseCaseError>) -> Void)
 }
 
 extension RemoteDataDecodableType {
-    func retrieveModel<T: Decodable>(from url: URL?, modelWillDeliverHandler: (() -> Void)?, completionHandler: @escaping (Result<T, UseCaseError>) -> Void) {
+    func retrieveModel(from url: URL?, completionHandler: @escaping (Result<T, UseCaseError>) -> Void) {
         networkManager.requestData(from: url,
-                                   isPermitDuplicate: false,
                                    method: .get,
                                    header: [.authorization(key: Secret.APIKey)],
                                    completionHandler: {
@@ -27,7 +27,6 @@ extension RemoteDataDecodableType {
                                     }.flatMap { data -> Result<T, UseCaseError> in
                                         do {
                                             let model = try JSONDecoder().decode(T.self, from: data)
-                                            modelWillDeliverHandler?()
                                             return .success(model)
                                         } catch {
                                             return .failure(.decodeError)

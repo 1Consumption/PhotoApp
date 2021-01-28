@@ -13,7 +13,5 @@ protocol NetworkManageable: class {
     var requester: Requestable { get }
     
     @discardableResult
-    func requestData(from url: URL?, isPermitDuplicate: Bool, method: HTTPMethod, header: [HTTPHeader]?, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask?
-    
-    func requestCompleted(with url: URLRequest, result: Result<Data, NetworkError>, handler: @escaping DataResultHandler)
+    func requestData(from url: URL?, method: HTTPMethod, header: [HTTPHeader]?, completionHandler: @escaping DataResultHandler) -> URLSessionDataTask?
 }

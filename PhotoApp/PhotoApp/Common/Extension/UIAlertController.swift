@@ -17,7 +17,7 @@ extension UIAlertController {
     
     func showUseCaseErrorAlert(_ error: UseCaseError) {
         switch error {
-        case .networkError(networkError: .duplicatedRequest):
+        case .duplicatedRequest:
             break
         default:
             DispatchQueue.main.async { [weak self] in

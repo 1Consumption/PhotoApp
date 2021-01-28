@@ -26,7 +26,6 @@ final class ImageManager: ImageRetrievable {
             } else {
                 let urls = URL(string: url)
                 let dataTask = self?.networkManageable.requestData(from: urls,
-                                                                   isPermitDuplicate: true,
                                                                    method: .get,
                                                                    header: nil,
                                                                    completionHandler: { result in

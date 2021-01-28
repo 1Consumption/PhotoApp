@@ -8,15 +8,24 @@
 import Foundation
 
 final class SearchPhotoUseCase: RemoteDataDecodableType {
+    typealias T = PhotoSearchResult
     private(set) var page: Int = 1
     let networkManager: NetworkManageable
     private var prevQuery: String?
+    private var isLoading: Bool = false
     
     init(networkManageable: NetworkManageable) {
         self.networkManager = networkManageable
     }
     
     func retrievePhotoList(with query: String?, completionHandler: @escaping (Result<PhotoSearchResult, UseCaseError>) -> Void) {
+        guard !isLoading else {
+            completionHandler(.failure(.duplicatedRequest))
+            return
+        }
+        
+        isLoading = true
+        
         var queryString = ""
         
         if let query = query {
@@ -25,13 +34,20 @@ final class SearchPhotoUseCase: RemoteDataDecodableType {
         } else {
             guard let prevQuery = prevQuery else {
                 completionHandler(.failure(.networkError(networkError: .invalidURL)))
+                isLoading = false
                 return
             }
             queryString = prevQuery
         }
         
         let url = EndPoint(urlInfomation: .search(query: queryString, page: page)).url
-        retrieveModel(from: url, modelWillDeliverHandler: { [weak self] in self?.page += 1 }, completionHandler: completionHandler)
+        retrieveModel(from: url, completionHandler: { [weak self] result in
+            if ((try? result.get()) != nil) {
+                self?.page += 1
+            }
+            self?.isLoading = false
+            completionHandler(result)
+        })
     }
     
     func resetPage() {

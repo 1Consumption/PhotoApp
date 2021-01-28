@@ -10,6 +10,7 @@ import Foundation
 enum UseCaseError: Error {
     case networkError(networkError: NetworkError)
     case decodeError
+    case duplicatedRequest
     
     var message: String {
         switch self {
@@ -17,6 +18,8 @@ enum UseCaseError: Error {
             return networkError.description
         case .decodeError:
             return "decodeError"
+        case .duplicatedRequest:
+            return "duplicated request"
         }
     }
 }
