@@ -58,7 +58,7 @@ final class PhotoListViewController: UIViewController {
         photoListViewModelOutput?.errorOccurred.bind { error in
             guard let error = error else { return }
             DispatchQueue.main.async {
-                UIAlertController().showUseCaseErrorAlert(error)
+                UIAlertController.showUseCaseErrorAlert(error, presentor: self)
             }
         }.store(in: &bag)
         
@@ -106,7 +106,7 @@ final class PhotoListViewController: UIViewController {
         searchViewModelOutput?.errorOccurred.bind {
             guard let error = $0 else { return }
             DispatchQueue.main.async {
-                UIAlertController().showUseCaseErrorAlert(error)
+                UIAlertController.showUseCaseErrorAlert(error, presentor: self)
             }
         }.store(in: &bag)
         

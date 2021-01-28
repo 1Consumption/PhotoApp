@@ -80,7 +80,7 @@ final class PhotoDetailViewController: UIViewController {
         photoListViewModelOutput?.errorOccurred.bind { error in
             guard let error = error else { return }
             DispatchQueue.main.async {
-                UIAlertController().showUseCaseErrorAlert(error)
+                UIAlertController.showUseCaseErrorAlert(error, presentor: self)
             }
         }.store(in: &bag)
         
